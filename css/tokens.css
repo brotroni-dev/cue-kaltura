@@ -1,0 +1,113 @@
+/* Cue design tokens.
+   Every name maps 1:1 to a Figma variable: --color-ink-2 becomes color/ink/2,
+   --space-5 becomes space/5, and so on. Change a value here, not in the components. */
+
+:root {
+  /* color / paper and ink */
+  --color-paper: #ffffff;
+  --color-paper-2: #f6f6f4;      /* hover, quiet fills */
+  --color-paper-3: #ececea;      /* bar tracks */
+  --color-ink: #0b0b0b;          /* text, rules, primary buttons */
+  --color-ink-2: #52514e;        /* secondary text */
+  --color-ink-3: #898781;        /* muted text, axis labels */
+  --color-line: #e4e3df;         /* hairlines */
+  --color-line-strong: #0b0b0b;  /* Swiss rules */
+
+  /* color / change (only for up and down changes, always with an arrow and a label) */
+  --color-up: #006300;
+  --color-up-mark: #0ca30c;
+  --color-up-soft: #e9f4e6;
+  --color-down: #b3261e;
+  --color-down-mark: #d03b3b;
+  --color-down-soft: #fbebe9;
+
+  /* color / viz. Pastel marks for graphs only. Numbers and labels stay black and white. */
+  --viz-up: #8fd3a2;
+  --viz-up-soft: #e6f6ea;
+  --viz-down: #f2a6a0;
+  --viz-down-soft: #fdeceb;
+  --viz-calm: #a9b9f2;
+  --viz-calm-soft: #eceffd;
+  --viz-base: #e4e3de;
+
+  /* color / person. Sampled from each photo's background, snapped to the chart palette.
+     A person's line, dot or bar always uses their own color. */
+  --person-sam: #2a78d6;
+  --person-lucia: #eb6834;
+  --person-dana: #1baf7a;
+  --person-hana: #eda100;
+  --person-theo: #008300;
+  --person-omar: #6250d6;
+  --person-kofi: #e34948;
+
+  /* type / family */
+  --font-sans: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* type / size */
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 36px;
+  --text-4xl: 44px;
+
+  /* type / shell. Five styles only: display, title, lead, body, label */
+  --shell-display: clamp(44px, 5.4vw, 78px);
+  --shell-title: clamp(32px, 3vw, 44px);
+  --shell-lead: 20px;
+  --shell-body: 15px;
+  --shell-label: 11px;
+
+  /* type / tracking */
+  --tracking-display: -0.045em;
+  --tracking-tight: -0.025em;
+  --tracking-snug: -0.01em;
+  --tracking-mono: 0.06em;
+
+  /* space (8px base, 4px half step) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 48px;
+  --space-9: 64px;
+  --space-10: 96px;
+  --space-11: 128px;
+
+  /* radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* grid (the shell's Swiss grid) */
+  --grid-columns: 12;
+  --grid-gutter: 24px;
+  --grid-margin: 48px;
+  --grid-max: 1440px;
+
+  /* motion */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration-fast: 160ms;
+  --duration-base: 320ms;
+  --duration-slow: 900ms;
+}
+
+
+@media (max-width: 900px) {
+  :root { --grid-margin: 16px; --grid-gutter: 16px; }
+}
+
+/* Keyboard focus: one quiet ring everywhere */
+:focus { outline: none; }
+:focus-visible { outline: 2px solid #0b0b0b; outline-offset: 2px; border-radius: 6px; }
+.cue-call :focus-visible, .cue-calm :focus-visible { outline-color: #ffffff; }
+[contenteditable]:focus-visible, input:focus-visible { outline: none; }

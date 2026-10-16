@@ -1,0 +1,283 @@
+/* The presentation shell. One left axis, one text column, five type styles, almost no lines.
+   Everything here is the "wrapper". The product lives in app.css under .cue. */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--shell-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* One container, one left edge */
+.shell-wrap {
+  width: 100%;
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: 0 var(--grid-margin);
+}
+
+/* The five type styles: display, title, lead, body, label */
+.shell-display {
+  margin: 0;
+  font-size: var(--shell-display);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+.shell-title {
+  margin: 0;
+  font-size: var(--shell-title);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.shell-lead {
+  margin: 0;
+  max-width: 30em;
+  font-size: var(--shell-lead);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-2);
+  text-wrap: pretty;
+}
+.shell-label {
+  font-family: var(--font-mono);
+  font-size: var(--shell-label);
+  font-weight: 400;
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--color-ink-3);
+}
+
+/* Nav: brand left, sections right */
+.shell-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--color-paper) 86%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+}
+.shell-nav .shell-wrap { height: 64px; display: flex; align-items: center; gap: var(--space-6); }
+.shell-brand { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.shell-brand img { width: 22px; height: 22px; }
+.shell-links { margin-left: auto; display: flex; gap: var(--space-6); }
+.shell-links a { font-size: 14px; color: var(--color-ink-3); transition: color var(--duration-fast); }
+.shell-links a:hover, .shell-links a[aria-current="true"] { color: var(--color-ink); }
+
+/* Cover, with a background drawn only from graphs and people (js/hero.js) */
+.shell-cover { position: relative; overflow: hidden; padding: var(--space-10) 0 0; }
+.shell-cover .shell-wrap { position: relative; z-index: 1; }
+/* The chart sits right under the text and tucks 96px behind it (the line is low on the left) */
+.shell-hero-bg { position: relative; z-index: 0; margin-top: calc(var(--space-10) * -1); pointer-events: none; }
+.hero { display: block; width: 100%; height: auto; aspect-ratio: 1440 / 440; }
+
+/* line: the chart draws in, dots and people pop, people float */
+.hero-stroke { stroke-dasharray: 1; stroke-dashoffset: 1; animation: hero-draw 2.2s var(--ease-out) 0.2s forwards; }
+.hero-area { opacity: 0; animation: hero-fade 1.6s var(--ease-out) 0.9s forwards; }
+.hero-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: hero-pop 420ms var(--ease-out) forwards; animation-delay: calc(0.35s + var(--i) * 0.11s); }
+.hero-person { opacity: 0; animation: hero-person 700ms var(--ease-out) forwards, hero-float 5s ease-in-out infinite; animation-delay: calc(1.2s + var(--i) * 0.25s), calc(2s + var(--i) * 0.6s); }
+
+
+@keyframes hero-draw { to { stroke-dashoffset: 0; } }
+@keyframes hero-fade { to { opacity: 1; } }
+@keyframes hero-pop { 0% { transform: scale(0); } 70% { transform: scale(1.3); } 100% { transform: scale(1); } }
+@keyframes hero-person { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes hero-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+.shell-cover .shell-label { margin-bottom: var(--space-6); }
+.shell-cover .shell-lead { margin-top: var(--space-6); }
+
+/* Section */
+.shell-section { padding: var(--space-10) 0 var(--space-6); }
+.shell-section .shell-label { margin-bottom: var(--space-4); }
+.shell-section .shell-lead { margin-top: var(--space-4); }
+
+/* Blocks inside a section: a label, then one list or one paragraph */
+.shell-block { margin-top: var(--space-8); }
+.shell-block > .shell-label { margin-bottom: var(--space-4); }
+.shell-text { margin: 0; max-width: 36em; font-size: 17px; line-height: 1.5; color: var(--color-ink-2); text-wrap: pretty; }
+.shell-list { margin: var(--space-8) 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-3); max-width: 38em; }
+.shell-block .shell-list { margin-top: 0; }
+.shell-list li { font-size: 17px; line-height: 1.5; color: var(--color-ink-2); text-wrap: pretty; }
+.shell-list b { font-weight: 500; color: var(--color-ink); }
+.shell-list--time li { padding-left: 22px; text-indent: -22px; }
+.shell-list--time i { display: inline-block; width: 10px; height: 10px; margin-right: 12px; border-radius: 50%; background: var(--c); }
+
+/* Three people: photo, name, the job in their words */
+.shell-people { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-5); }
+.shell-people li { display: flex; align-items: center; gap: var(--space-4); }
+.shell-people img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; }
+.shell-people div { display: flex; flex-direction: column; gap: 2px; }
+.shell-person { font-size: 14px; color: var(--color-ink-3); }
+.shell-people q { font-size: var(--shell-lead); line-height: 1.35; letter-spacing: -0.01em; color: var(--color-ink); quotes: "\201C" "\201D"; text-indent: -0.42em; }
+
+/* The loop: five moves in one row, the current one in ink */
+.shell-loop {
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+}
+.shell-loop button {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--color-ink-3);
+  cursor: pointer;
+  transition: color var(--duration-base);
+}
+.shell-loop button .shell-label { color: inherit; }
+.shell-loop button:hover { color: var(--color-ink-2); }
+.shell-loop button.is-current { color: var(--color-ink); }
+.shell-loop button:disabled { cursor: default; color: var(--color-line); }
+.shell-loop button:disabled:hover { color: var(--color-line); }
+
+/* Prototype controls: quiet text buttons */
+.shell-controls { display: flex; gap: var(--space-5); }
+.shell-controls button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-ink-2);
+  cursor: pointer;
+  transition: color var(--duration-fast);
+}
+.shell-controls button:hover { color: var(--color-ink); }
+.shell-controls button:disabled { color: var(--color-line); cursor: default; }
+.shell-caption-text { margin: 0; }
+/* A small switch next to the caption, e.g. Slack or Gmail */
+.shell-switch { display: inline-flex; padding: 2px; gap: 2px; border-radius: var(--radius-pill); background: var(--color-paper-2); }
+.shell-switch button { height: 26px; padding: 0 12px; border: 0; border-radius: var(--radius-pill); background: transparent; font: inherit; font-size: 13px; color: var(--color-ink-2); cursor: pointer; }
+.shell-switch button[aria-pressed="true"] { background: var(--color-paper); color: var(--color-ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); }
+[data-proto-extra]:empty { display: none; }
+
+/* ===== Section divider: the thread (see js/sections.js) ===== */
+main#top { position: relative; }
+.shell-section { position: relative; }
+.shell-section > .shell-wrap { position: relative; z-index: 1; }
+.shell-thread { position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none; overflow: visible; }
+.shell-thread-ghost { stroke: var(--color-line); stroke-width: 1; opacity: 0.6; }
+.shell-thread-line { stroke-width: 2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 120ms linear; }
+.shell-thread-dot { stroke: var(--color-paper); stroke-width: 3; transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 500ms var(--ease-out); }
+.shell-thread-dot.is-on { transform: scale(1); }
+@media (max-width: 900px) { .shell-thread { display: none; } }
+
+/* Stage: the product sits on a blurred photo, so it reads as software, not as the page */
+.shell-stage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: var(--space-9) var(--grid-margin);
+  background: #8fcfd6;
+}
+.shell-stage-bg {
+  position: absolute;
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  object-fit: cover;
+  filter: blur(70px) saturate(1.1);
+  transform: scale(1.15);
+  z-index: -1;
+}
+.shell-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.16));
+}
+.shell-stage-fit { margin: 0 auto; max-width: 1280px; }
+.shell-stage-note { display: none; }
+
+/* Caption: one quiet line under the stage, controls on the right */
+.shell-caption { padding: var(--space-4) 0 0; font-size: 14px; color: var(--color-ink-3); }
+.shell-caption .shell-wrap { display: flex; align-items: baseline; gap: var(--space-5); }
+.shell-caption .shell-controls { margin-left: auto; }
+.shell-caption-text b { font-weight: 500; color: var(--color-ink); margin-right: var(--space-2); }
+
+/* Full screen: the stage takes the whole window, with one bar on top */
+.shell-stage-bar { display: none; }
+:root.is-full { overflow: hidden; }
+:root.is-full .shell-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  padding: 72px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+:root.is-full .shell-stage-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 0 24px;
+  background: color-mix(in srgb, var(--color-paper) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 14px;
+  color: var(--color-ink-3);
+}
+:root.is-full .shell-stage-bar .shell-controls { margin-left: auto; }
+:root.is-full .shell-stage-fit { margin: 0; }
+
+/* Footer: one quiet line */
+.shell-foot { padding: var(--space-6) 0 var(--space-8); font-size: 13px; color: var(--color-ink-3); }
+
+@media (max-width: 900px) {
+  .shell-links { display: none; }
+  .shell-cover { padding: var(--space-9) 0 0; }
+  .shell-hero-bg { margin-top: calc(var(--space-5) * -1); }
+  .shell-section { padding: var(--space-8) 0 var(--space-5); }
+  .shell-lead { font-size: 18px; }
+  .shell-loop { margin-top: var(--space-6); }
+  .shell-stage { padding: var(--space-5) var(--grid-margin); }
+  .shell-caption .shell-wrap { flex-direction: column; gap: var(--space-2); }
+  .shell-caption .shell-controls { margin-left: 0; }
+  .shell-list li, .shell-text { font-size: 16px; }
+  .shell-people q { font-size: 18px; }
+}
+
+
+@media (max-width: 600px) {
+  .shell-stage-note { display: block; margin: var(--space-4) 0 0; color: #fff; text-align: center; }
+  .shell-full-btn { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  /* things that start hidden and animate in must simply be shown */
+  .hero-stroke { stroke-dashoffset: 0; }
+  .hero-area, .hero-person { opacity: 1; }
+  .hero-dot, .cue-calm-bar b, .cue-pin { transform: none; opacity: 1; }
+}
