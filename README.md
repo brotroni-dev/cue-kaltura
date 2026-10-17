@@ -42,8 +42,8 @@ Three people, one loop:
 10. Sam's home the next morning
 11. Results: who needs what
 12. Omar and a ready 1:1 plan
-13. A week later: how the real calls went
-14. October impact, with how sure we are
+13. A week later: the practice overview, and how the real calls went
+14. Impact: the practice's Impact page, end of October
 15. Ira sees what works across teams and scales it
 
 Use the stepper above the prototype, Back and Next under it, Full screen, or just click

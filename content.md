@@ -132,6 +132,9 @@ Cue, a product design concept for Kaltura. Photos from Unsplash, names are made 
 
 Each screen lists: act, who, where, the caption line, then the copy.
 Rule for every screen: little by default, detail on hover. The copy never tells people to hover.
+App sidebar: Home · Team · Practice · Impact · Library. Impact is the cross-practice view
+(screen 14), so it is not confused with a practice's own Results page. Reps see Home ·
+Practice · Progress · Library.
 
 ### 1. Home (done)
 Act: Spot · Who: Noa · Where: cue.app/home
@@ -395,10 +398,14 @@ Note: the share confirmation lives on screen 9. "Share this round with Noa" turn
 ### 11. Results
 Act: Coach · Who: Noa · Where: cue.app/practice/hold-your-price/results
 Caption: Back to Noa. Everyone is done, and Cue shows where each person stands.
-Breadcrumb: Practice / Hold your price (this page sits under the list of practices, which
-the walkthrough skips) · Action: Send another round
-Title: Results
-4 of 4 done · Average 76 · Pass at 80 · Up 12 from the first rounds
+The practice header (the same on screens 11 and 13):
+Breadcrumb: Practice (the list of practices, which the walkthrough skips)
+Title: Hold your price
+Under the title: Sent Oct 16 to 4 people · 4 of 4 done · Average 76
+Page switch: Overview · **Results** · Impact (this screen is Results; Overview is screen 13,
+Impact is screen 14)
+Action: Send another round
+By person (note: Pass at 80 · Up 12 from the first rounds)
 By person: a light table. Header: Person · Scorecard · Score · Status. Scorecard = 4 small bars, one per scorecard line,
 in the same order as the draft; height is the score, green 80+, blue 70 to 79, red below 70. One row per person with
 light gray lines between them (4 small bars for the 4 lines, best score, status: Ready /
@@ -433,30 +440,42 @@ Side: Omar's scores vs team average, and the next real call (Pinecrest · Fri, O
 
 Buttons: **Add to Thursday's 1:1** · Send a harder round
 
-### 13. Real calls
-Act: Prove · Who: Noa · Where: cue.app/home, one week later
-Caption: A week later. Cue checks the real calls, not just the practice.
-Title: How the real calls went
-From call recordings, this week:
-- **Sam · Acme Logistics.** Value before price ✓ · No discount ✓ · Next step ✓
-  · Moved to contract
-- **Lucia · Northline Foods.** Value before price ✓ · 5% discount (team: 18%)
-- **Theo · Brightline Retail.** Price came up early ✕ · Next step ✓ · Follow-up Tue
+### 13. The practice overview, a week later
+Act: Prove · Who: Noa · Where: cue.app/practice/hold-your-price, one week later
+Caption: A week later, Noa opens the practice from her home to see how the real calls went.
+(She gets here from her home; the walkthrough doesn't show that. The breadcrumb says where
+the page sits.)
+The practice header, the same as screen 11, with **Overview** active in the page switch
+(Overview · Results · Impact). The walkthrough hint sits on the Impact tab.
+Early signal · one week in: Lost at the price step. These 4, before and after the
+practice. Before 58% · This week 41%
+How the real calls went (Checked from call recordings, not from practice), light lines
+between people:
+- **Sam · Acme Logistics.** Value before price ✓ · No discount ✓ · Next step set ✓
+  · Moved to contract · 0:30
+- **Lucia · Northline Foods.** Value before price ✓ · 5% discount (team: 18%) ✓ · Next step
+  set ✓ · In negotiation · 0:30
+- **Theo · Brightline Retail.** Price came up early ✕ · Next step set ✓ · Follow-up Tue · 0:30
 - **Omar · Pinecrest Supply.** Not yet · Price call Fri, after the 1:1
-Early signal: lost at the price step 58% → 41% for these 4
-Button: See October impact
 
-### 14. Monthly impact
-Act: Prove · Who: Noa (also sent to Ira) · Where: cue.app/results/october
-Caption: Once a month, Noa and enablement get the impact, with how sure we are.
-Title: October impact
+### 14. Impact
+Act: Prove · Who: Noa (also sent to Ira) · Where: cue.app/practice/hold-your-price/impact
+Caption: End of October. The practice's Impact page shows if the numbers moved, and how
+sure we are.
+The practice header, the same as screens 11 and 13, with **Impact** active.
+Actions: Copy link · Share with Ira (then "See Ira's view")
+Month picker at the right end of the page switch: **October** (Since the practice was sent)
+· This quarter · September (Before the practice)
 Three numbers (practiced vs not yet):
 - Win rate at the price step · 41% vs 26%
 - Average discount · 9% vs 17%
-- Deals saved · $310K
-Chart: practiced vs not yet, by week (the "It worked" style).
-Confidence: Early signal. 4 people, 4 weeks. We check again at quarter end.
-Buttons: Copy link · Share with Ira (then "See Ira's view")
+- Deals saved · $310K in 3 deals
+Chart: Win rate at the price step, by week. Practiced · 4 people, Not yet · 3 people.
+Weeks of Sep 15 to Oct 27, "Practice" marked on the week of Oct 13.
+Confidence: Early signal: 4 people, 2 weeks. We check again at quarter end.
+
+Main nav Impact (not built): the roll-up of all your practices, to compare them. Each row
+opens the same Impact page inside its practice.
 
 ### 15. Across teams
 Act: Prove · Who: Ira · Where: cue.app/enablement

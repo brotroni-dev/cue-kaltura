@@ -447,6 +447,16 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-h1 { margin: 0; font-size: var(--text-2xl); font-weight: 600; line-height: 1.2; letter-spacing: var(--tracking-tight); }
 .cue-sub { margin: 0; font-size: var(--text-md); color: var(--color-ink-3); }
 .cue-sub b { color: var(--color-ink); font-weight: 600; }
+.cue-real-gap { width: 59px; flex: none; }
+/* Page switch inside one practice: Overview, Results */
+.cue-tabs { display: flex; gap: var(--space-5); margin-top: calc(var(--space-6) * -1 + var(--space-4)); border-bottom: 1px solid var(--color-line); }
+.cue-tab { position: relative; padding: 0 0 10px; border: 0; background: none; font: inherit; font-size: var(--text-md); font-weight: 500; color: var(--color-ink-3); cursor: pointer; transition: color var(--duration-fast); }
+.cue-tab:hover { color: var(--color-ink); }
+.cue-tab.is-active { color: var(--color-ink); cursor: default; }
+.cue-tab[data-hint]::before { inset: -6px -10px 4px; border-radius: 8px; }
+.cue-tabs-tools { margin: -8px 0 4px auto; }
+.cue-tabs-tools .cue-dd-menu { left: auto; right: 0; }
+.cue-tab.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; border-radius: 1px; background: var(--color-ink); }
 .cue-titlerow { display: flex; align-items: center; gap: var(--space-3); }
 .cue-pill { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: var(--radius-pill); background: var(--color-paper-2); font-size: var(--text-xs); font-weight: 500; color: var(--color-ink-2); white-space: nowrap; }
 
@@ -571,7 +581,8 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-score li .cue-editable { flex: 0 1 auto; }
 
 /* ----- The draft: calm panels, values you can touch ----- */
-.is-still .cue-rise, .is-still .cue-skill-fill, .is-still .cue-hbar i, .is-still .cue-minibar i { animation: none !important; }
+.is-still .cue-rise, .is-still .cue-skill-fill, .is-still .cue-hbar i, .is-still .cue-minibar i, .is-still .cue-pair i, .is-still .cue-chart .area, .is-still .cue-chart .dot { animation: none !important; }
+.is-still .cue-chart .draw { animation: none !important; stroke-dashoffset: 0; }
 [data-flash], .is-flash { animation: cue-flash 1.6s var(--ease-out) both; border-radius: var(--radius-sm); }
 @keyframes cue-flash { 0%, 30% { background: var(--viz-calm-soft); box-shadow: 0 0 0 6px var(--viz-calm-soft); } 100% { background: transparent; box-shadow: 0 0 0 6px transparent; } }
 
@@ -1124,7 +1135,8 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
 /* Results: one row per person */
 .cue-result { min-height: 60px; gap: var(--space-4); }
 .cue-rows--table .cue-row { border-radius: 0; }
-.cue-rows--table .cue-row + .cue-row { border-top: 1px solid var(--color-line); }
+.cue-rows--table .cue-row { position: relative; }
+.cue-rows--table .cue-row + .cue-row::before { content: ''; position: absolute; top: 0; left: var(--space-2); right: var(--space-2); height: 1px; background: var(--color-line); }
 .cue-result-head { min-height: 32px; font-size: var(--text-xs); color: var(--color-ink-3); }
 .cue-result-head:hover { background: none; }
 .cue-result-head .cue-row-name { font-size: var(--text-xs); }

@@ -108,3 +108,16 @@ Due date dropdown with the suggested day, and Add people. Opening a menu no long
 the sheet, and menus open downward unless there is no room. Results got a breadcrumb
 (Practice / Hold your price), the sections By person and By scorecard line, a header row
 and light lines between people. All "hover" hints were removed from the copy.
+
+## Round 16: one practice, three pages
+**Roni asked for:** the "a week later" screen to stop pretending to be a home page, clear
+breadcrumbs, both practice pages represented, and no clash between the practice's Results
+and the main nav Results.
+**Claude changed:** "Hold your price" is now one practice with three pages and one shared
+header (breadcrumb Practice, title, status): Overview (early signal and real calls),
+Results (by person and by scorecard line) and Impact (practiced vs not yet, with an
+October picker). The main nav item became Impact, the roll-up across all practices (not
+built), and reps see Progress. The chart weeks now match the Oct 16 send date, and charts
+stay still when a menu opens.
+**Got wrong:** the first overview kept a "Practice results" link and a big "See October
+impact" button; the page switch replaced both.

@@ -91,7 +91,7 @@
         navItem('home', 'Home', active === 'home') +
         (who === 'noa' ? navItem('team', 'Team', active === 'team') : '') +
         navItem('practice', 'Practice', active === 'practice', who === 'noa' ? '1' : '') +
-        navItem('results', 'Results', active === 'results') +
+        navItem('results', who === 'sam' ? 'Progress' : 'Impact', active === 'results') +
         navItem('library', 'Library', active === 'library') +
       '</nav>' +
       '<div class="cue-me" data-component="Profile" data-toast="Profile and settings are not part of this walkthrough.">' + ava(who, 'md') +
@@ -100,7 +100,7 @@
   }
   function navItem(icon, label, active, count) {
     return '<a class="cue-nav-item' + (active ? ' is-active' : '') + '" data-component="Nav item' + (active ? '/Active' : '') + '"' +
-      (active ? ' aria-current="page"' : (icon === 'home' ? ' data-go="0"' : ' data-toast="' + label + ' is not part of this walkthrough."')) + '>' +
+      (active ? ' aria-current="page"' : (icon === 'home' ? ' data-go="0"' : ' data-toast="' + (label === 'Impact' ? 'Impact across all your practices, to compare them. Not part of this walkthrough.' : label + ' is not part of this walkthrough.') + '"')) + '>' +
       ic(icon) + '<span>' + label + '</span>' + (count ? '<span class="cue-nav-count">' + count + '</span>' : '') + '</a>';
   }
 
@@ -946,6 +946,22 @@
   }
   function tone(v) { return v >= 80 ? 'up' : v < 70 ? 'down' : 'calm'; }
 
+  /* The practice header, shared by its pages: breadcrumb, title, status, and the page switch */
+  function practiceHead(page, actions, hint, tools) {
+    function tab(id, label, step) {
+      var on = page === id;
+      return '<button class="cue-tab' + (on ? ' is-active' : '') + '"' + (on ? ' aria-current="page"' : ' data-go="' + step + '"') + (hint === id ? ' data-hint' : '') + '>' + label + '</button>';
+    }
+    return '<header class="cue-pagebar" data-component="Page bar">' +
+        '<nav class="cue-crumbs" aria-label="Breadcrumb" data-component="Breadcrumb">' +
+          '<button class="cue-crumb" data-toast="All your team\u2019s practices. This walkthrough skips the list.">Practice</button></nav>' +
+        '<div class="cue-pagebar-actions">' + (actions || '') + '</div>' +
+      '</header>' +
+      '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">Hold your price</h1>' +
+        '<p class="cue-sub">Sent Oct 16 to 4 people \u00b7 <b>4 of 4</b> done \u00b7 Average <b>76</b></p></div>' +
+      '<nav class="cue-tabs cue-rise" aria-label="Practice pages" data-component="Page tabs">' + tab('overview', 'Overview', 12) + tab('results', 'Results', 10) + tab('impact', 'Impact', 13) + (tools ? '<span class="cue-tabs-tools">' + tools + '</span>' : '') + '</nav>';
+  }
+
   /* Screen 11: results */
   var RESULTS = [
     ['sam', 84, 2, [90, 78, 82, 86], 'Ready', 'up'],
@@ -978,16 +994,8 @@
         '<span class="cue-skill-score">' + avg + '</span>' +
         '<span class="cue-skill-end">' + (avg < 70 ? '<span class="cue-status-pill cue-status-pill--down">Weakest</span>' : '') + '</span></div>';
     }).join('') + '</div>';
-    /* Breadcrumb: this page sits under the list of practices (not part of the walkthrough) */
-    return '<header class="cue-pagebar" data-component="Page bar">' +
-        '<nav class="cue-crumbs" aria-label="Breadcrumb" data-component="Breadcrumb">' +
-          '<button class="cue-crumb" data-toast="All your team\u2019s practices. This walkthrough skips the list.">Practice</button><span class="cue-crumb-sep" aria-hidden="true">/</span>' +
-          '<button class="cue-crumb" data-toast="The practice setup: the buyer, the brief and the scorecard.">Hold your price</button></nav>' +
-        '<div class="cue-pagebar-actions"><button class="cue-btn cue-btn--secondary" data-toast="Sends a harder round to everyone who passed.">' + ic('replay') + 'Send another round</button></div>' +
-      '</header>' +
-      '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">Results</h1>' +
-        '<p class="cue-sub"><b>4 of 4</b> done · Average <b>76</b> · Pass at 80 · Up 12 from the first rounds</p></div>' +
-      '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>By person</h2></div>' + people + '</section>' +
+    return practiceHead('results', '<button class="cue-btn cue-btn--secondary" data-toast="Sends a harder round to everyone who passed.">' + ic('replay') + 'Send another round</button>') +
+      '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>By person</h2><span>Pass at 80 \u00b7 Up 12 from the first rounds</span></div>' + people + '</section>' +
       '<section class="cue-section cue-rise" style="--i:2"><div class="cue-section-head"><h2>By scorecard line</h2></div>' + team + '</section>';
   }
 
@@ -1037,7 +1045,7 @@
       '</div>';
   }
 
-  /* Screen 13: the real calls, one week later */
+  /* Screen 13: the practice overview, one week later. Noa opens it from her home (not shown); the breadcrumb says where it sits */
   var REAL = [
     ['sam', 'Acme Logistics', [['Value before price', 1], ['No discount', 1], ['Next step set', 1]], 'Moved to contract', 'Oct 23'],
     ['lucia', 'Northline Foods', [['Value before price', 1], ['5% discount (team: 18%)', 1], ['Next step set', 1]], 'In negotiation', 'Oct 20'],
@@ -1045,28 +1053,25 @@
     ['omar', 'Pinecrest Supply', null, 'Price call Fri, after the 1:1', '']
   ];
   function realCalls() {
-    var rows = '<div class="cue-rows">' + REAL.map(function (r) {
+    var rows = '<div class="cue-rows cue-rows--table">' + REAL.map(function (r) {
       var checks = r[2] ? r[2].map(function (c) {
         return '<span class="cue-check-chip">' + ic(c[1] ? 'check' : 'close', 'cue-ic--xs cue-check-' + (c[1] ? 'yes' : 'no')) + c[0] + '</span>';
       }).join('') : '<span class="cue-row-quiet">Not yet</span>';
       return '<div class="cue-row cue-real"' + (r[4] ? ' data-tip="From the call recording, ' + r[4] + '"' : '') + ' data-component="Real call row">' + ava(r[0], 'md') +
         '<span class="cue-row-name"><b>' + P[r[0]].name + ' · ' + r[1] + '</b><span class="cue-checks">' + checks + '</span></span>' +
         '<span class="cue-real-out">' + r[3] + '</span>' +
-        (r[4] ? play('0:30', P[r[0]].name + '’s call') : '<span class="cue-result-gap"></span>') +
+        (r[4] ? play('0:30', P[r[0]].name + '’s call') : '<span class="cue-real-gap"></span>') +
       '</div>';
     }).join('') + '</div>';
-    return '<header class="cue-topbar"><h1 class="cue-title">Good morning, Noa</h1><span class="cue-date">Thu, Oct 23</span>' +
-        '<div class="cue-search" data-toast="Ask Cue answers questions about your team. Not part of this walkthrough.">' + ic('sparkle', 'cue-ic--sm') + '<span>Ask Cue</span><kbd>⌘K</kbd></div>' +
-        '<button class="cue-icon-btn" aria-label="Notifications" data-toast="Notifications are not part of this walkthrough.">' + ic('bell') + '<span class="cue-dot"></span></button></header>' +
+    return practiceHead('overview', '', 'impact') +
       '<section class="cue-signal cue-rise" data-component="Early signal">' +
-        '<div><span class="cue-field-label">Hold your price · early signal</span><h2>Lost at the price step</h2><p class="cue-sub">These 4, before and after the practice</p></div>' +
+        '<div><span class="cue-field-label">Early signal \u00b7 one week in</span><h2>Lost at the price step</h2><p class="cue-sub">These 4, before and after the practice</p></div>' +
         '<div class="cue-signal-bars">' +
           '<div class="cue-compare-row"><span>Before</span><span class="cue-compare-track"><i class="is-down" style="--value:58%;transform:none"></i></span><b>58%</b></div>' +
           '<div class="cue-compare-row"><span>This week</span><span class="cue-compare-track"><i class="is-up" style="--value:41%;transform:none"></i></span><b>41%</b></div>' +
         '</div>' +
       '</section>' +
-      '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>How the real calls went</h2><span>Checked from call recordings, not from practice</span></div>' + rows + '</section>' +
-      '<div class="cue-endrow cue-rise" style="--i:2"><button class="cue-btn" data-go="13" data-hint>' + ic('results') + 'See October impact</button></div>';
+      '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>How the real calls went</h2><span>Checked from call recordings, not from practice</span></div>' + rows + '</section>';
   }
 
   /* Screen 14: monthly impact */
@@ -1083,8 +1088,8 @@
     }).join('');
     var chart = C.area({
       id: 'impact', w: 900, h: 200, yMin: 20, yMax: 45, ticks: [25, 35, 45], unit: '%',
-      x: ['Sep 8', '', 'Sep 22', '', 'Oct 6', '', 'Oct 20'],
-      tipX: ['Sep 8', 'Sep 15', 'Sep 22', 'Sep 29', 'Oct 6', 'Oct 13', 'Oct 20'],
+      x: ['Sep 15', '', 'Sep 29', '', 'Oct 13', '', 'Oct 27'],
+      tipX: ['Week of Sep 15', 'Week of Sep 22', 'Week of Sep 29', 'Week of Oct 6', 'Week of Oct 13', 'Week of Oct 20', 'Week of Oct 27'],
       marker: { i: 4, text: 'Practice' },
       label: 'Win rate at the price step by week. People who practiced rose from 27% to 41%. People who have not practiced yet stayed near 26%.',
       series: [
@@ -1092,14 +1097,14 @@
         { name: 'Not yet', kind: 'base', values: [28, 27, 28, 26, 27, 26, 26] }
       ]
     });
-    return pagehead('Home', 12,
+    return practiceHead('impact',
         '<button class="cue-btn cue-btn--secondary" data-toast="Link copied.">' + ic('share') + 'Copy link</button>' +
-        confirmBtn('Share with Ira', 'send', 'Shared with Ira, head of enablement.', 'Shared with Ira', 'See Ira’s view', 14)) +
-      '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">October impact</h1><p class="cue-sub">Hold your price · 4 people practiced · 3 haven’t yet</p></div>' +
+        confirmBtn('Share with Ira', 'send', 'Shared with Ira, head of enablement.', 'Shared with Ira', 'See Ira’s view', 14), '',
+        dropdown('period', '', 'October', [{ v: 'oct', title: 'October', sub: 'Since the practice was sent', on: true }, { v: 'quarter', title: 'This quarter' }, { v: 'sep', title: 'September', sub: 'Before the practice' }])) +
       '<div class="cue-stats">' + tiles + '</div>' +
       '<section class="cue-card cue-rise" style="--i:3"><div class="cue-card-head"><h2>Win rate at the price step, by week</h2></div>' +
-        '<div class="cue-legend cue-legend--plain"><span><i class="is-up"></i>Practiced</span><span><i class="is-base"></i>Not yet</span></div>' + chart +
-        '<div class="cue-skills-hint">' + ic('info', 'cue-ic--sm') + 'Early signal: 4 people, 4 weeks. We check again at quarter end.</div>' +
+        '<div class="cue-legend cue-legend--plain"><span><i class="is-up"></i>Practiced \u00b7 4 people</span><span><i class="is-base"></i>Not yet \u00b7 3 people</span></div>' + chart +
+        '<div class="cue-skills-hint">' + ic('info', 'cue-ic--sm') + 'Early signal: 4 people, 2 weeks. We check again at quarter end.</div>' +
       '</section>';
   }
 
@@ -1145,8 +1150,8 @@
     { id: 'samhome', loop: 2, nav: 'home', who: 'sam', url: 'cue.app/home', caption: 'The next morning: Sam\u2019s week, and Noa\u2019s note on the round.', render: samHome },
     { id: 'results', loop: 3, nav: 'practice', url: 'cue.app/practice/hold-your-price/results', caption: 'Back to Noa. Everyone is done, and Cue shows where each person stands.', render: results },
     { id: 'omar', loop: 3, nav: 'team', url: 'cue.app/team/omar', caption: 'Noa gets a ready plan for the 1:1 with Omar.', render: omar },
-    { id: 'real', loop: 4, nav: 'home', url: 'cue.app/home', caption: 'A week later. Cue checks the real calls, not just the practice.', render: realCalls },
-    { id: 'impact', loop: 4, nav: 'results', url: 'cue.app/results/october', caption: 'Once a month, Noa and enablement get the impact, with how sure we are.', render: impact },
+    { id: 'real', loop: 4, nav: 'practice', url: 'cue.app/practice/hold-your-price', caption: 'A week later, Noa opens the practice from her home to see how the real calls went.', render: realCalls },
+    { id: 'impact', loop: 4, nav: 'practice', url: 'cue.app/practice/hold-your-price/impact', caption: 'End of October. The practice\u2019s Impact page shows if the numbers moved, and how sure we are.', render: impact },
     { id: 'teams', loop: 4, nav: 'library', who: 'ira', url: 'cue.app/library/pricing-template', caption: 'Ira, head of enablement, sees what works across teams and scales it.', render: acrossTeams }
   ];
 
@@ -1331,6 +1336,7 @@
       if (pk[0] === 'tracks') ui.tracks = +pk[1];
       if (pk[0] === 'pass') ui.pass = +pk[1];
       if (pk[0] === 'voice') ui.voice = +pk[1];
+      if (pk[0] === 'period') { changeDraft(null); if (pk[1] !== 'oct') toast('This walkthrough shows October.'); return; }
       if (pk[0].indexOf('due-') === 0) ui.due[pk[0].slice(4)] = +pk[1];
       if (pk[0] === 'addwho') {
         ui.whoList.push(pk[1]);
