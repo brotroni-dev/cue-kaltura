@@ -88,3 +88,23 @@ thread: a pastel line in the margin that draws as you scroll, from soft red to g
 **Claude changed:** removed the review toolbar and unused options and fonts, rewrote
 placeholder messages in plain words, removed dead styles, added keyboard focus rings and
 reduced-motion fallbacks, checked desktop, tablet and phone, wrote this log and the README.
+
+## Round 14: the draft, made configurable
+**Roni asked for:** real dropdowns, a reference to the existing template, rep instructions
+like Gong, and buyer parts the manager can rename, not only their values.
+**Claude changed:** the top bar became Template, Length, Tracks and Reference calls (Goal
+removed). The buyer has an avatar picker with faces, and Mood, Voice and Language as one row
+of dropdowns (each voice has a small wave, and you listen from inside the menu). Who the
+buyer is and the Rep brief are now small editable parts: rename, remove, or Add a part.
+Reference calls became a panel: keep, remove, search and add real call snippets.
+**Got wrong:** tabs for the brief (rejected), one text block (Roni wanted separate parts),
+and a Listen button outside the menu.
+
+## Round 15: sending and results
+**Roni asked for:** a Who and when that works like a real setting, not a timeline of faces,
+no hover hints in the copy, and a results page that reads like a table.
+**Claude changed:** Who and when is a recipient list: checkbox, the person's price call, a
+Due date dropdown with the suggested day, and Add people. Opening a menu no longer redraws
+the sheet, and menus open downward unless there is no room. Results got a breadcrumb
+(Practice / Hold your price), the sections By person and By scorecard line, a header row
+and light lines between people. All "hover" hints were removed from the copy.

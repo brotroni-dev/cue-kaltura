@@ -17,6 +17,9 @@
     kofi: { name: 'Kofi' },
     hana: { name: 'Hana' },
     mark: { name: 'Mark Ellis' },
+    claire: { name: 'Claire Novak' },
+    elias: { name: 'Elias Haddad' },
+    grace: { name: 'Grace Lin' },
     ira: { name: 'Ira', full: 'Ira Klein', role: 'Head of enablement' }
   };
   var TEAM = ['dana', 'sam', 'lucia', 'omar', 'theo', 'kofi', 'hana'];
@@ -154,11 +157,11 @@
       '</header>' +
       '<div class="cue-stats" data-component="Stats">' + STATS.map(stat).join('') + '</div>' +
       '<section class="cue-section">' +
-        '<div class="cue-section-head"><h2>Worth your time</h2><span>Hover a card for the why</span></div>' +
+        '<div class="cue-section-head"><h2>Worth your time</h2></div>' +
         '<div class="cue-insights">' + INSIGHTS.map(insight).join('') + '</div>' +
       '</section>' +
       '<section class="cue-section" data-component="Skill table">' +
-        '<div class="cue-section-head"><h2>Team skills</h2><span>Hover a skill to see each person</span></div>' +
+        '<div class="cue-section-head"><h2>Team skills</h2></div>' +
         '<div class="cue-skills">' + SKILLS.map(skill).join('') + '</div>' +
       '</section>';
   }
@@ -271,22 +274,103 @@
 
   /* Screen 4: the draft */
   var MOODS = {
-    friendly: 'Open and curious. Likes the product, but has a quote that’s 20% cheaper.',
-    doubtful: 'Busy and doubtful. Has a quote that’s 20% cheaper.',
+    friendly: 'Open and curious. Likes the product, but needs a reason to pay more.',
+    doubtful: 'Busy and doubtful. Short answers until you earn more.',
     tough: 'Short on time and pushing hard for a discount. Ready to walk away.'
   };
+  /* The avatar library: a face, a name, and the voice it comes with */
+  var AVATARS = [['mark', 'Mark Ellis', 0], ['claire', 'Claire Novak', 1], ['elias', 'Elias Haddad', 2], ['grace', 'Grace Lin', 3]];
+  var VOICES = ['Calm and low', 'Warm and clear', 'Quick and direct', 'Soft and steady'];
+  ui.avatar = 'mark';
+  ui.voice = 0;
+  function av() { return AVATARS.filter(function (a) { return a[0] === ui.avatar; })[0]; }
+  function avFirst() { return av()[1].split(' ')[0]; }
+  var MOOD_NOTES = { friendly: 'Open, needs a reason to pay more', doubtful: 'Busy, short answers', tough: 'Pushes hard, ready to walk away' };
+  function cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+  var VOICE_NOTES = ['Slow, few words', 'Friendly, easy to follow', 'Fast, gets to the point', 'Quiet, even pace'];
+  var VOICE_BARS = [[40, 60, 50, 65, 45], [45, 80, 100, 80, 45], [95, 35, 100, 30, 85], [40, 45, 40, 45, 40]];
+  function voiceGlyph(i) {
+    return '<span class="cue-vglyph" aria-hidden="true">' + VOICE_BARS[i].map(function (h) { return '<i style="height:' + h + '%"></i>'; }).join('') + '</span>';
+  }
+  /* Reference calls: real call snippets reps watch before the practice.
+     The creator keeps, removes, finds and adds them */
+  var REFS = {
+    dana: ['dana', 'Dana \u00b7 Kestrel Shipping', '0:40', 'Shows what doing nothing costs before the price', 'Dana\u2019s call'],
+    dana2: ['dana', 'Dana \u00b7 Northwind Freight', '1:10', 'Gets the COO into the next call', 'Dana\u2019s call'],
+    model: ['ira', 'Model call \u00b7 Pricing template', '2:30', 'By Ira, enablement. From value to price to next step', 'Model call'],
+    ben: ['BO', 'Ben Ortiz \u00b7 East team', '0:55', 'Turns \u201ctoo expensive\u201d into a cost per year', 'Ben\u2019s call']
+  };
+  ui.refs = ['dana'];
+  function refFace(r) {
+    return r[0].length === 2 ? '<span class="cue-ref-initials">' + r[0] + '</span>' : '<img src="assets/people/' + r[0] + '.jpg" alt="">';
+  }
+  function refRow(id, on) {
+    var r = REFS[id];
+    return '<div class="cue-ref"' + (ui.refFlash === id ? ' data-flash' : '') + (on ? '' : ' data-find="' + (r[1] + ' ' + r[3]).toLowerCase().replace(/"/g, '') + '"') + ' data-component="Reference call">' +
+      '<button class="cue-ref-play" data-play aria-label="Play ' + r[1] + '">' + refFace(r) +
+        '<span class="cue-ref-hover">' + ic('play', 'cue-ic--xs') + '</span>' +
+        '<span class="cue-ref-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>' +
+      '<span class="cue-dd-text"><b>' + r[1] + '</b><span>' + r[2] + ' \u00b7 ' + r[3] + '</span></span>' +
+      (on ? '<button class="cue-ref-act" data-ref-remove="' + id + '" aria-label="Remove ' + r[1] + '">' + ic('close', 'cue-ic--xs') + '</button>'
+          : '<button class="cue-ref-act cue-ref-act--add" data-ref-add="' + id + '">' + ic('plus', 'cue-ic--xs') + 'Add</button>') +
+    '</div>';
+  }
+  function refCalls() {
+    var open = ui.dd === 'refs';
+    var picked = ui.refs;
+    var rest = Object.keys(REFS).filter(function (id) { return picked.indexOf(id) < 0; });
+    var faces = [];
+    picked.forEach(function (id) { var f = REFS[id][0]; if (f.length > 2 && faces.indexOf(f) < 0) faces.push(f); });
+    var value = !picked.length ? 'Add a call' : picked.length === 1 ? REFS[picked[0]][4] : picked.length + ' calls';
+    return '<span class="cue-dd' + (open ? ' is-open' : '') + '">' +
+      '<button class="cue-meta-item" data-dd="refs" aria-haspopup="dialog" aria-expanded="' + open + '"' + (ui.flash === 'refs' ? ' data-flash' : '') + '>' +
+        '<span>Reference calls</span>' + (faces.length ? '<span class="cue-avatars">' + faces.map(function (f) { return ava(f, 'xs'); }).join('') + '</span>' : '') +
+        value + ic('chevronDown', 'cue-ic--xs') + '</button>' +
+      (open ? '<div class="cue-dd-menu cue-refs' + (ui.ddStill ? ' is-still' : '') + '" role="dialog" aria-label="Reference calls" data-component="Reference calls">' +
+        '<p class="cue-refs-label">In this practice<span>Reps watch these before the call</span></p>' +
+        (picked.length ? picked.map(function (id) { return refRow(id, true); }).join('') : '<p class="cue-refs-empty">No reference calls yet. Add one below.</p>') +
+        '<label class="cue-refs-search">' + ic('search', 'cue-ic--sm') + '<input type="text" data-ref-search placeholder="Find a call, like \u201clate fees\u201d"></label>' +
+        (rest.length ? '<p class="cue-refs-label">Suggested<span>Won calls on price, across teams</span></p>' + rest.map(function (id) { return refRow(id, false); }).join('') : '') +
+        '<p class="cue-refs-empty" data-ref-none hidden>No calls match.</p>' +
+      '</div>' : '') +
+    '</span>';
+  }
+
+  /* A part: one small editable block, a bold name and its text. Hover shows edit and remove */
+  function partHTML(name, text) {
+    return '<div class="cue-part" data-component="Part">' +
+      '<p class="cue-part-text" contenteditable="true" spellcheck="false"><b>' + name + '</b> ' + text + '</p>' +
+      '<span class="cue-part-tools">' + ic('pencil', 'cue-ic--xs') +
+        '<button class="cue-part-del" data-remove-part aria-label="Remove this part">' + ic('close', 'cue-ic--xs') + '</button></span>' +
+    '</div>';
+  }
+  function parts(key, list) {
+    return '<div class="cue-parts" data-keep="' + key + '">' + kept(key, list.map(function (x) { return partHTML(x[0], x[1]); }).join('')) + '</div>' +
+      '<button class="cue-add-part" data-add-part="' + key + '">' + ic('plus', 'cue-ic--xs') + 'Add a part</button>';
+  }
+  /* Text the manager edits survives re-renders (a dropdown opening redraws the screen) */
+  ui.keep = {};
+  function kept(key, html) { return ui.keep[key] || html; }
+  function saveKeep(el) { ui.keep[el.getAttribute('data-keep')] = el.innerHTML.replace(/ data-flash=""/g, ''); }
+  function flashEl(el) { if (!el) return; el.removeAttribute('data-flash'); void el.offsetWidth; el.setAttribute('data-flash', ''); }
+  function setMood(m) {
+    ui.mood = m;
+    if (ui.keep.buyer) ui.keep.buyer = ui.keep.buyer.replace(/(<span data-mood-text[^>]*>)[\s\S]*?(<\/span>)/, '$1' + MOODS[m] + '$2');
+  }
   var SCORECARD = [
     ['Asks about the problem first', '“What happens when a shipment is late?”'],
     ['Puts a number on the value', '“So late fees cost you about $80K a year.”'],
     ['Handles “too expensive” without a discount', '“Let’s compare what each option costs you over a year.”'],
     ['Agrees on a next step', '“Can we book 20 minutes with your COO on Tuesday?”']
   ];
-  var DUE = [
-    ['sam', 'Acme', 'Thu, Oct 23'],
-    ['lucia', 'Northline', 'Mon, Oct 20'],
-    ['omar', 'Pinecrest', 'Fri, Oct 24'],
-    ['theo', 'Brightline', 'Tue, Oct 21']
-  ];
+  /* Who gets it: each person's next price call (deal, day index in DAYS, time). No deal = no price call this week */
+  var WHO_INFO = {
+    sam: ['Acme', 5, '11:00'], lucia: ['Northline', 2, '10:00'], omar: ['Pinecrest', 6, '09:30'], theo: ['Brightline', 3, '14:00'],
+    kofi: ['Ridgeway', 4, '15:00'], hana: [null, 6], dana: [null, 6]
+  };
+  var WHO_EXTRA = { kofi: 'New on the team \u00b7 price call Wed', hana: 'New on the team', dana: 'Top of the team on price' };
+  ui.whoList = ['sam', 'lucia', 'omar', 'theo'];
+  ui.due = { sam: 5, lucia: 2, omar: 6, theo: 3 };
   ui.mood = 'doubtful';
   ui.who = { sam: true, lucia: true, omar: true, theo: true };
   ui.weights = [20, 30, 30, 20];
@@ -295,84 +379,133 @@
   ui.lang = 0;
   ui.flash = null;
   var LANGS = ['English', 'Español', 'Deutsch', 'Français', 'עברית'];
-  var LENGTHS = [5, 8, 10];
+  var LENGTHS = [5, 8, 10, 15];
+  var TEMPLATES = [
+    ['pricing', 'Pricing', 'By Ira, enablement \u00b7 used by 5 teams'],
+    ['discovery', 'Discovery questions', 'By Ira, enablement \u00b7 used by 3 teams'],
+    ['firstcalls', 'First calls that land', 'By Ira, enablement \u00b7 used by 4 teams'],
+    ['scratch', 'Start from scratch', 'Cue drafts from your team\u2019s lost calls only']
+  ];
+  var TRACKS = [['Win rate at the price step', 'Suggested by the insight'], ['Average discount', ''], ['Deal size', ''], ['Time to close', '']];
+  ui.template = 'pricing';
+  ui.tracks = 0;
+  ui.dd = null;
+
+  /* A real dropdown: a button, and a small menu under it while open */
+  function dropdown(key, label, value, items, cls) {
+    var open = ui.dd === key;
+    return '<span class="cue-dd' + (open ? ' is-open' : '') + '">' +
+      '<button class="' + (cls || 'cue-meta-item') + '" data-dd="' + key + '" aria-haspopup="listbox" aria-expanded="' + open + '"' + (ui.flash === key ? ' data-flash' : '') + '>' +
+        label + value + ic('chevronDown', 'cue-ic--xs') + '</button>' +
+      (open ? '<span class="cue-dd-menu" role="listbox" data-component="Dropdown menu">' + items.map(function (it) {
+        return '<button class="cue-dd-item' + (it.on ? ' is-on' : '') + '" role="option" aria-selected="' + !!it.on + '" data-dd-pick="' + key + '|' + it.v + '">' +
+          (it.lead || '') + '<span class="cue-dd-text"><b>' + it.title + '</b>' + (it.sub ? '<span>' + it.sub + '</span>' : '') + '</span>' +
+          (it.on ? ic('check', 'cue-ic--sm') : '') + '</button>';
+      }).join('') + '</span>' : '') +
+    '</span>';
+  }
   var WEIGHT_COLORS = ['var(--viz-calm)', 'var(--viz-up)', 'var(--viz-down)', '#f3d38b'];
   function whoCount() { return Object.keys(ui.who).filter(function (k) { return ui.who[k]; }).length; }
 
   var DAYS = [['Thu', '16'], ['Fri', '17'], ['Mon', '20'], ['Tue', '21'], ['Wed', '22'], ['Thu', '23'], ['Fri', '24']];
-  var DUE_DAY = { lucia: 2, theo: 3, sam: 5, omar: 6 };
-  var DUE_TIME = { lucia: '10:00', theo: '14:00', sam: '11:00', omar: '09:30' };
   ui.aiOpen = false;
+  function dayLabel(i) { return DAYS[i][0] + ', Oct ' + DAYS[i][1]; }
+
+  /* Who and when (in the Send sheet): one row per person. Checkbox to include,
+     their price call for context, and a due date you can change. Add people at the end */
+  function recipients() {
+    var rows = ui.whoList.map(function (id) {
+      var on = !!ui.who[id];
+      var info = WHO_INFO[id];
+      var last = info[0] ? info[1] : 6;
+      var items = [];
+      for (var k = 1; k <= last; k++) {
+        items.push({ v: k, title: dayLabel(k), on: ui.due[id] === k,
+          sub: k === last ? (info[0] ? 'Before the ' + info[0] + ' call \u00b7 Suggested' : 'End of the week \u00b7 Suggested') : '' });
+      }
+      return '<div class="cue-who' + (on ? '' : ' is-off') + '"' + (ui.whoFlash === id ? ' data-flash' : '') + ' data-component="Recipient">' +
+        '<label class="cue-who-pick"><input type="checkbox" data-who="' + id + '"' + (on ? ' checked' : '') + '>' +
+          '<span class="cue-checkbox">' + ic('check', 'cue-ic--sm') + '</span>' +
+          '<img src="assets/people/' + id + '.jpg" alt="">' +
+          '<span class="cue-who-name"><b>' + (P[id].full || P[id].name) + '</b><span>' +
+            (info[0] ? info[0] + ' price call \u00b7 ' + DAYS[info[1]][0] + ' ' + info[2] : 'No price call this week') + '</span></span></label>' +
+        dropdown('due-' + id, '<span>Due</span>', dayLabel(ui.due[id]), items, 'cue-meta-item cue-who-due') +
+        '<span class="cue-who-off">Not included</span>' +
+      '</div>';
+    }).join('');
+    var more = Object.keys(WHO_EXTRA).filter(function (id) { return ui.whoList.indexOf(id) < 0; });
+    return '<div class="cue-whos" data-component="Recipients">' + rows + '</div>' +
+      (more.length ? '<div class="cue-who-add">' + dropdown('addwho', ic('plus', 'cue-ic--xs') + 'Add people', '', more.map(function (id) {
+        return { v: id, title: P[id].name, sub: WHO_EXTRA[id], lead: ava(id, 'sm') };
+      })) + '</div>' : '');
+  }
 
   function draft() {
     var n = whoCount();
 
-    /* The buyer: a calm profile. Little by default, every value editable on hover */
-    var seg = '<div class="cue-seg cue-seg--sm" role="group" aria-label="Mood" data-component="Segmented control">' +
-      ['friendly', 'doubtful', 'tough'].map(function (m) {
-        return '<button data-mood="' + m + '" aria-pressed="' + (ui.mood === m) + '">' + m.charAt(0).toUpperCase() + m.slice(1) + '</button>';
-      }).join('') + '</div>';
-    /* One field block for every part of the persona: a label, the value under it */
-    function field(label, value, opts) {
-      opts = opts || {};
-      return '<div class="cue-fc' + (opts.wide ? ' cue-fc--wide' : '') + '"' + (opts.flash && ui.flash === opts.flash ? ' data-flash' : '') + ' data-component="Field">' +
-        '<span class="cue-fc-label">' + label + (opts.extra || '') + '</span>' +
-        (opts.raw ? value : '<span class="cue-fc-value" contenteditable="true" spellcheck="false"' + (opts.attr || '') + '>' + value + '</span>' + ic('pencil', 'cue-ic--xs cue-fc-pencil')) +
-      '</div>';
-    }
+    /* The buyer. Controls for what the avatar is (face, mood, voice, language),
+       one text for who they play: the manager can rename, add or delete any part */
+    var avatarPick = dropdown('avatar', '', '<img class="cue-persona-photo" src="assets/people/' + ui.avatar + '.jpg" alt=""><b>' + av()[1] + '</b>',
+      AVATARS.map(function (a) {
+        return { v: a[0], title: a[1], sub: VOICES[a[2]] + ' voice', on: a[0] === ui.avatar, lead: '<img class="cue-dd-face" src="assets/people/' + a[0] + '.jpg" alt="">' };
+      }).concat([{ v: 'more', title: 'More avatars', sub: 'From the Kaltura avatar library', lead: '<span class="cue-dd-lead">' + ic('plus', 'cue-ic--sm') + '</span>' }]),
+      'cue-persona-pick');
+    /* Mood, voice, language: one row of dropdowns. Each voice has its own little wave; hover one in the menu to listen */
+    var voiceSet = '<div class="cue-persona-set" data-component="Avatar settings">' +
+      dropdown('mood', '<span>Mood</span>', cap(ui.mood), ['friendly', 'doubtful', 'tough'].map(function (m) {
+        return { v: m, title: cap(m), sub: MOOD_NOTES[m], on: m === ui.mood };
+      })) +
+      dropdown('voice', '<span>Voice</span>', VOICES[ui.voice], VOICES.map(function (v, i) {
+        return { v: i, title: v, sub: VOICE_NOTES[i] + (i === av()[2] ? ' \u00b7 Made for ' + avFirst() : ''), on: i === ui.voice,
+          lead: '<span class="cue-dd-lead cue-voice-lead" data-play role="button" tabindex="0" aria-label="Listen to ' + v + '">' + voiceGlyph(i) + ic('play', 'cue-ic--xs') + '</span>' };
+      })) +
+      dropdown('lang', '<span>Language</span>', LANGS[ui.lang], LANGS.map(function (l, i) { return { v: i, title: l, on: i === ui.lang }; })) +
+    '</div>';
     var buyer = '<section class="cue-panel cue-persona" data-component="Panel/Buyer">' +
-      '<div class="cue-persona-head">' +
-        '<img class="cue-persona-photo" src="assets/people/mark.jpg" alt="Mark Ellis">' +
-        '<div class="cue-persona-name"><b>Mark Ellis</b><span data-tip="CFO of a 300-person logistics company. Company and deal size change to match each person’s real deal.">CFO · AI avatar</span></div>' +
-        seg +
-      '</div>' +
-      '<div class="cue-fields">' +
-        field('Style', MOODS[ui.mood], { wide: true, flash: 'mood', attr: ' data-mood-text' }) +
-        field('The objection to beat', '“Your price is 20% higher than the other quote.”', { wide: true, flash: 'objection',
-          extra: '<span class="cue-evidence" data-tip="Heard in 9 of the team’s 12 lost calls">' + ic('sparkle', 'cue-ic--xs') + '9 of 12 lost calls</span>' }) +
-        field('Wants', 'Lower shipping costs, without a risky switch.') +
-        field('Gives in when', 'You put a real number on what late shipments cost.') +
-        field('Knows', '<span class="cue-tags"><span class="cue-tag-chip">Has a cheaper quote</span><span class="cue-tag-chip">Burned by a past vendor</span>' +
-          '<button class="cue-tag-chip cue-tag-chip--add" aria-label="Add something Mark knows" data-toast="Type a fact Mark knows, like “uses a 3PL today”.">' + ic('plus', 'cue-ic--xs') + '</button></span>', { raw: true }) +
-        field('Voice', '<span class="cue-voice"><button class="cue-tag-chip cue-tag-chip--pick" data-field-btn="lang"' + (ui.flash === 'lang' ? ' data-flash' : '') + '>' + LANGS[ui.lang] + ic('chevronDown', 'cue-ic--xs') + '</button>' +
-          '<span class="cue-fc-value" contenteditable="true" spellcheck="false">Calm, short answers</span></span>', { raw: true }) +
-      '</div>' +
+      '<div class="cue-panel-head"><h2>The buyer</h2><span class="cue-card-note" data-tip="Company and deal size change to match each person’s real deal">What the AI avatar plays</span></div>' +
+      '<div class="cue-persona-head">' + avatarPick + '</div>' +
+      voiceSet +
+      parts('buyer', [
+        ['Role.', 'CFO of a 300-person logistics company.'],
+        ['Mood.', '<span data-mood-text>' + MOODS[ui.mood] + '</span>'],
+        ['Wants.', 'Lower shipping costs, without a risky switch.'],
+        ['Knows.', 'There’s a cheaper quote. A past vendor let them down.'],
+        ['Decides with.', 'The COO, who signs off on anything over $50K.'],
+        ['Shares only if asked.', 'Two big clients left after late deliveries.'],
+        ['The objection.', '“Your price is 20% higher than the other quote.” ' +
+          '<span class="cue-evidence" contenteditable="false" data-tip="Heard in 9 of the team’s 12 lost calls">' + ic('sparkle', 'cue-ic--xs') + '9 of 12 lost calls</span>'],
+        ['Gives in when.', 'You show what late fees really cost.']
+      ]) +
+    '</section>';
+
+    /* The rep brief: what each person reads before the call, in the same editable parts */
+    var brief = '<section class="cue-panel" data-component="Panel/Rep brief">' +
+      '<div class="cue-panel-head"><h2>Rep brief</h2><span class="cue-card-note" data-tip="Deal names and dates match each person\u2019s own deal">What each person reads before the call</span></div>' +
+      parts('brief', [
+        ['The situation.', 'Second call. ' + avFirst() + ' has a 20% cheaper quote.'],
+        ['Your goal.', 'Show what late fees cost before you talk price.'],
+        ['You know.', 'Late fees cost them about $80K a year.'],
+        ['Rules.', 'No discount above 5%. Hints are off.']
+      ]) +
     '</section>';
 
     /* The scorecard: one split bar, one block per line, weights you can step */
     var score = '<section class="cue-panel" data-component="Panel/Scorecard">' +
-      '<div class="cue-panel-head"><h2>Scored on</h2><span class="cue-card-note">Weights add up to 100%</span></div>' +
+      '<div class="cue-panel-head"><h2>Scored on</h2><span class="cue-card-note">Weights add up to 100%</span>' +
+        dropdown('pass', '<span>Pass at</span>', String(ui.pass), [60, 65, 70, 75, 80, 85, 90, 95].map(function (v) { return { v: v, title: 'Pass at ' + v, sub: v === 80 ? 'Suggested for this template' : '', on: v === ui.pass }; }), 'cue-meta-item cue-pass-pick') + '</div>' +
       '<div class="cue-split-bar' + (ui.flash === 'weights' ? ' is-flash' : '') + '" role="img" aria-label="Weights: ' + ui.weights.join(', ') + ' percent">' +
         ui.weights.map(function (w, i) { return '<i data-seg-i="' + i + '" style="width:' + w + '%;background:' + WEIGHT_COLORS[i] + '"></i>'; }).join('') + '</div>' +
       '<ol class="cue-wlist">' + SCORECARD.map(function (r, i) {
         return '<li class="cue-wrow" data-row-i="' + i + '" data-tip="Good: ' + r[1].replace(/"/g, '&quot;') + '"><span class="cue-wdot" style="background:' + WEIGHT_COLORS[i] + '"></span>' +
-          '<span class="cue-wname" contenteditable="true" spellcheck="false">' + r[0] + '</span>' +
+          '<span class="cue-wname" contenteditable="true" spellcheck="false" data-keep="score' + i + '">' + kept('score' + i, r[0]) + '</span>' +
           '<span class="cue-weight' + (ui.flash === 'weights' ? ' is-flash' : '') + '"><button data-weight="' + i + '|-5" aria-label="Less weight">−</button><b>' + ui.weights[i] + '%</b><button data-weight="' + i + '|5" aria-label="More weight">+</button></span></li>';
       }).join('') + '</ol>' +
-      '<label class="cue-pass"><span>Pass at</span><input type="range" min="60" max="95" step="5" value="' + ui.pass + '" data-pass aria-label="Pass mark" style="--p:' + ((ui.pass - 60) / 35 * 100) + '%"><b data-pass-label>' + ui.pass + '</b></label>' +
-    '</section>';
-
-    /* Who and when: faces on their due day. Click a face to leave that person out */
-    var marks = DUE.map(function (d) {
-      var on = ui.who[d[0]];
-      return '<button class="cue-due' + (on ? '' : ' is-off') + '" style="--x:' + (DUE_DAY[d[0]] / (DAYS.length - 1) * 100) + '%" data-who-toggle="' + d[0] + '" ' +
-        'data-tip="' + P[d[0]].name + (on ? ' · before the ' + d[1] + ' price call, ' + DAYS[DUE_DAY[d[0]]].join(' ') + ', ' + DUE_TIME[d[0]] + '. Click to leave out.' : ' is left out. Click to add back.') + '">' +
-        '<img src="assets/people/' + d[0] + '.jpg" alt="' + P[d[0]].name + '"><span>' + P[d[0]].name + '</span></button>';
-    }).join('');
-    var who = '<section class="cue-panel" data-component="Panel/Who and when">' +
-      '<div class="cue-panel-head"><h2>Who and when</h2>' +
-        '<button class="cue-tag-chip cue-tag-chip--add" aria-label="Add people" data-tip="Add people" data-toast="Pick more people from your team.">' + ic('plus', 'cue-ic--xs') + '</button>' +
-        '<span class="cue-card-note">Due before each price call</span></div>' +
-      '<div class="cue-week' + (ui.flash === 'who' ? ' is-flash' : '') + '"><div class="cue-week-marks">' + marks + '</div>' +
-        '<div class="cue-week-axis">' + DAYS.map(function (d, i) {
-          return '<span style="--x:' + (i / (DAYS.length - 1) * 100) + '%"' + (i === 0 ? ' class="is-today"' : '') + '><i></i>' + (i === 0 ? 'Today' : d[0] + ' ' + d[1]) + '</span>';
-        }).join('') + '</div></div>' +
     '</section>';
 
     /* Ask Cue: a small input that grows when you click it, then shows ideas */
     var ai = '<div class="cue-ai" data-component="AI input">' +
       '<div class="cue-ai-chips"><span>Try</span>' +
-        '<button data-ai="tough">Make Mark tougher</button>' +
+        '<button data-ai="tough">Make ' + avFirst() + ' tougher</button>' +
         '<button data-ai="value">Weigh the value line higher</button>' +
         '<button data-ai="short">Make it 5 minutes</button>' +
       '</div>' +
@@ -381,24 +514,27 @@
         '<button class="cue-ai-send" data-ai="text" aria-label="Apply">' + ic('arrowRight', 'cue-ic--sm') + '</button></label>' +
     '</div>';
 
+    var tpl = TEMPLATES.filter(function (t) { return t[0] === ui.template; })[0];
     var meta = '<div class="cue-meta">' +
-      '<button class="cue-meta-item" data-field-btn="length"' + (ui.flash === 'length' ? ' data-flash' : '') + '>' + ui.length + ' min' + ic('chevronDown', 'cue-ic--xs') + '</button>' +
-      '<button class="cue-meta-item" data-field-btn="goal"><span>Goal</span> Show the value before the price' + ic('chevronDown', 'cue-ic--xs') + '</button>' +
-      '<button class="cue-meta-item" data-field-btn="tracks"><span>Tracks</span> Win rate at the price step' + ic('chevronDown', 'cue-ic--xs') + '</button>' +
-      '<button class="cue-meta-item" data-play aria-label="Play Dana’s clip"><span>Before the call</span> ' + ava('dana', 'xs') + ' Dana’s clip' + ic('play', 'cue-ic--xs') + '</button>' +
+      dropdown('template', '<span>Template</span>', ava('ira', 'xs') + tpl[1], TEMPLATES.map(function (t) {
+        return { v: t[0], title: t[1], sub: t[2], on: t[0] === ui.template, lead: t[0] === 'scratch' ? '<span class="cue-dd-lead">' + ic('sparkle', 'cue-ic--sm') + '</span>' : ava('ira', 'sm') };
+      })) +
+      dropdown('length', '', ui.length + ' min', LENGTHS.map(function (l) { return { v: l, title: l + ' minutes', on: l === ui.length }; })) +
+      dropdown('tracks', '<span>Tracks</span>', TRACKS[ui.tracks][0], TRACKS.map(function (t, i) { return { v: i, title: t[0], sub: t[1], on: i === ui.tracks }; })) +
+      refCalls() +
     '</div>';
 
     return pagehead('Pricing insight', 1,
         '<button class="cue-btn cue-btn--secondary" data-toast="You’ll see the call exactly as Sam does, at step 8.">' + ic('play') + 'Try it yourself</button>' +
         '<button class="cue-btn" data-go="4" data-hint data-send-label>' + ic('send') + 'Send to ' + n + ' people</button>') +
       '<div class="cue-pagehead cue-rise">' +
-        '<div class="cue-titlerow"><h1 class="cue-h1 cue-editable" contenteditable="true" spellcheck="false">Hold your price</h1>' +
+        '<div class="cue-titlerow"><h1 class="cue-h1 cue-editable" contenteditable="true" spellcheck="false" data-keep="title">' + kept('title', 'Hold your price') + '</h1>' +
           '<span class="cue-pill" data-tip="Built from enablement’s Pricing template and 12 of your team’s lost calls">' + ic('sparkle', 'cue-ic--xs') + 'Draft by Cue</span></div>' +
         meta +
       '</div>' +
-      '<div class="cue-grid cue-rise" style="--i:1">' +
+      '<div class="cue-grid cue-grid--fill cue-rise" style="--i:1">' +
         '<div class="cue-col cue-col--even">' + buyer + '</div>' +
-        '<div class="cue-col cue-col--even">' + score + who + '</div>' +
+        '<div class="cue-col cue-col--even">' + brief + score + '</div>' +
       '</div>' + ai;
   }
 
@@ -427,7 +563,7 @@
   }
   function aiChange(kind, text) {
     ui.aiOpen = false;
-    if (kind === 'tough') { ui.mood = 'tough'; changeDraft('mood'); toast('Mark is tougher now: pushes harder and is ready to walk away.'); }
+    if (kind === 'tough') { setMood('tough'); changeDraft('mood'); flashEl(main.querySelector('[data-mood-text]')); toast(avFirst() + ' is tougher now: pushes harder and is ready to walk away.'); }
     if (kind === 'value') { ui.weights = [15, 40, 30, 15]; changeDraft('weights'); toast('“Puts a number on the value” now counts for 40%.'); }
     if (kind === 'short') { ui.length = 5; changeDraft('length'); toast('The practice is now 5 minutes.'); }
     if (kind === 'text') { changeDraft('objection'); toast(text ? 'Cue updated the draft: ' + text : 'Type what you want to change.'); }
@@ -436,20 +572,19 @@
   /* Screen 5: send (a sheet over the draft) */
   function sendSheet() {
     var n = whoCount();
-    var ids = DUE.filter(function (d) { return ui.who[d[0]]; });
     return '<div class="cue-sheet" role="dialog" aria-label="Send" data-component="Sheet/Send">' +
       '<div class="cue-sheet-body" data-send-body>' +
-        '<div class="cue-card-head"><h2>Send to ' + n + ' people</h2><button class="cue-icon-btn cue-icon-btn--plain" data-go="3" aria-label="Close">' + ic('close') + '</button></div>' +
+        '<div class="cue-card-head"><h2 data-send-count>Send to ' + n + ' people</h2><button class="cue-icon-btn cue-icon-btn--plain" data-go="3" aria-label="Close">' + ic('close') + '</button></div>' +
         '<div class="cue-field"><span class="cue-field-label">Send by</span>' +
           '<div class="cue-channels">' +
             '<label class="cue-channel"><input type="checkbox" checked>' + '<span class="cue-logo-sm">' + window.CueIcons.SLACK + '</span>Slack<span class="cue-checkbox">' + ic('check', 'cue-ic--sm') + '</span></label>' +
             '<label class="cue-channel"><input type="checkbox" checked>' + '<span class="cue-logo-sm">' + window.CueIcons.GMAIL + '</span>Email<span class="cue-checkbox">' + ic('check', 'cue-ic--sm') + '</span></label>' +
           '</div></div>' +
         '<div class="cue-field"><span class="cue-field-label">Message <em>' + ic('sparkle', 'cue-ic--xs') + 'Drafted by Cue</em></span>' +
-          '<div class="cue-message" contenteditable="true" spellcheck="false">Hi <span class="cue-token" contenteditable="false">first name</span>, your <span class="cue-token" contenteditable="false">deal</span> price call is on <span class="cue-token" contenteditable="false">day</span>. Here’s an 8 minute practice with a tough CFO. Rounds are private, share your best one. Noa</div></div>' +
-        '<div class="cue-field"><span class="cue-field-label">Due</span>' +
-          '<div class="cue-due-list">' + ids.map(function (d) { return '<span>' + ava(d[0], 'xs') + d[2].split(',')[0] + ' ' + d[2].split(', ')[1] + '</span>'; }).join('') + '</div></div>' +
-        '<div class="cue-sheet-foot"><button class="cue-link" data-go="3">Cancel</button><button class="cue-btn" data-sent data-hint>' + ic('send') + 'Send</button></div>' +
+          '<div class="cue-message" contenteditable="true" spellcheck="false" data-keep="message">' + kept('message', 'Hi <span class="cue-token" contenteditable="false">first name</span>, your <span class="cue-token" contenteditable="false">deal</span> price call is on <span class="cue-token" contenteditable="false">day</span>. Here’s an 8 minute practice with a tough CFO. Rounds are private, share your best one. Noa') + '</div></div>' +
+        '<div class="cue-field"><span class="cue-field-label">Who and when <em>Due before each person\u2019s price call. Change any date.</em></span>' +
+          recipients() + '</div>' +
+        '<div class="cue-sheet-foot"><button class="cue-link" data-go="3">Cancel</button><button class="cue-btn" data-sent data-hint' + (n ? '' : ' disabled') + '>' + ic('send') + 'Send</button></div>' +
       '</div>' +
     '</div>';
   }
@@ -560,7 +695,11 @@
       '<button data-channel="gmail" aria-pressed="' + (ui.channel === 'gmail') + '">Gmail</button></span>';
   }
 
-  /* Screen 7: before the call */
+  /* Screen 7: before the call. Shows the first reference call Noa kept */
+  function refMoment(r) {
+    return '<div class="cue-moment cue-moment--good">' + (r[0].length === 2 ? '<span class="cue-ref-initials">' + r[0] + '</span>' : ava(r[0], 'sm')) +
+      '<div class="cue-moment-text"><span>Reference call \u00b7 ' + r[1].split(' \u00b7 ')[0] + ' \u00b7 ' + r[2] + '</span><b>What good sounds like</b></div>' + play(r[2], r[1]) + '</div>';
+  }
   function beforeCall() {
     var score = '<ol class="cue-score">' + SCORECARD.map(function (r, i) {
       return '<li data-tip="Good: ' + r[1] + '"><span>' + r[0] + '</span><b class="cue-wt">' + ui.weights[i] + '%</b></li>';
@@ -575,8 +714,9 @@
         '<div class="cue-prep-text">' +
           '<div><h1 class="cue-h1">Hold your price</h1><p class="cue-sub">Before your Acme call · Thu 11:00 · 8 min</p></div>' +
           '<div class="cue-prep-block"><span class="cue-field-label">You’ll meet</span><p>Busy and doubtful. Has a quote that’s 20% cheaper. Wants to know why you cost more.</p></div>' +
-          '<div class="cue-prep-block"><span class="cue-field-label">You’re scored on <em>Hover a line to hear what good sounds like</em></span>' + score + '</div>' +
-          '<div class="cue-moment cue-moment--good">' + ava('dana', 'sm') + '<div class="cue-moment-text"><span>Dana · 40 sec</span><b>What good sounds like</b></div>' + play('0:40', 'Dana’s clip') + '</div>' +
+          '<div class="cue-prep-block"><span class="cue-field-label">Your goal</span><p>Show what late shipments cost before you talk price. End with a clear next step.</p></div>' +
+          '<div class="cue-prep-block"><span class="cue-field-label">You’re scored on</span>' + score + '</div>' +
+          (ui.refs.length ? refMoment(REFS[ui.refs[0]]) : '') +
           '<div class="cue-prep-foot"><button class="cue-btn" data-go="7" data-hint>' + ic('mic') + 'Start call</button><button class="cue-btn cue-btn--secondary" data-toast="Your mic sounds good.">Test mic</button>' +
             '<span class="cue-private">' + ic('lock', 'cue-ic--sm') + 'Rounds are private. You choose which one Noa sees.</span></div>' +
         '</div>' +
@@ -722,7 +862,7 @@
       return '<button class="cue-pin" style="--x:' + (sec / 480 * 100).toFixed(1) + '%;--c:var(--viz-' + m[1] + ')" data-tip="' + m[0] + ' · ' + m[2].replace(/"/g, '&quot;') + '" data-play aria-label="Replay ' + m[0] + '"><span>' + m[0] + '</span></button>';
     }).join('');
     return '<section class="cue-card cue-rise" style="--i:1" data-component="Round timeline">' +
-      '<div class="cue-card-head"><h2>Your round</h2><span class="cue-card-note">8:00 · hover a pin to read it</span></div>' +
+      '<div class="cue-card-head"><h2>Your round</h2><span class="cue-card-note">8:00</span></div>' +
       '<div class="cue-timeline"><div class="cue-timeline-wave">' + bars + '</div>' + pins + '</div>' +
       '<div class="cue-timeline-axis"><span>0:00</span><span>4:00</span><span>8:00</span></div>' +
     '</section>';
@@ -814,7 +954,9 @@
     ['omar', 68, 3, [74, 50, 66, 78], 'Needs a 1:1', 'down']
   ];
   function results() {
-    var people = '<div class="cue-rows">' + RESULTS.map(function (r) {
+    var head = '<div class="cue-row cue-result cue-result-head" aria-hidden="true"><span class="cue-row-name">Person</span>' +
+      '<span class="cue-ticks-h">Scorecard</span><span class="cue-row-num--lg">Score</span><span class="cue-result-status">Status</span><span class="cue-result-gap"></span></div>';
+    var people = '<div class="cue-rows cue-rows--table">' + head + RESULTS.map(function (r) {
       var lines = SCORECARD.map(function (l, i) { return l[0].replace(/“|”/g, '') + ' ' + r[3][i]; }).join(' · ');
       return '<div class="cue-row cue-result" data-tip="' + lines + '" data-component="Result row">' + ava(r[0], 'md') +
         '<span class="cue-row-name"><b>' + P[r[0]].name + '</b><span>' + r[2] + ' rounds · best round shared</span></span>' +
@@ -836,12 +978,17 @@
         '<span class="cue-skill-score">' + avg + '</span>' +
         '<span class="cue-skill-end">' + (avg < 70 ? '<span class="cue-status-pill cue-status-pill--down">Weakest</span>' : '') + '</span></div>';
     }).join('') + '</div>';
-    return pagehead('Home', 0,
-        '<button class="cue-btn cue-btn--secondary" data-toast="Sends a harder round to everyone who passed.">' + ic('replay') + 'Send another round</button>') +
-      '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">Hold your price · Results</h1>' +
+    /* Breadcrumb: this page sits under the list of practices (not part of the walkthrough) */
+    return '<header class="cue-pagebar" data-component="Page bar">' +
+        '<nav class="cue-crumbs" aria-label="Breadcrumb" data-component="Breadcrumb">' +
+          '<button class="cue-crumb" data-toast="All your team\u2019s practices. This walkthrough skips the list.">Practice</button><span class="cue-crumb-sep" aria-hidden="true">/</span>' +
+          '<button class="cue-crumb" data-toast="The practice setup: the buyer, the brief and the scorecard.">Hold your price</button></nav>' +
+        '<div class="cue-pagebar-actions"><button class="cue-btn cue-btn--secondary" data-toast="Sends a harder round to everyone who passed.">' + ic('replay') + 'Send another round</button></div>' +
+      '</header>' +
+      '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">Results</h1>' +
         '<p class="cue-sub"><b>4 of 4</b> done · Average <b>76</b> · Pass at 80 · Up 12 from the first rounds</p></div>' +
-      '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>Who needs what</h2><span>Hover a person for each line</span></div>' + people + '</section>' +
-      '<section class="cue-section cue-rise" style="--i:2"><div class="cue-section-head"><h2>Team by scorecard line</h2><span>Hover a line to see each person</span></div>' + team + '</section>';
+      '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>By person</h2></div>' + people + '</section>' +
+      '<section class="cue-section cue-rise" style="--i:2"><div class="cue-section-head"><h2>By scorecard line</h2></div>' + team + '</section>';
   }
 
   /* Screen 12: Omar and the 1:1 plan */
@@ -878,7 +1025,7 @@
           '<div class="cue-person-head cue-rise">' + '<img class="cue-avatar cue-avatar--xl" src="assets/people/omar.jpg" alt="Omar">' +
             '<div><h1 class="cue-h1">Omar</h1><p class="cue-sub">Account executive · Best round <b>68</b> · 3 rounds</p></div></div>' +
           '<p class="cue-summary cue-rise" style="--i:1">Omar asks good questions, but brings up price in the first 3 minutes. No number on the value yet.</p>' +
-          '<section class="cue-card cue-rise" style="--i:2"><div class="cue-card-head"><h2>Two moments to watch</h2><span class="cue-card-note">Hover a pin, click to replay</span></div>' + omarTimeline() + '</section>' +
+          '<section class="cue-card cue-rise" style="--i:2"><div class="cue-card-head"><h2>Two moments to watch</h2></div>' + omarTimeline() + '</section>' +
           '<section class="cue-card cue-rise" style="--i:3"><div class="cue-card-head"><h2>1:1 plan · 15 min</h2><span class="cue-card-note">' + ic('sparkle', 'cue-ic--xs') + ' Drafted by Cue, edit anything</span></div>' + plan + '</section>' +
         '</div>' +
         '<aside class="cue-split-side cue-rise" style="--i:3">' +
@@ -950,7 +1097,7 @@
         confirmBtn('Share with Ira', 'send', 'Shared with Ira, head of enablement.', 'Shared with Ira', 'See Ira’s view', 14)) +
       '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">October impact</h1><p class="cue-sub">Hold your price · 4 people practiced · 3 haven’t yet</p></div>' +
       '<div class="cue-stats">' + tiles + '</div>' +
-      '<section class="cue-card cue-rise" style="--i:3"><div class="cue-card-head"><h2>Win rate at the price step, by week</h2><span class="cue-card-note">Hover for each week</span></div>' +
+      '<section class="cue-card cue-rise" style="--i:3"><div class="cue-card-head"><h2>Win rate at the price step, by week</h2></div>' +
         '<div class="cue-legend cue-legend--plain"><span><i class="is-up"></i>Practiced</span><span><i class="is-base"></i>Not yet</span></div>' + chart +
         '<div class="cue-skills-hint">' + ic('info', 'cue-ic--sm') + 'Early signal: 4 people, 4 weeks. We check again at quarter end.</div>' +
       '</section>';
@@ -979,7 +1126,7 @@
         confirmBtn('Update the template', 'sparkle', 'Template updated: doubtful buyer, two rounds, due 2 days before the call.', 'Template updated', 'Start over', 0)) +
       '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">Pricing template · 6 teams</h1><p class="cue-sub">31 people practiced · lift in win rate at the price step</p></div>' +
       '<div class="cue-grid cue-rise" style="--i:1">' +
-        '<div class="cue-col cue-col--even">' + card('Lift per team', teams, '<span class="cue-card-note">Points, hover for before and after</span>') + '</div>' +
+        '<div class="cue-col cue-col--even">' + card('Lift per team', teams, '<span class="cue-card-note">Points</span>') + '</div>' +
         '<div class="cue-col cue-col--even">' + card('What works', works, '<span class="cue-card-note">' + ic('sparkle', 'cue-ic--xs') + ' Cue compares versions on its own</span>') + '</div>' +
       '</div>' +
       '<p class="cue-loopline cue-rise" style="--i:2">The loop closes: every team gets a better practice next time.</p>';
@@ -996,7 +1143,7 @@
     { id: 'call', loop: 2, nav: 'practice', who: 'sam', frame: 'call', url: function () { return ui.callPhase === 'scoring' ? 'cue.app/practice/hold-your-price/round-2' : 'cue.app/practice/hold-your-price/call'; }, caption: function () { return ui.callPhase === 'scoring' ? 'Cue scores the round line by line and finds the moments to fix.' : 'An 8 minute call with Mark, an AI avatar built on Kaltura.'; }, render: callView, after: callAfter },
     { id: 'feedback', loop: 2, nav: 'practice', who: 'sam', url: 'cue.app/practice/hold-your-price/round-2', caption: 'Sam gets a score and three moments to fix, then shares the best round.', render: feedback },
     { id: 'samhome', loop: 2, nav: 'home', who: 'sam', url: 'cue.app/home', caption: 'The next morning: Sam\u2019s week, and Noa\u2019s note on the round.', render: samHome },
-    { id: 'results', loop: 3, nav: 'practice', url: 'cue.app/practice/hold-your-price/results', caption: 'Back to Noa. Everyone is done, and Cue shows who needs what.', render: results },
+    { id: 'results', loop: 3, nav: 'practice', url: 'cue.app/practice/hold-your-price/results', caption: 'Back to Noa. Everyone is done, and Cue shows where each person stands.', render: results },
     { id: 'omar', loop: 3, nav: 'team', url: 'cue.app/team/omar', caption: 'Noa gets a ready plan for the 1:1 with Omar.', render: omar },
     { id: 'real', loop: 4, nav: 'home', url: 'cue.app/home', caption: 'A week later. Cue checks the real calls, not just the practice.', render: realCalls },
     { id: 'impact', loop: 4, nav: 'results', url: 'cue.app/results/october', caption: 'Once a month, Noa and enablement get the impact, with how sure we are.', render: impact },
@@ -1018,6 +1165,13 @@
   var ACT_START = [0, 2, 5, 10, 12];
   var TOTAL = 15;
 
+  /* Menus open downward. Only when there is no room left in the window, they open upward */
+  function flipMenus() {
+    var bottom = win.getBoundingClientRect().bottom - 12;
+    root.querySelectorAll('.cue-dd-menu').forEach(function (m) {
+      if (m.getBoundingClientRect().bottom > bottom) m.classList.add('is-up');
+    });
+  }
   function render() {
     var s = STATES[ui.step];
     clearInterval(ui.callTimer);
@@ -1029,21 +1183,24 @@
     var sideEl = root.querySelector('.cue-side');
     if (sideEl) sideEl.outerHTML = side(s.nav, s.who);
     main.innerHTML = s.render();
-    main.classList.toggle('is-still', !!ui.still);
-    if (!ui.still) main.scrollTop = 0;
+    var still = !!ui.still;
+    main.classList.toggle('is-still', still);
+    if (!still) main.scrollTop = 0;
     ui.still = false;
     document.querySelectorAll('[data-proto-extra]').forEach(function (el) { el.innerHTML = s.extra ? s.extra() : ''; });
     var oldToast = win.querySelector('.cue-toast');
     if (oldToast) oldToast.remove();
     if (s.toast) setTimeout(function () { toast(s.toast); }, 250);
     var old = root.querySelector('.cue-overlay');
+    var stay = !!old && still && !!s.overlay;
     if (old) old.remove();
     if (s.overlay) {
       var ov = document.createElement('div');
-      ov.className = 'cue-overlay';
+      ov.className = 'cue-overlay' + (stay ? ' is-still' : '');
       ov.innerHTML = s.overlay();
       root.querySelector('.cue-app').appendChild(ov);
     }
+    flipMenus();
     if (s.after) s.after();
     clearTimeout(ui.autoTimer);
     if (s.auto) {
@@ -1102,21 +1259,49 @@
 
   /* One click router for the product */
   root.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-end-call],[data-toast],[data-go],[data-play],[data-mood],[data-sent],[data-next-screen],[data-shared],[data-confirm],[data-weight],[data-ai],[data-field-btn],[data-ai-open],[data-who-toggle]');
+    if (ui.dd && !e.target.closest('.cue-dd')) { ui.dd = null; changeDraft(null); }
+    var t = e.target.closest('[data-dd],[data-dd-pick],[data-end-call],[data-toast],[data-go],[data-play],[data-sent],[data-next-screen],[data-shared],[data-confirm],[data-weight],[data-ai],[data-ai-open],[data-add-part],[data-remove-part],[data-ref-add],[data-ref-remove]');
     if (!t) return;
     e.stopPropagation();
     if (t.hasAttribute('data-go')) { go(+t.getAttribute('data-go')); return; }
     if (t.hasAttribute('data-play')) {
-      /* A short fake playback: the wave moves for 3 seconds */
+      /* A short fake playback: the wave moves for 3 seconds, one at a time */
+      root.querySelectorAll('[data-play].is-playing').forEach(function (b) { if (b !== t) b.classList.remove('is-playing'); });
       t.classList.add('is-playing');
       setTimeout(function () { t.classList.remove('is-playing'); }, 3000);
       return;
     }
-    if (t.hasAttribute('data-mood')) {
-      ui.mood = t.getAttribute('data-mood');
-      t.parentNode.querySelectorAll('[data-mood]').forEach(function (b) { b.setAttribute('aria-pressed', String(b === t)); });
-      var txt = main.querySelector('[data-mood-text]');
-      if (txt) { txt.textContent = MOODS[ui.mood]; txt.removeAttribute('data-flash'); void txt.offsetWidth; txt.setAttribute('data-flash', ''); }
+    if (t.hasAttribute('data-add-part')) {
+      /* A new part at the end, its name selected so you can type over it */
+      var list = main.querySelector('[data-keep="' + t.getAttribute('data-add-part') + '"]');
+      list.insertAdjacentHTML('beforeend', partHTML('New part.', 'Write it here.'));
+      var block = list.lastElementChild;
+      var para = block.querySelector('[contenteditable]');
+      para.focus();
+      var range = document.createRange();
+      range.selectNodeContents(para.firstChild);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      flashEl(block);
+      saveKeep(list);
+      return;
+    }
+    if (t.hasAttribute('data-ref-add') || t.hasAttribute('data-ref-remove')) {
+      var rid = t.getAttribute('data-ref-add') || t.getAttribute('data-ref-remove');
+      if (t.hasAttribute('data-ref-add')) { ui.refs.push(rid); ui.refFlash = rid; }
+      else ui.refs = ui.refs.filter(function (x) { return x !== rid; });
+      ui.ddStill = true;
+      changeDraft('refs');
+      ui.ddStill = false;
+      ui.refFlash = null;
+      return;
+    }
+    if (t.hasAttribute('data-remove-part')) {
+      var gone = t.closest('.cue-part');
+      var from = gone.parentNode;
+      gone.classList.add('is-leaving');
+      setTimeout(function () { gone.remove(); saveKeep(from); }, 200);
       return;
     }
     if (t.hasAttribute('data-ai-open')) {
@@ -1126,12 +1311,6 @@
       if (box) box.focus();
       return;
     }
-    if (t.hasAttribute('data-who-toggle')) {
-      var id = t.getAttribute('data-who-toggle');
-      ui.who[id] = !ui.who[id];
-      changeDraft('who');
-      return;
-    }
     if (t.hasAttribute('data-end-call')) { ui.callPhase = 'scoring'; ui.still = true; render(); return; }
     if (t.hasAttribute('data-weight')) { var wv = t.getAttribute('data-weight').split('|'); moveWeight(+wv[0], +wv[1]); return; }
     if (t.hasAttribute('data-ai')) {
@@ -1139,11 +1318,45 @@
       aiChange(t.getAttribute('data-ai'), inp ? inp.value.trim() : '');
       return;
     }
-    if (t.hasAttribute('data-field-btn')) {
-      var f = t.getAttribute('data-field-btn');
-      if (f === 'length') { ui.length = LENGTHS[(LENGTHS.indexOf(ui.length) + 1) % LENGTHS.length]; changeDraft('length'); }
-      else if (f === 'lang') { ui.lang = (ui.lang + 1) % LANGS.length; changeDraft('lang'); toast('Mark speaks 30+ languages, powered by Kaltura avatars.'); }
-      else toast('Opens a short list to pick from.');
+    if (t.hasAttribute('data-dd')) {
+      var key = t.getAttribute('data-dd');
+      ui.dd = ui.dd === key ? null : key;
+      changeDraft(null);
+      return;
+    }
+    if (t.hasAttribute('data-dd-pick')) {
+      var pk = t.getAttribute('data-dd-pick').split('|');
+      ui.dd = null;
+      if (pk[0] === 'length') ui.length = +pk[1];
+      if (pk[0] === 'tracks') ui.tracks = +pk[1];
+      if (pk[0] === 'pass') ui.pass = +pk[1];
+      if (pk[0] === 'voice') ui.voice = +pk[1];
+      if (pk[0].indexOf('due-') === 0) ui.due[pk[0].slice(4)] = +pk[1];
+      if (pk[0] === 'addwho') {
+        ui.whoList.push(pk[1]);
+        ui.who[pk[1]] = true;
+        ui.due[pk[1]] = WHO_INFO[pk[1]][0] ? WHO_INFO[pk[1]][1] : 6;
+        ui.whoFlash = pk[1];
+        changeDraft('who');
+        ui.whoFlash = null;
+        return;
+      }
+      if (pk[0] === 'mood') { setMood(pk[1]); changeDraft('mood'); flashEl(main.querySelector('[data-mood-text]')); return; }
+      if (pk[0] === 'avatar') {
+        if (pk[1] === 'more') { changeDraft(null); toast('Opens the Kaltura avatar library.'); return; }
+        if (pk[1] === ui.avatar) { changeDraft(null); return; }
+        var was = avFirst();
+        ui.avatar = pk[1];
+        ui.voice = av()[2];
+        ['brief', 'buyer'].forEach(function (k) { if (ui.keep[k]) ui.keep[k] = ui.keep[k].split(was).join(avFirst()); });
+        changeDraft('avatar');
+        flashEl(main.querySelector('[data-dd="voice"]'));
+        toast(avFirst() + ' plays the buyer now, with a ' + VOICES[ui.voice].toLowerCase() + ' voice.');
+        return;
+      }
+      if (pk[0] === 'lang') { if (ui.lang !== +pk[1]) toast(avFirst() + ' speaks 30+ languages, powered by Kaltura avatars.'); ui.lang = +pk[1]; }
+      if (pk[0] === 'template' && pk[1] !== ui.template) { changeDraft(null); toast('Switching templates rebuilds the draft. This walkthrough stays on Pricing.'); return; }
+      changeDraft(pk[0]);
       return;
     }
     if (t.hasAttribute('data-confirm')) {
@@ -1179,6 +1392,19 @@
     });
   });
   root.addEventListener('input', function (e) {
+    var keep = e.target.closest && e.target.closest('[data-keep]');
+    if (keep) saveKeep(keep);
+    if (e.target.hasAttribute && e.target.hasAttribute('data-ref-search')) {
+      var q = e.target.value.trim().toLowerCase();
+      var menu = e.target.closest('.cue-refs');
+      var shown = 0;
+      menu.querySelectorAll('.cue-ref[data-find]').forEach(function (row) {
+        var hit = !q || row.getAttribute('data-find').indexOf(q) >= 0;
+        row.hidden = !hit;
+        if (hit) shown++;
+      });
+      menu.querySelector('[data-ref-none]').hidden = shown > 0;
+    }
     if (!e.target.hasAttribute || !e.target.hasAttribute('data-pass')) return;
     ui.pass = +e.target.value;
     e.target.style.setProperty('--p', ((ui.pass - 60) / 35 * 100) + '%');
@@ -1196,7 +1422,11 @@
     if (!w) return;
     ui.who[w] = e.target.checked;
     var n = whoCount();
+    var row = e.target.closest('.cue-who');
+    if (row) row.classList.toggle('is-off', !e.target.checked);
     root.querySelectorAll('[data-send-label]').forEach(function (b) { b.lastChild.textContent = 'Send to ' + n + ' people'; });
+    root.querySelectorAll('[data-send-count]').forEach(function (h) { h.textContent = 'Send to ' + n + ' people'; });
+    root.querySelectorAll('[data-sent]').forEach(function (b) { b.disabled = !n; });
   });
 
   /* Shell controls: Back, Next, Start over, Full screen, and the five moves */
@@ -1213,6 +1443,7 @@
     if (a === 'full') full(!html.classList.contains('is-full'));
   });
   document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && ui.dd) { ui.dd = null; changeDraft(null); return; }
     if (e.key === 'Escape' && document.activeElement && document.activeElement.hasAttribute('data-ai-input')) { document.activeElement.blur(); return; }
     if (e.key === 'Escape' && html.classList.contains('is-full')) full(false);
     if (!html.classList.contains('is-full')) return;
@@ -1222,6 +1453,7 @@
 
   function go(i) {
     ui.aiOpen = false;
+    ui.dd = null;
     ui.callPhase = 'call';
     var next = Math.max(0, Math.min(STATES.length - 1, i));
     if (next === ui.step && main.innerHTML) return;

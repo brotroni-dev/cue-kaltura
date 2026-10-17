@@ -16,5 +16,10 @@ background and snapped to the nearest color in the chart palette.
 | kofi.jpg | Kofi, new on the team | Cleopas Monbest | https://unsplash.com/photos/LtxemIIXBZw | #6b3723 | red #e34948 |
 | mark.jpg | Mark Ellis, CFO (the AI avatar) | Vitaly Gariev | https://unsplash.com/photos/pWPFsDXgt04 | #6f7478 | none (not charted) |
 | ira.jpg | Ira, head of enablement | Kelly Cristine | https://unsplash.com/photos/OS8ax0WNzWc | #c3d2d8 | none (not charted) |
+| claire.jpg | Claire Novak, avatar option | Vitaly Gariev | https://unsplash.com/photos/ZwNj7w0BnwA | not sampled | none (not charted) |
+| elias.jpg | Elias Haddad, avatar option | Emre Çoban | https://unsplash.com/photos/t0TWycp34AE | not sampled | none (not charted) |
+| grace.jpg | Grace Lin, avatar option | Vitaly Gariev | https://unsplash.com/photos/JMg2S0m6RfE | not sampled | none (not charted) |
 
 Each person has two files: `name.jpg` (400 x 400, face crop) and `name-full.jpg` (1200 wide).
+The three extra avatar options (claire, elias, grace) only appear in the avatar picker, so
+they have a face crop only (240 x 240).

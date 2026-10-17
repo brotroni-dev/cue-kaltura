@@ -131,7 +131,7 @@ Cue, a product design concept for Kaltura. Photos from Unsplash, names are made 
 ## The prototype: 15 screens
 
 Each screen lists: act, who, where, the caption line, then the copy.
-Rule for every screen: little by default, detail on hover.
+Rule for every screen: little by default, detail on hover. The copy never tells people to hover.
 
 ### 1. Home (done)
 Act: Spot · Who: Noa · Where: cue.app/home
@@ -190,31 +190,66 @@ Caption: Noa checks the draft and edits anything.
 Rule: soft panels, no lines. Every value shows a pencil on hover; choices open a list.
 Title: Hold your price · pill "Draft by Cue" (hover: built from enablement's Pricing
 template and 12 of the team's lost calls)
-Meta line (click to change): 8 min · Goal: Show the value before the price ·
-Tracks: Win rate at the price step · Before the call: Dana's clip
+Meta line:
+- Template (dropdown, shows the draft comes from existing training): Pricing · By Ira,
+  enablement · used by 5 teams. Also: Discovery questions, First calls that land,
+  Start from scratch (Cue drafts from your team's lost calls only).
+- Length (dropdown): 5 / 8 / 10 / 15 minutes
+- Tracks (dropdown, the business number that proves it worked): Win rate at the price
+  step (suggested by the insight) · Average discount · Deal size · Time to close
+- Reference calls (dropdown panel; real call snippets reps watch before the practice):
+  shows the kept calls' faces and "Dana's call" (or "2 calls"). Inside:
+  In this practice (Reps watch these before the call): Dana · Kestrel Shipping · 0:40 ·
+  Shows what doing nothing costs before the price · remove.
+  Search: Find a call, like "late fees".
+  Suggested (Won calls on price, across teams): Dana · Northwind Freight · 1:10 · Gets the
+  COO into the next call · Model call · Pricing template · 2:30 · By Ira, enablement. From
+  value to price to next step · Ben Ortiz · East team · 0:55 · Turns "too expensive" into a
+  cost per year. Each with Add. Hover a face to play the snippet.
 
-**The buyer** (panel; every part is the same field: a small label, the value under it,
-pencil on hover)
-Mark Ellis · CFO · AI avatar (hover: CFO of a 300-person logistics company; company and
-deal size match each person's real deal) · mood: Friendly / **Doubtful** / Tough
-- Style: Busy and doubtful. Has a quote that's 20% cheaper.
-- The objection to beat: "Your price is 20% higher than the other quote." (9 of 12 lost calls)
-- Wants: Lower shipping costs, without a risky switch.
-- Gives in when: You put a real number on what late shipments cost.
-- Knows: Has a cheaper quote · Burned by a past vendor · +
-- Voice: English · Calm, short answers
+**The buyer** (left card, "What the AI avatar plays", hover: company and deal size match
+each person's real deal). Two layers: controls for what the avatar is, and parts for who it
+plays. The avatar sits alone on top; mood, voice and language are one row of dropdowns
+under it.
+- Avatar (dropdown with faces): **Mark Ellis** · Claire Novak · Elias Haddad · Grace Lin ·
+  More avatars (from the Kaltura avatar library). Picking one also picks its voice.
+- Mood (dropdown): Friendly (Open, needs a reason to pay more) · **Doubtful** (Busy, short
+  answers) · Tough (Pushes hard, ready to walk away). Changes the Mood part.
+- Voice (dropdown; in the menu each voice has its own small wave, the closed dropdown shows
+  the name only): **Calm and low** (Slow, few words ·
+  Made for Mark) · Warm and clear (Friendly, easy to follow) · Quick and direct (Fast, gets
+  to the point) · Soft and steady (Quiet, even pace). Hover a voice in the menu and its wave
+  turns into play: listen without picking it.
+- Language (dropdown): English · Español · Deutsch · Français · עברית
 
-**Scored on** (panel; one split bar; one block per line with − and + always visible;
-hovering a line highlights its part of the bar)
+Parts: each one is its own small block. Click to edit the name or the text, hover for the
+pencil and a remove button, Add a part at the end:
+Role. CFO of a 300-person logistics company.
+Mood. Busy and doubtful. Short answers until you earn more.
+Wants. Lower shipping costs, without a risky switch.
+Knows. There's a cheaper quote. A past vendor let them down.
+Decides with. The COO, who signs off on anything over $50K.
+Shares only if asked. Two big clients left after late deliveries.
+The objection. "Your price is 20% higher than the other quote." (9 of 12 lost calls)
+Gives in when. You show what late fees really cost.
+
+**Rep brief** (right card, "What each person reads before the call", hover: deal names and
+dates match each person's own deal). Try it yourself in the header covers previewing. The
+same parts as the buyer, Add a part at the end:
+The situation. Second call. Mark has a 20% cheaper quote.
+Your goal. Show what late fees cost before you talk price.
+You know. Late fees cost them about $80K a year.
+Rules. No discount above 5%. Hints are off.
+
+**Scored on** (right card; weights add up to 100%; one split bar; − and + always visible;
+hovering a line highlights its part of the bar; Pass at is a dropdown in the header, 80)
 Asks about the problem first 20% · Puts a number on the value 30% ·
-Handles "too expensive" without a discount 30% · Agrees on a next step 20% · Pass at 80
+Handles "too expensive" without a discount 30% · Agrees on a next step 20%
 
-**Who and when** (panel; a week from today, each face on its due day; click a face to
-leave that person out; hover for the deal): Lucia Mon 20 · Theo Tue 21 · Sam Thu 23 ·
-Omar Fri 24 · +
+Who and when moved to the Send sheet (screen 5): who gets it and by when is a sending decision.
 
 **Ask Cue** (a small input at the bottom: "Ask Cue to change this practice". On click it
-grows and shows: Try · Make Mark tougher · Weigh the value line higher · Make it 5 minutes.)
+grows and shows: Try · Make Mark tougher (uses the chosen avatar's name) · Weigh the value line higher · Make it 5 minutes.)
 What changes flashes for a moment.
 
 Buttons: Try it yourself · **Send to 4 people**
@@ -227,7 +262,18 @@ Channels: Slack ✓ · Email ✓
 Message (drafted by Cue, editable):
 "Hi {first name}, your {deal} price call is on {day}. Here's an 8 minute
 practice with a tough CFO. Rounds are private, share your best one. Noa"
-Due: before each person's price call
+Who and when (note: Due before each person's price call. Change any date.)
+One row per person: checkbox, face, name, their price call, and a Due dropdown.
+- Sam Rivera · Acme price call · Thu 11:00 · Due Thu, Oct 23
+- Lucia · Northline price call · Mon 10:00 · Due Mon, Oct 20
+- Omar · Pinecrest price call · Fri 09:30 · Due Fri, Oct 24
+- Theo · Brightline price call · Tue 14:00 · Due Tue, Oct 21
+Due dropdown: the days from tomorrow up to the call; the call day says "Before the Acme
+call · Suggested". People with no price call get "End of the week · Suggested".
+Unchecked: the row fades and shows "Not included"; the title and the Send button count
+update ("Send to 3 people"). Send turns off when no one is checked.
+Add people (dropdown): Kofi (New on the team · price call Wed) · Hana (New on the team) ·
+Dana (Top of the team on price). Added people get a row with their own due date.
 Button: **Send**
 Toast after: Sent. Results show up as people finish.
 
@@ -263,11 +309,14 @@ Under the title: Before your Acme call · Thu 11:00
 Mark Ellis, CFO · Acme Logistics
 Busy and doubtful. Has a quote that's 20% cheaper. Wants to know why you cost more.
 
+**Your goal**
+Show what late shipments cost before you talk price. End with a clear next step.
+
 **You're scored on**
 The 4 scorecard lines. Hover a line to hear what good sounds like.
 
-**What good sounds like**
-Dana · 40 sec · Play
+**What good sounds like** (the first reference call Noa kept; hidden if she removed them all)
+Reference call · Dana · 0:40 · Play
 
 Note: Rounds are private. You choose which one Noa sees.
 Buttons: **Start call** · Test mic
@@ -345,19 +394,23 @@ Note: the share confirmation lives on screen 9. "Share this round with Noa" turn
 
 ### 11. Results
 Act: Coach · Who: Noa · Where: cue.app/practice/hold-your-price/results
-Caption: Back to Noa. Everyone is done, and Cue shows who needs what.
-Back: Home · Action: Send another round
-Title: Hold your price · Results
+Caption: Back to Noa. Everyone is done, and Cue shows where each person stands.
+Breadcrumb: Practice / Hold your price (this page sits under the list of practices, which
+the walkthrough skips) · Action: Send another round
+Title: Results
 4 of 4 done · Average 76 · Pass at 80 · Up 12 from the first rounds
-Who needs what: one row per person (4 small bars for the 4 lines, best score,
-status: Ready / Close / Needs a 1:1, and "Plan 1:1" on Omar). Hover for each line.
+By person: a light table. Header: Person · Scorecard · Score · Status. Scorecard = 4 small bars, one per scorecard line,
+in the same order as the draft; height is the score, green 80+, blue 70 to 79, red below 70. One row per person with
+light gray lines between them (4 small bars for the 4 lines, best score, status: Ready /
+Close / Needs a 1:1, and "Plan 1:1" on Omar). No hover hints in the copy; details still
+show on hover.
 
 Groups:
 - **Ready:** Sam 84, Lucia 81
 - **Close:** Theo 74
 - **Needs a 1:1:** Omar 68
 
-Team by scorecard line (hover for each person):
+By scorecard line:
 Asks about the problem first 82 · Puts a number on the value 66 ·
 Handles "too expensive" 75 · Agrees on a next step 83
 
