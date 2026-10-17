@@ -6,7 +6,7 @@ Cue is an outcome-driven learning platform. It finds the skill a team is missing
 work, turns it into a short practice with a Kaltura AI avatar, and shows whether it moved
 the numbers. It works for any role where conversations matter. Sales is the first story.
 
-Live: https://brotroni-dev.github.io/cue-kaltura/ (after publishing)
+Live: https://brotroni-dev.github.io/cue-kaltura/
 
 A product design home assignment by Roni Brot, October 2026.
 
@@ -14,8 +14,8 @@ A product design home assignment by Roni Brot, October 2026.
 
 ## The brief, in one line
 Design the homepage and one core flow of a next-generation LXP that ties learning to real
-business outcomes, plus a 4-slide presentation. Here the 4 slides are the 4 sections of
-one page, and the clickable prototype lives inside the Solution section.
+business outcomes, plus a 4-slide presentation. Here the 4 slides are framed sections of
+one page, and the clickable prototype opens on its own page.
 
 ## The idea
 Today's LXP counts views, not wins. Cue closes the loop that nobody owns today:
@@ -72,12 +72,15 @@ Then open http://localhost:8766
 - All design tokens live in `css/tokens.css` and are named like Figma variables.
 - Layouts use flex and gap, so they map to Figma auto layout.
 - Every block carries a `data-component` name for its Figma component.
-- `index.html?capture` shows the full product with no inner scroll, for capturing.
+- `v1.html?capture` shows the full product with no inner scroll, for capturing.
 
 ## In this repo
-- `index.html` the page: four sections and the prototype stage
+- `index.html` the presentation: four framed slides
+- `prototype.html` the clickable prototype, 15 steps
+- `v1.html` the first version, with the prototype inside the page
 - `css/tokens.css` colors, type, spacing, radius, motion
-- `css/shell.css` the presentation
+- `css/v2.css`, `js/v2.js` the presentation and its animations
+- `css/shell.css` the first version
 - `css/app.css` the product (all classes start with `cue-`)
 - `js/app.js` the 15 screens, one state list and one click router
 - `js/charts.js`, `js/icons.js` small inline SVG charts and line icons

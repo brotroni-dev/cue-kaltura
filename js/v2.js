@@ -1,4 +1,4 @@
-/* Version 2 of the page (v2.html): four framed slides on one scroll.
+/* Version 2 of the page (index.html): four framed slides on one scroll.
    1. The nav marks the slide you are reading.
    2. Present mode: one slide at a time, scaled to the screen, with its own small bar.
    3. Links into the prototype remember where you came from. */
@@ -121,7 +121,7 @@
     return window.scrollY < slides[0].getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.5 ? 0 : best;
   }
 
-  /* v2.html?present=3 opens Present mode on slide 3 (used when coming back from the prototype).
+  /* index.html?present=3 opens Present mode on slide 3 (used when coming back from the prototype).
      While the Present button is hidden, the link opens the normal page instead */
   var presentBtn = document.querySelector('[data-present]');
   var start = presentBtn && presentBtn.hidden ? NaN : parseInt(new URLSearchParams(location.search).get('present'), 10);

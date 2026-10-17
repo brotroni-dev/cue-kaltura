@@ -48,7 +48,7 @@
 .cue-chrome-end { width: 80px; }
 
 .cue-app { flex: 1; min-height: 0; display: flex; align-items: stretch; }
-/* Capture mode for Figma: index.html?capture shows the whole page with no inner scroll */
+/* Capture mode for Figma: v1.html?capture shows the whole page with no inner scroll */
 :root[data-capture] .cue-window { height: auto; }
 :root[data-capture] .cue-main { overflow: visible; }
 

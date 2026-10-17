@@ -26,7 +26,7 @@
 
   <!-- The prototype on its own page. Its bar is the only navigation here -->
   <header class="proto-top" data-component="Prototype/Bar">
-    <a class="shell-brand" href="v2.html" data-proto-return><img src="favicon.svg" alt="">Cue</a>
+    <a class="shell-brand" href="index.html" data-proto-return><img src="favicon.svg" alt="">Cue</a>
     <span class="shell-label proto-top-tag">Prototype</span>
     <ol class="shell-loop" data-component="Shell/Loop" aria-label="Jump to a move">
       <li><button data-act="0"><span class="shell-label">1</span>Spot</button></li>
@@ -35,7 +35,7 @@
       <li><button data-act="3"><span class="shell-label">4</span>Coach</button></li>
       <li><button data-act="4"><span class="shell-label">5</span>Prove</button></li>
     </ol>
-    <a class="proto-return" href="v2.html#solution" data-proto-return>Back to the presentation</a>
+    <a class="proto-return" href="index.html#solution" data-proto-return>Back to the presentation</a>
   </header>
   <!-- Shown on phones only -->
   <p class="proto-phone-note">Best viewed on a computer.</p>
@@ -65,7 +65,7 @@
     (function () {
       var q = new URLSearchParams(location.search);
       if (q.get('return') !== 'present') return;
-      var to = 'v2.html?present=' + (q.get('slide') || '3');
+      var to = 'index.html?present=' + (q.get('slide') || '3');
       document.querySelectorAll('[data-proto-return]').forEach(function (a) { a.href = to; });
     })();
   </script>

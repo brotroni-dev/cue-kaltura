@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cue · A concept for Kaltura</title>
+  <meta name="description" content="Cue: outcome-driven learning. Practice the real moment, prove it in the numbers. A product design concept for Kaltura by Roni Brot.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Lato:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400,0,0&display=block">
+  <link rel="stylesheet" href="css/tokens.css?v=8">
+  <link rel="stylesheet" href="css/shell.css?v=16">
+  <link rel="stylesheet" href="css/app.css?v=84">
+</head>
+<body>
+  <!-- Shared SVG defs -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="cue-spark-fill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0b0b0b" stop-opacity=".12"/>
+        <stop offset="1" stop-color="#0b0b0b" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- SHELL: the presentation -->
+  <header class="shell-nav" data-component="Shell/Nav">
+    <div class="shell-wrap">
+      <a class="shell-brand" href="#top"><img src="favicon.svg" alt="">Cue</a>
+      <nav class="shell-links" aria-label="Sections">
+        <a href="#problem">Problem</a>
+        <a href="#insight">Insight</a>
+        <a href="#solution">Solution</a>
+        <a href="#results">Results</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="shell-cover" data-component="Shell/Cover">
+      <div class="shell-wrap">
+        <div class="shell-label">A concept for Kaltura · Roni Brot · October 2026</div>
+        <h1 class="shell-display">Learning built around real work.</h1>
+        <p class="shell-lead">Cue finds the skill a team is missing in real work, turns it into an 8 minute practice with an AI avatar, and shows if it moved the numbers.</p>
+      </div>
+      <div class="shell-hero-bg"></div>
+    </section>
+
+    <section class="shell-section" id="problem" data-component="Shell/Section">
+      <div class="shell-wrap">
+        <div class="shell-label">01 Problem</div>
+        <h2 class="shell-title">Finishing a course isn’t the same as getting better.</h2>
+        <p class="shell-lead">Today's LXP is mostly a content library. People watch, mark it done, and go back to work. Nobody can say if anything changed.</p>
+        <ul class="shell-list">
+          <li><b>Far from work.</b> Learning lives in another tab, not where the deal happens.</li>
+          <li><b>Watching is not doing.</b> There is no practice before the real moment.</li>
+          <li><b>No proof.</b> Reports show hours and completions, not results.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="shell-section" id="insight" data-component="Shell/Section">
+      <div class="shell-wrap">
+        <div class="shell-label">02 Insight</div>
+        <h2 class="shell-title">The manager is the lever.</h2>
+        <p class="shell-lead">Frontline managers turn learning into results. They need to see the gap, act in minutes, and know if it worked.</p>
+        <div class="shell-block">
+          <div class="shell-label">Three people, one loop</div>
+          <ul class="shell-people">
+            <li><img src="assets/people/noa.jpg" alt=""><div><span class="shell-person">Noa, sales team lead</span><q>Show me where my team loses, and help me fix it fast.</q></div></li>
+            <li><img src="assets/people/sam.jpg" alt=""><div><span class="shell-person">Sam, account executive</span><q>Help me nail Thursday's call without losing my week.</q></div></li>
+            <li><img src="assets/people/ira.jpg" alt=""><div><span class="shell-person">Ira, head of enablement</span><q>Show me which practice moves the numbers, so I can scale it.</q></div></li>
+          </ul>
+        </div>
+        <div class="shell-block">
+          <div class="shell-label">Who we design for</div>
+          <p class="shell-text">Teams whose conversations make or lose money. Sales first, then support, success and new managers.</p>
+        </div>
+        <div class="shell-block">
+          <div class="shell-label">Why Kaltura</div>
+          <p class="shell-text">Kaltura already owns video and real-time AI avatars. Cue turns them into a weekly habit tied to a business number.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell-section" id="solution" data-component="Shell/Section">
+      <div class="shell-wrap">
+        <div class="shell-label">03 Solution</div>
+        <h2 class="shell-title">How a gap becomes a skill.</h2>
+        <p class="shell-lead">A manager spots a gap, Cue builds a practice, the team rehearses with an avatar, and it shows in the way they work.</p>
+        <ol class="shell-loop" data-component="Shell/Loop" aria-label="Jump to a move">
+          <li><button data-act="0"><span class="shell-label">1</span>Spot</button></li>
+          <li><button data-act="1"><span class="shell-label">2</span>Build</button></li>
+          <li><button data-act="2"><span class="shell-label">3</span>Practice</button></li>
+          <li><button data-act="3"><span class="shell-label">4</span>Coach</button></li>
+          <li><button data-act="4"><span class="shell-label">5</span>Prove</button></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- PRODUCT: the prototype sits on its own stage -->
+    <section class="shell-stage" aria-label="Prototype" data-component="Shell/Stage">
+      <img class="shell-stage-bg" src="assets/people/sam-full.jpg" alt="">
+      <div class="shell-stage-bar">
+        <p class="shell-caption-text"><b data-proto-step>Step 1 of 15</b><span data-proto-caption></span></p>
+        <span data-proto-extra></span>
+        <div class="shell-controls">
+          <button data-proto="prev">Back</button>
+          <button data-proto="next">Next</button>
+          <button data-proto="full">Exit full screen</button>
+        </div>
+      </div>
+      <div class="shell-stage-fit">
+        <div id="cue-proto"></div>
+      </div>
+      <p class="shell-stage-note shell-label">Best on a desktop screen</p>
+    </section>
+
+    <div class="shell-caption">
+      <div class="shell-wrap">
+        <p class="shell-caption-text"><b data-proto-step>Step 1 of 15</b><span data-proto-caption></span></p>
+        <span data-proto-extra></span>
+        <div class="shell-controls">
+          <button data-proto="prev">Back</button>
+          <button data-proto="next">Next</button>
+          <button data-proto="restart">Start over</button>
+          <button data-proto="full" class="shell-full-btn">Full screen</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="shell-section" id="results" data-component="Shell/Section">
+      <div class="shell-wrap">
+        <div class="shell-label">04 Results</div>
+        <h2 class="shell-title">Measure what changes, not what's watched.</h2>
+        <p class="shell-lead">Cue checks behavior in weeks and revenue in quarters, and compares people who practiced with people who haven't yet.</p>
+        <div class="shell-block">
+          <div class="shell-label">What we measure, by when</div>
+          <ul class="shell-list shell-list--time">
+            <li><i style="--c:var(--viz-down)"></i><b>Weeks.</b> Behavior on real calls. Value before price, fewer discounts.</li>
+            <li><i style="--c:var(--viz-calm)"></i><b>A month.</b> Win rate at the hard step.</li>
+            <li><i style="--c:var(--viz-up)"></i><b>A quarter.</b> Revenue per person, and time to first deal for new people.</li>
+          </ul>
+        </div>
+        <div class="shell-block">
+          <div class="shell-label">Guardrails</div>
+          <ul class="shell-list">
+            <li><b>People feel watched.</b> Practice rounds are private until you share one.</li>
+            <li><b>Scores feel unfair.</b> Anyone can flag a score.</li>
+            <li><b>Did practice cause it?</b> Every number is compared with people who haven't practiced yet, and labeled with how sure we are.</li>
+          </ul>
+        </div>
+        <div class="shell-block">
+          <div class="shell-label">How it grows</div>
+          <p class="shell-text">The same loop works for support (an angry customer), customer success (a renewal talk), new managers (a hard feedback talk) and healthcare (hard news).</p>
+        </div>
+        <div class="shell-block">
+          <div class="shell-label">What's next</div>
+          <p class="shell-text">Live hints during practice, practice inside Zoom right before a call, and templates that improve themselves from what works.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell-foot">
+    <div class="shell-wrap">Cue, a product design concept for Kaltura. Photos from Unsplash, names are made up.</div>
+  </footer>
+
+
+  <script src="js/icons.js?v=8"></script>
+  <script src="js/charts.js?v=7"></script>
+  <script src="js/app.js?v=98"></script>
+  <script src="js/hero.js?v=4"></script>
+  <script src="js/shell.js?v=1"></script>
+  <script src="js/sections.js?v=2"></script>
+</body>
+</html>
