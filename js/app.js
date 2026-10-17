@@ -946,20 +946,33 @@
   }
   function tone(v) { return v >= 80 ? 'up' : v < 70 ? 'down' : 'calm'; }
 
-  /* The practice header, shared by its pages: breadcrumb, title, status, and the page switch */
-  function practiceHead(page, actions, hint, tools) {
-    function tab(id, label, step) {
-      var on = page === id;
-      return '<button class="cue-tab' + (on ? ' is-active' : '') + '"' + (on ? ' aria-current="page"' : ' data-go="' + step + '"') + (hint === id ? ' data-hint' : '') + '>' + label + '</button>';
-    }
+  /* A filter row that belongs to one page (under the tabs, not on them) */
+  function filterBar(html) { return '<div class="cue-filterbar cue-rise" data-component="Filter bar">' + html + '</div>'; }
+  /* One header for every object page (a practice, a template): breadcrumb to its list,
+     title, status, and the switch between its pages. A tab goes to a step, or shows a note */
+  function objectHead(o) {
+    var tabs = o.tabs.map(function (t) {
+      var on = o.page === t[0];
+      return '<button class="cue-tab' + (on ? ' is-active' : '') + '"' +
+        (on ? ' aria-current="page"' : (typeof t[2] === 'number' ? ' data-go="' + t[2] + '"' : ' data-toast="' + t[2] + '"')) +
+        (o.hint === t[0] ? ' data-hint' : '') + '>' + t[1] + '</button>';
+    }).join('');
     return '<header class="cue-pagebar" data-component="Page bar">' +
         '<nav class="cue-crumbs" aria-label="Breadcrumb" data-component="Breadcrumb">' +
-          '<button class="cue-crumb" data-toast="All your team\u2019s practices. This walkthrough skips the list.">Practice</button></nav>' +
-        '<div class="cue-pagebar-actions">' + (actions || '') + '</div>' +
+          '<button class="cue-crumb" data-toast="' + o.crumbNote + '">' + o.crumb + '</button></nav>' +
+        '<div class="cue-pagebar-actions">' + (o.actions || '') + '</div>' +
       '</header>' +
-      '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">Hold your price</h1>' +
-        '<p class="cue-sub">Sent Oct 16 to 4 people \u00b7 <b>4 of 4</b> done \u00b7 Average <b>76</b></p></div>' +
-      '<nav class="cue-tabs cue-rise" aria-label="Practice pages" data-component="Page tabs">' + tab('overview', 'Overview', 12) + tab('results', 'Results', 10) + tab('impact', 'Impact', 13) + (tools ? '<span class="cue-tabs-tools">' + tools + '</span>' : '') + '</nav>';
+      '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">' + o.title + '</h1><p class="cue-sub">' + o.sub + '</p></div>' +
+      '<nav class="cue-tabs cue-rise" aria-label="' + o.title + ' pages" data-component="Page tabs">' + tabs + '</nav>';
+  }
+  /* The practice: Overview, Results, Impact */
+  function practiceHead(page, actions, hint) {
+    return objectHead({
+      crumb: 'Practice', crumbNote: 'All your team\u2019s practices. This walkthrough skips the list.',
+      title: 'Hold your price', sub: 'Sent Oct 16 to 4 people \u00b7 <b>4 of 4</b> done \u00b7 Average <b>76</b>',
+      tabs: [['overview', 'Overview', 12], ['results', 'Results', 10], ['impact', 'Impact', 13]],
+      page: page, actions: actions, hint: hint
+    });
   }
 
   /* Screen 11: results */
@@ -1098,9 +1111,9 @@
       ]
     });
     return practiceHead('impact',
-        '<button class="cue-btn cue-btn--secondary" data-toast="Link copied.">' + ic('share') + 'Copy link</button>' +
-        confirmBtn('Share with Ira', 'send', 'Shared with Ira, head of enablement.', 'Shared with Ira', 'See Ira’s view', 14), '',
-        dropdown('period', '', 'October', [{ v: 'oct', title: 'October', sub: 'Since the practice was sent', on: true }, { v: 'quarter', title: 'This quarter' }, { v: 'sep', title: 'September', sub: 'Before the practice' }])) +
+        '<button class="cue-btn cue-btn--secondary" data-toast="Link copied. Send it to your VP or your team.">' + ic('share') + 'Share</button>' +
+        '<button class="cue-btn" data-go="14" data-hint>See Ira\u2019s view' + ic('arrowRight') + '</button>') +
+      filterBar(dropdown('period', '<span>Period</span>', 'October', [{ v: 'oct', title: 'October', sub: 'Since the practice was sent', on: true }, { v: 'quarter', title: 'This quarter' }, { v: 'sep', title: 'September', sub: 'Before the practice' }])) +
       '<div class="cue-stats">' + tiles + '</div>' +
       '<section class="cue-card cue-rise" style="--i:3"><div class="cue-card-head"><h2>Win rate at the price step, by week</h2></div>' +
         '<div class="cue-legend cue-legend--plain"><span><i class="is-up"></i>Practiced \u00b7 4 people</span><span><i class="is-base"></i>Not yet \u00b7 3 people</span></div>' + chart +
@@ -1126,15 +1139,36 @@
           '<div class="cue-compare-row"><span>' + w[3][0] + '</span><span class="cue-compare-track"><i class="is-base" style="--value:' + (w[3][1] / 16 * 100) + '%"></i></span><b>+' + w[3][1] + '</b></div>' +
         '</div></div>';
     }).join('') + '</div>';
-    return pagehead('Library', 14,
-        '<button class="cue-btn cue-btn--secondary" data-toast="Rolled out to 3 more teams. Their leads get a draft to approve.">' + ic('team') + 'Roll out to 3 more teams</button>' +
-        confirmBtn('Update the template', 'sparkle', 'Template updated: doubtful buyer, two rounds, due 2 days before the call.', 'Template updated', 'Start over', 0)) +
-      '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">Pricing template · 6 teams</h1><p class="cue-sub">31 people practiced · lift in win rate at the price step</p></div>' +
-      '<div class="cue-grid cue-rise" style="--i:1">' +
+    var trend = C.area({
+      id: 'template', w: 900, h: 200, yMin: 20, yMax: 45, ticks: [25, 35, 45], unit: '%',
+      x: ['Aug 25', '', 'Sep 8', '', 'Sep 22', '', 'Oct 6', '', 'Oct 20'],
+      tipX: ['Week of Aug 25', 'Week of Sep 1', 'Week of Sep 8', 'Week of Sep 15', 'Week of Sep 22', 'Week of Sep 29', 'Week of Oct 6', 'Week of Oct 13', 'Week of Oct 20'],
+      markers: [{ i: 1, text: '2 teams' }, { i: 4, text: '4 teams' }, { i: 7, text: '6 teams' }],
+      label: 'Win rate at the price step by week, all 6 teams. People who practiced rose from 27% to 38% and held there as more teams joined. People who have not practiced yet stayed near 27%.',
+      series: [
+        { name: 'Practiced', kind: 'focus', values: [27, 30, 32, 34, 35, 36, 37, 38, 38] },
+        { name: 'Not yet', kind: 'base', values: [27, 26, 27, 26, 27, 26, 27, 26, 27] }
+      ]
+    });
+    return objectHead({
+        crumb: 'Library', crumbNote: 'All of enablement\u2019s templates. This walkthrough skips the list.',
+        title: 'Pricing template', sub: 'Used by 6 teams \u00b7 31 people practiced \u00b7 By Ira, enablement',
+        tabs: [
+          ['setup', 'Setup', 'The master buyer, brief, scorecard and reference calls, and what team leads may change. Not part of this walkthrough.'],
+          ['teams', 'Teams', 'Which teams use it, who leads each, and how many finished. Not part of this walkthrough.'],
+          ['impact', 'Impact', 14]
+        ],
+        page: 'impact',
+        actions: '<button class="cue-btn cue-btn--secondary" data-toast="Rolled out to 3 more teams. Their leads get a draft to approve.">' + ic('team') + 'Roll out to 3 more teams</button>' +
+          confirmBtn('Update the template', 'sparkle', 'Template updated: doubtful buyer, two rounds, due 2 days before the call.', 'Template updated', 'Start over', 0)
+      }) +
+      filterBar(dropdown('tperiod', '<span>Period</span>', 'This quarter', [{ v: 'q', title: 'This quarter', on: true }, { v: 'oct', title: 'October' }, { v: 'all', title: 'Since launch' }])) +
+      '<section class="cue-card cue-rise" data-component="Trend card"><div class="cue-card-head"><h2>Win rate at the price step, by week</h2></div>' +
+        '<div class="cue-legend cue-legend--plain"><span><i class="is-up"></i>Practiced \u00b7 31 people</span><span><i class="is-base"></i>Not yet \u00b7 22 people</span></div>' + trend + '</section>' +
+      '<div class="cue-grid cue-grid--match cue-rise" style="--i:1">' +
         '<div class="cue-col cue-col--even">' + card('Lift per team', teams, '<span class="cue-card-note">Points</span>') + '</div>' +
         '<div class="cue-col cue-col--even">' + card('What works', works, '<span class="cue-card-note">' + ic('sparkle', 'cue-ic--xs') + ' Cue compares versions on its own</span>') + '</div>' +
-      '</div>' +
-      '<p class="cue-loopline cue-rise" style="--i:2">The loop closes: every team gets a better practice next time.</p>';
+      '</div>';
   }
 
   var STATES = [
@@ -1152,7 +1186,7 @@
     { id: 'omar', loop: 3, nav: 'team', url: 'cue.app/team/omar', caption: 'Noa gets a ready plan for the 1:1 with Omar.', render: omar },
     { id: 'real', loop: 4, nav: 'practice', url: 'cue.app/practice/hold-your-price', caption: 'A week later, Noa opens the practice from her home to see how the real calls went.', render: realCalls },
     { id: 'impact', loop: 4, nav: 'practice', url: 'cue.app/practice/hold-your-price/impact', caption: 'End of October. The practice\u2019s Impact page shows if the numbers moved, and how sure we are.', render: impact },
-    { id: 'teams', loop: 4, nav: 'library', who: 'ira', url: 'cue.app/library/pricing-template', caption: 'Ira, head of enablement, sees what works across teams and scales it.', render: acrossTeams }
+    { id: 'teams', loop: 4, nav: 'library', who: 'ira', url: 'cue.app/library/pricing-template', caption: 'Ira, head of enablement, sees what works and updates the template. The loop closes.', render: acrossTeams }
   ];
 
   /* Shell */
@@ -1337,6 +1371,7 @@
       if (pk[0] === 'pass') ui.pass = +pk[1];
       if (pk[0] === 'voice') ui.voice = +pk[1];
       if (pk[0] === 'period') { changeDraft(null); if (pk[1] !== 'oct') toast('This walkthrough shows October.'); return; }
+      if (pk[0] === 'tperiod') { changeDraft(null); if (pk[1] !== 'q') toast('This walkthrough shows this quarter.'); return; }
       if (pk[0].indexOf('due-') === 0) ui.due[pk[0].slice(4)] = +pk[1];
       if (pk[0] === 'addwho') {
         ui.whoList.push(pk[1]);

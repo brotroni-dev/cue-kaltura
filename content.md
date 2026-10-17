@@ -459,13 +459,15 @@ between people:
 - **Omar · Pinecrest Supply.** Not yet · Price call Fri, after the 1:1
 
 ### 14. Impact
-Act: Prove · Who: Noa (also sent to Ira) · Where: cue.app/practice/hold-your-price/impact
+Act: Prove · Who: Noa · Where: cue.app/practice/hold-your-price/impact
 Caption: End of October. The practice's Impact page shows if the numbers moved, and how
 sure we are.
 The practice header, the same as screens 11 and 13, with **Impact** active.
-Actions: Copy link · Share with Ira (then "See Ira's view")
-Month picker at the right end of the page switch: **October** (Since the practice was sent)
-· This quarter · September (Before the practice)
+Actions: Share (copies the link, for her VP or her team) · **See Ira's view →** (no fake
+share: Ira already gets every team's impact through the template. The button only carries
+the story to her, like "See what Sam gets" on screen 5.)
+Period (under the page switch, because it belongs to the Impact page only): **October**
+(Since the practice was sent) · This quarter · September (Before the practice)
 Three numbers (practiced vs not yet):
 - Win rate at the price step · 41% vs 26%
 - Average discount · 9% vs 17%
@@ -477,20 +479,31 @@ Confidence: Early signal: 4 people, 2 weeks. We check again at quarter end.
 Main nav Impact (not built): the roll-up of all your practices, to compare them. Each row
 opens the same Impact page inside its practice.
 
-### 15. Across teams
-Act: Prove · Who: Ira · Where: cue.app/enablement
-Caption: Ira, head of enablement, sees what works across teams and scales it.
-Title: Pricing template · 6 teams
+### 15. The template's Impact
+Act: Prove · Who: Ira · Where: cue.app/library/pricing-template
+Caption: Ira, head of enablement, sees what works and updates the template. The loop closes.
+(The caption now carries the loop line that used to sit inside the product.)
+The same object header as a practice:
+Breadcrumb: Library (all of enablement's templates, which the walkthrough skips)
+Title: Pricing template
+Under the title: Used by 6 teams · 31 people practiced · By Ira, enablement
+Page switch: Setup · Teams · **Impact**
+- Setup (not built): the master buyer, brief, scorecard and reference calls, and what team
+  leads may change or not (locked parts)
+- Teams (not built): which teams use it, who leads each, how many finished
+Actions: Roll out to 3 more teams · **Update the template**
+Period (under the page switch, Impact only): **This quarter** · October · Since launch
+**Win rate at the price step, by week** (the same chart as the practice's Impact, all 6
+teams): Practiced · 31 people, Not yet · 22 people. Weeks of Aug 25 to Oct 20, rising from
+27% to 38% and holding while teams joined; markers: 2 teams · 4 teams · 6 teams.
+Below it, the breakdown, side by side:
 Lift per team (points): Noa Levin's team +15 · Mid-market West +12 · Enterprise +9 ·
-Mid-market East +7 · EMEA +4 · Partners +2 (hover for before and after)
+Mid-market East +7 · EMEA +4 · Partners +2
 
 **What works** (Cue compares versions on its own):
 - A doubtful buyer beats a friendly one · +9 pts more lift
 - Two rounds beat one · +6 pts
 - Practice within 2 days of the real call · +5 pts
-
-Buttons: **Update the template** · Roll out to 3 more teams
-End line: The loop closes. Every team gets a better practice.
 
 ---
 

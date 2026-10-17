@@ -54,11 +54,12 @@
       if (lab) out += '<text x="' + X(i).toFixed(1) + '" y="' + (h - 6) + '" text-anchor="middle">' + lab + '</text>';
     });
 
-    if (cfg.marker) {
-      var mx = X(cfg.marker.i).toFixed(1);
+    /* One marker, or several (like teams joining over time) */
+    (cfg.markers || (cfg.marker ? [cfg.marker] : [])).forEach(function (m) {
+      var mx = X(m.i).toFixed(1);
       out += '<line class="marker" x1="' + mx + '" x2="' + mx + '" y1="' + (T - 6) + '" y2="' + (h - B) + '"/>' +
-        '<text class="marker-text" x="' + (+mx + 4) + '" y="' + (T - 1) + '">' + cfg.marker.text + '</text>';
-    }
+        '<text class="marker-text" x="' + (+mx + 4) + '" y="' + (T - 1) + '">' + m.text + '</text>';
+    });
 
     var series = cfg.series.map(function (s) {
       var pts = s.values.map(function (v, i) { return [X(i), Y(v)]; });

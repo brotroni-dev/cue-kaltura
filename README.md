@@ -44,7 +44,7 @@ Three people, one loop:
 12. Omar and a ready 1:1 plan
 13. A week later: the practice overview, and how the real calls went
 14. Impact: the practice's Impact page, end of October
-15. Ira sees what works across teams and scales it
+15. The Pricing template's Impact: Ira sees what works and updates the template
 
 Use the stepper above the prototype, Back and Next under it, Full screen, or just click
 the pulsing buttons inside the product.

@@ -121,3 +121,14 @@ built), and reps see Progress. The chart weeks now match the Oct 16 send date, a
 stay still when a menu opens.
 **Got wrong:** the first overview kept a "Practice results" link and a big "See October
 impact" button; the page switch replaced both.
+
+## Round 17: the template, like a practice
+**Roni asked for:** a breadcrumb and an Impact page inside the Pricing template, a trend
+on Ira's Impact, no fake "Share with Ira", and filters that belong to one page only.
+**Claude changed:** one object header for practices and templates. The template has
+Library as its breadcrumb and Setup · Teams · Impact (Setup and Teams not built). Ira's
+Impact opens with the same weekly trend as Noa's, across all 6 teams, with markers when
+teams joined. Noa's Impact has "Share" and the story button "See Ira's view". The Period
+picker sits under the tabs on both Impact pages. The loop line moved into the caption.
+**Got wrong:** first squeezed the trend to avoid scrolling; Roni preferred the normal
+height and a bit of scroll.

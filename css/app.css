@@ -454,8 +454,7 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-tab:hover { color: var(--color-ink); }
 .cue-tab.is-active { color: var(--color-ink); cursor: default; }
 .cue-tab[data-hint]::before { inset: -6px -10px 4px; border-radius: 8px; }
-.cue-tabs-tools { margin: -8px 0 4px auto; }
-.cue-tabs-tools .cue-dd-menu { left: auto; right: 0; }
+.cue-filterbar { display: flex; align-items: center; gap: var(--space-2); margin: calc(var(--space-6) * -1 + var(--space-4)) 0 calc(var(--space-6) * -1 + var(--space-4)) -8px; }
 .cue-tab.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; border-radius: 1px; background: var(--color-ink); }
 .cue-titlerow { display: flex; align-items: center; gap: var(--space-3); }
 .cue-pill { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: var(--radius-pill); background: var(--color-paper-2); font-size: var(--text-xs); font-weight: 500; color: var(--color-ink-2); white-space: nowrap; }
@@ -1112,6 +1111,9 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
 
 /* My skills, with a quiet team average tick */
 .cue-legend--plain { margin-top: 0; }
+/* Two cards side by side that end at the same line */
+.cue-grid--match { align-items: stretch; }
+.cue-grid--match .cue-card { flex: 1; }
 .cue-legend i.is-you { background: var(--person-sam); opacity: 0.45; }
 .cue-legend i.is-team { width: 2px; height: 12px; border-radius: 1px; background: var(--color-ink-3); }
 .cue-myskills { display: flex; flex-direction: column; gap: var(--space-4); margin-top: var(--space-2); }
@@ -1227,7 +1229,6 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
 .cue-work-more .cue-compare-row > span:first-child { width: 104px; }
 .cue-work-more .cue-compare-track { height: 6px; }
 .cue-work-more .cue-compare-track i { transform: none; }
-.cue-loopline { margin: calc(var(--space-6) * -1 + var(--space-4)) 0 0; font-size: var(--text-sm); color: var(--color-ink-3); }
 
 /* Feedback: shared state */
 .cue-pill--lg { height: 36px; padding: 0 14px; font-size: var(--text-sm); }
