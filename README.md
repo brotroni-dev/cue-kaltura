@@ -1,6 +1,6 @@
 # Cue · a concept for Kaltura
 
-**Practice the moment. Prove it in the numbers.**
+**Learning built around real work.**
 
 Cue is an outcome-driven learning platform. It finds the skill a team is missing in real
 work, turns it into a short practice with a Kaltura AI avatar, and shows whether it moved

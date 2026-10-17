@@ -52,8 +52,7 @@ Cue · Problem · Insight · Solution · Results
 
 ### Cover
 Label: A concept for Kaltura · Roni Brot · October 2026
-Title: Practice the moment.
-Prove it in the numbers.
+Title: Learning built around real work.
 Lead: Cue finds the skill a team is missing in real work, turns it into a
 10 minute practice with an AI avatar, and shows if it moved the numbers.
 Background: the rising line with the team on it.
