@@ -41,7 +41,7 @@ Three people, one loop:
 9. Feedback: score, the round as a timeline, three moments to fix
 10. Sam's home the next morning
 11. Results: who needs what
-12. Omar and a ready 1:1 plan
+12. Daniel and a ready 1:1 plan
 13. A week later: the practice overview, and how the real calls went
 14. Impact: the practice's Impact page, end of October
 15. The Pricing template's Impact: Ira sees what works and updates the template

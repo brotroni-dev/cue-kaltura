@@ -9,13 +9,13 @@
   /* People. Color = their photo's background, snapped to the chart palette (see tokens.css) */
   var P = {
     noa: { name: 'Noa Levin', first: 'Noa', role: 'Sales team lead' },
-    dana: { name: 'Dana' },
+    dana: { name: 'Dana', full: 'Dana Brooks' },
     sam: { name: 'Sam', full: 'Sam Rivera', role: 'Account executive' },
-    lucia: { name: 'Lucia' },
-    omar: { name: 'Omar', role: 'Account executive' },
-    theo: { name: 'Theo' },
-    kofi: { name: 'Kofi' },
-    hana: { name: 'Hana' },
+    lucia: { name: 'Lucia', full: 'Lucia Moreno' },
+    omar: { name: 'Daniel', full: 'Daniel Shaw', role: 'Account executive' },
+    theo: { name: 'Theo', full: 'Theo Walsh' },
+    kofi: { name: 'Kofi', full: 'Kofi Mensah' },
+    hana: { name: 'Hana', full: 'Hana Weiss' },
     mark: { name: 'Mark Ellis' },
     claire: { name: 'Claire Novak' },
     elias: { name: 'Elias Haddad' },
@@ -24,6 +24,8 @@
   };
   var TEAM = ['dana', 'sam', 'lucia', 'omar', 'theo', 'kofi', 'hana'];
 
+  /* Full names wherever a name labels a person (rows, lists, headers). Sentences use first names */
+  function fullName(id) { return P[id].full || P[id].name; }
   function ava(id, size) {
     return '<img class="cue-avatar' + (size ? ' cue-avatar--' + size : '') + '" src="assets/people/' + id + '.jpg" alt="' + P[id].name.split(' ')[0] + '" data-component="Avatar">';
   }
@@ -40,28 +42,31 @@
       tip: '72% of goal, 3 weeks left', spark: [52, 61, 58, 70, 66, 81, 77, 90, 86, 98, 104, 112] },
     { label: 'Win rate', value: '24%', delta: ['down', '3'], tone: 'down',
       tip: 'Down from 27% in September', spark: [28, 29, 27, 28, 27, 26, 27, 25, 26, 24, 25, 24] },
-    { label: 'Deals in play', value: '$3.1M', small: '38 deals', tone: 'calm',
-      tip: '9 deals are at the price step', spark: [31, 33, 34, 32, 35, 36, 35, 37, 36, 38, 37, 38] }
+    { label: 'Open deals', value: '$3.1M', small: '38 deals', tone: 'calm',
+      tip: '9 deals are about to talk price', spark: [31, 33, 34, 32, 35, 36, 35, 37, 36, 38, 37, 38] }
   ];
 
   var INSIGHTS = [
     { people: ['sam', 'lucia', 'omar', 'theo'], tag: 'Pricing',
       num: '$420K', unit: 'at risk',
       title: '4 people lose deals when price comes up',
-      more: 'Deals lost at the price step',
-      bars: [['These 4', 58, '58%', 'down'], ['Rest of team', 27, '27%', 'base']],
+      tone: 'down',
+      essence: 'They offer a discount before the buyer hears the value.',
+      detail: 'That’s why 58% of their deals are lost at price, twice the rest of the team. 9 deals worth $420K reach that talk in the next two weeks.',
       btn: 'Build practice', btnIcon: 'sparkle', go: 2, why: 1 },
     { people: ['kofi', 'hana'], tag: 'New people',
       num: '$260K', unit: 'stuck',
       title: 'First calls end too early',
-      more: 'How long first calls last',
-      bars: [['Kofi, Hana', 35, '14 min', 'down'], ['Top 3', 80, '32 min', 'base']],
+      tone: 'calm',
+      essence: 'They hang up before the buyer shares a real need.',
+      detail: 'Kofi and Hana end first calls at 14 minutes. The top 3 stay 32, long enough to find it. $260K is stuck after call one.',
       btn: 'Build practice', btnIcon: 'sparkle', toast: 'Would draft a first-call practice for Kofi and Hana. This walkthrough follows the pricing one.' },
     { people: ['dana'], tag: 'Worth sharing', good: true,
       num: '2x', unit: 'bigger deals',
       title: 'Dana brings more buyers into each deal',
-      more: 'People on the buyer’s side',
-      bars: [['Dana', 100, '5', 'up'], ['Team', 40, '2', 'base']],
+      tone: 'up',
+      essence: 'Dana brings finance and IT in early, so no one blocks the deal later.',
+      detail: '5 buyers join her deals, against 2 for the team. Her deals close twice as big.',
       btn: 'Share Dana’s call', btnIcon: 'share', toast: 'Would share a 40 second clip of Dana’s call with the team.' }
   ];
 
@@ -113,17 +118,16 @@
   }
 
   function insight(o, i) {
-    return '<article class="cue-insight cue-rise" style="--i:' + (i + 3) + '" tabindex="0" data-component="Insight card">' +
+    return '<article class="cue-insight cue-rise" style="--i:' + (i + 3) + ';--tone:var(--viz-' + o.tone + ')" tabindex="0" data-component="Insight card">' +
       '<div class="cue-insight-top">' + avas(o.people) + '<span class="cue-insight-tag">' + o.tag + '</span></div>' +
       '<div class="cue-insight-stack">' +
         '<div class="cue-insight-num">' + o.num + '<small>' + o.unit + '</small></div>' +
         '<h3>' + o.title + '</h3>' +
-        '<div class="cue-insight-more" aria-hidden="true">' +
-          '<span class="cue-insight-more-label">' + o.more + '</span>' +
-          '<div class="cue-compare" data-component="Compare bars">' + o.bars.map(function (b) {
-            return '<div class="cue-compare-row"><span>' + b[0] + '</span><span class="cue-compare-track"><i class="is-' + b[3] + '" style="--value:' + b[1] + '%"></i></span><b>' + b[2] + '</b></div>';
-          }).join('') + '</div>' +
-        '</div>' +
+      '</div>' +
+      /* On hover: the whole card turns its color and tells the essence of the insight. The buttons stay */
+      '<div class="cue-insight-face">' +
+        '<p class="cue-insight-essence">' + o.essence + '</p>' +
+        '<p class="cue-insight-detail">' + o.detail + '</p>' +
       '</div>' +
       '<div class="cue-insight-actions">' +
         '<button class="cue-btn' + (o.good ? ' cue-btn--secondary' : '') + '" data-component="Button/' + (o.good ? 'Secondary' : 'Primary') + '" ' +
@@ -136,7 +140,7 @@
   function skill(k, i) {
     var dir = k.change > 0 ? 'up' : k.change < 0 ? 'down' : 'flat';
     var people = TEAM.map(function (id) {
-      return '<img class="cue-skill-person" src="assets/people/' + id + '.jpg" alt="' + P[id].name + ' ' + k.s[id] + '" title="' + P[id].name + ' · ' + k.s[id] + '" style="--value:' + k.s[id] + '%;--c:var(--person-' + id + ')" data-toast="' + P[id].name + '’s page is not part of this walkthrough.">';
+      return '<img class="cue-skill-person" src="assets/people/' + id + '.jpg" alt="' + fullName(id) + ' ' + k.s[id] + '" title="' + fullName(id) + ' · ' + k.s[id] + '" style="--value:' + k.s[id] + '%;--c:var(--person-' + id + ')" data-toast="' + P[id].name + '’s page is not part of this walkthrough.">';
     }).join('');
     return '<div class="cue-skill cue-rise" style="--i:' + (i + 6) + '" data-component="Skill row">' +
       '<span class="cue-skill-name">' + k.name + '</span>' +
@@ -161,7 +165,7 @@
         '<div class="cue-insights">' + INSIGHTS.map(insight).join('') + '</div>' +
       '</section>' +
       '<section class="cue-section" data-component="Skill table">' +
-        '<div class="cue-section-head"><h2>Team skills</h2></div>' +
+        '<div class="cue-section-head"><h2>Team skills</h2><span>Points out of 100</span></div>' +
         '<div class="cue-skills">' + SKILLS.map(skill).join('') + '</div>' +
       '</section>';
   }
@@ -184,11 +188,12 @@
 
   /* Screen 2: the insight */
   var STEPS_LOST = [['First call', 14, 12], ['Demo', 21, 18], ['Price', 58, 27]];
+  /* Who: deals lost once price came up, and their average discount */
   var WHO = [
-    ['sam', 62, 'Lost 5 of 8 at the price step. Average discount 21%.'],
-    ['lucia', 55, 'Lost 6 of 11 at the price step. Average discount 18%.'],
-    ['omar', 57, 'Lost 4 of 7 at the price step. Average discount 19%.'],
-    ['theo', 60, 'Lost 3 of 5 at the price step. Average discount 22%.']
+    ['sam', '5 of 8', '21%'],
+    ['lucia', '6 of 11', '18%'],
+    ['omar', '4 of 7', '19%'],
+    ['theo', '3 of 5', '22%']
   ];
   var MOMENTS = [
     ['sam', 'Acme Logistics', '4:12', '“We can do 15% off if you sign this month.”'],
@@ -202,37 +207,39 @@
   ];
 
   function insightPage() {
-    var chart = '<div class="cue-legend"><span><i class="is-down"></i>These 4</span><span><i class="is-base"></i>Rest of team</span></div>' +
-      '<div class="cue-lost">' + STEPS_LOST.map(function (r, i) {
-        var focus = r[0] === 'Price';
-        return '<div class="cue-lost-row' + (focus ? ' is-focus' : '') + '" data-tip="' + r[0] + ': these 4 lost ' + r[1] + '%, the rest lost ' + r[2] + '%">' +
-          '<span class="cue-lost-name">' + r[0] + '</span>' +
-          '<span class="cue-lost-bars">' +
-            '<span class="cue-hbar"><i class="is-down" style="--value:' + (r[1] / 70 * 100) + '%;--i:' + i + '"></i><b>' + r[1] + '%</b></span>' +
-            '<span class="cue-hbar"><i class="is-base" style="--value:' + (r[2] / 70 * 100) + '%;--i:' + i + '"></i><b>' + r[2] + '%</b></span>' +
-          '</span></div>';
+    /* Lost once price comes up: two bars, each labeled, nothing to decode */
+    var price = STEPS_LOST[2];
+    var chart = '<div class="cue-vs" data-component="Compare bars">' +
+        '<div class="cue-vs-row is-focus"><span class="cue-vs-name">These 4</span><span class="cue-vs-bar"><i style="--value:' + price[1] + '%;--i:0"></i></span><b>' + price[1] + '%</b></div>' +
+        '<div class="cue-vs-row"><span class="cue-vs-name">Rest of team</span><span class="cue-vs-bar"><i style="--value:' + price[2] + '%;--i:1"></i></span><b>' + price[2] + '%</b></div>' +
+      '</div>' +
+      '<p class="cue-vs-note">At the first call and the demo, they lose about as many as everyone else.</p>';
+
+    /* The whole insight in a few plain sentences, for a manager who only scans */
+    var brief = '<p class="cue-brief">These 4 people lose <b>58%</b> of their deals once price comes up. The rest of your team loses 27%. ' +
+      'The reason: they name the price before the buyer sees the value. It happened in <b>9 of 12</b> lost calls. ' +
+      '9 open deals worth <b>$420K</b> get to the price talk in the next two weeks.</p>';
+
+    var who = '<div class="cue-who-table" data-component="Who table">' +
+      '<div class="cue-who-row cue-who-row--head"><span></span><span>Lost at price</span><span>Avg discount</span></div>' +
+      WHO.map(function (w) {
+        return '<div class="cue-who-row" data-component="Person row"><span class="cue-who-person">' + ava(w[0], 'sm') + fullName(w[0]) + '</span>' +
+          '<b>' + w[1] + '</b><b>' + w[2] + '</b></div>';
       }).join('') + '</div>';
 
-    var who = '<div class="cue-rows">' + WHO.map(function (w, i) {
-      return '<div class="cue-row" data-tip="' + w[2] + '" data-component="Person row">' + ava(w[0], 'sm') +
-        '<span class="cue-row-name">' + P[w[0]].name + '</span>' +
-        '<span class="cue-minibar"><i style="--value:' + w[1] + '%;--c:var(--person-' + w[0] + ');--i:' + i + '"></i></span>' +
-        '<b class="cue-row-num">' + w[1] + '%</b></div>';
-    }).join('') + '</div>';
-
-    var why = '<p class="cue-lede">In 9 of 12 lost calls, price came up before the buyer saw the value.</p>' +
-      '<div class="cue-rows">' + MOMENTS.map(function (m) {
+    var why = '<div class="cue-rows">' + MOMENTS.map(function (m) {
         return '<div class="cue-moment" data-component="Call moment">' + ava(m[0], 'sm') +
-          '<div class="cue-moment-text"><span>' + P[m[0]].name + ' · ' + m[1] + ' · ' + m[2] + '</span><b>' + m[3] + '</b></div>' +
+          '<div class="cue-moment-text"><span>' + fullName(m[0]) + ' · ' + m[1] + ' · ' + m[2] + '</span><b>' + m[3] + '</b></div>' +
           play('0:20', P[m[0]].name + '’s call') + '</div>';
       }).join('') +
-      '<div class="cue-moment cue-moment--good" data-component="Call moment/Good">' + ava('dana', 'sm') +
-        '<div class="cue-moment-text"><span>What Dana does</span><b>Shows what doing nothing costs before saying a price.</b></div>' +
+      /* The positive turn: what the best person on the team does differently */
+      '<div class="cue-moment cue-moment--works" data-component="Call moment/What works">' + ava('dana', 'sm') +
+        '<div class="cue-moment-text"><span>' + ic('up', 'cue-ic--xs') + 'What Dana does differently</span><b>Shows what doing nothing costs before saying a price.</b></div>' +
         play('0:40', 'Dana’s call') + '</div>' +
       '</div>';
 
-    var deals = '<div class="cue-rows">' + DEALS.map(function (d) {
-      return '<div class="cue-row" data-component="Deal row"><span class="cue-row-name"><b>' + d[0] + '</b><span>' + ava(d[1], 'xs') + P[d[1]].name + ' · price call ' + d[3].split(',')[0] + '</span></span>' +
+    var deals = '<div class="cue-rows cue-rows--deals">' + DEALS.map(function (d) {
+      return '<div class="cue-row" data-component="Deal row"><span class="cue-row-name"><b>' + d[0] + '</b><span>' + ava(d[1], 'xs') + fullName(d[1]) + ' · price call ' + d[3].split(',')[0] + '</span></span>' +
         '<b class="cue-row-num">' + d[2] + '</b></div>';
     }).join('') + '</div>' +
       '<button class="cue-link" data-toast="The full list of deals is not part of this walkthrough.">6 more deals' + ic('arrowRight') + '</button>';
@@ -243,16 +250,15 @@
       '<div class="cue-pagehead cue-rise">' +
         '<div class="cue-insight-top">' + avas(['sam', 'lucia', 'omar', 'theo']) + '<span class="cue-insight-tag">Pricing · 4 people</span></div>' +
         '<h1 class="cue-h1">4 people lose deals when price comes up</h1>' +
-        '<p class="cue-sub"><b>$420K</b> at risk · 9 open deals at the price step</p>' +
       '</div>' +
       '<div class="cue-grid cue-rise" style="--i:1">' +
-        '<div class="cue-col">' + card('Where deals are lost', chart) + card('Why', why) + '</div>' +
-        '<div class="cue-col cue-col--side">' + card('Who', who, '<span class="cue-card-note">Lost at the price step</span>') + card('Deals at risk', deals) + '</div>' +
+        '<div class="cue-col">' + card('In short', brief) + card('Lost once price comes up', chart) + card('Why', why) + '</div>' +
+        '<div class="cue-col cue-col--side">' + card('Who', who) + card('Deals at risk', deals) + '</div>' +
       '</div>';
   }
 
   /* Screen 3: building */
-  var BUILD = ['Reading 12 lost calls', 'Using the Pricing template from enablement', 'Finding Dana’s best moments', 'Writing the buyer'];
+  var BUILD = ['Reading 12 lost calls', 'Using Ira’s Pricing template', 'Finding Dana’s best moments', 'Writing the buyer'];
   function building() {
     return '<div class="cue-building" data-component="Building">' +
       '<span class="cue-building-mark">' + ic('sparkle') + '</span>' +
@@ -295,9 +301,9 @@
   /* Reference calls: real call snippets reps watch before the practice.
      The creator keeps, removes, finds and adds them */
   var REFS = {
-    dana: ['dana', 'Dana \u00b7 Kestrel Shipping', '0:40', 'Shows what doing nothing costs before the price', 'Dana\u2019s call'],
-    dana2: ['dana', 'Dana \u00b7 Northwind Freight', '1:10', 'Gets the COO into the next call', 'Dana\u2019s call'],
-    model: ['ira', 'Model call \u00b7 Pricing template', '2:30', 'By Ira, enablement. From value to price to next step', 'Model call'],
+    dana: ['dana', 'Dana Brooks \u00b7 Kestrel Shipping', '0:40', 'Shows what doing nothing costs before the price', 'Dana\u2019s call'],
+    dana2: ['dana', 'Dana Brooks \u00b7 Northwind Freight', '1:10', 'Gets the COO into the next call', 'Dana\u2019s call'],
+    model: ['ira', 'Model call \u00b7 Pricing template', '2:30', 'By Ira Klein, enablement. From value to price to next step', 'Model call'],
     ben: ['BO', 'Ben Ortiz \u00b7 East team', '0:55', 'Turns \u201ctoo expensive\u201d into a cost per year', 'Ben\u2019s call']
   };
   ui.refs = ['dana'];
@@ -381,14 +387,12 @@
   var LANGS = ['English', 'Español', 'Deutsch', 'Français', 'עברית'];
   var LENGTHS = [5, 8, 10, 15];
   var TEMPLATES = [
-    ['pricing', 'Pricing', 'By Ira, enablement \u00b7 used by 5 teams'],
-    ['discovery', 'Discovery questions', 'By Ira, enablement \u00b7 used by 3 teams'],
-    ['firstcalls', 'First calls that land', 'By Ira, enablement \u00b7 used by 4 teams'],
+    ['pricing', 'Pricing', 'By Ira Klein, enablement \u00b7 used by 5 teams'],
+    ['discovery', 'Discovery questions', 'By Ira Klein, enablement \u00b7 used by 3 teams'],
+    ['firstcalls', 'First calls that land', 'By Ira Klein, enablement \u00b7 used by 4 teams'],
     ['scratch', 'Start from scratch', 'Cue drafts from your team\u2019s lost calls only']
   ];
-  var TRACKS = [['Win rate at the price step', 'Suggested by the insight'], ['Average discount', ''], ['Deal size', ''], ['Time to close', '']];
   ui.template = 'pricing';
-  ui.tracks = 0;
   ui.dd = null;
 
   /* A real dropdown: a button, and a small menu under it while open */
@@ -427,7 +431,7 @@
         '<label class="cue-who-pick"><input type="checkbox" data-who="' + id + '"' + (on ? ' checked' : '') + '>' +
           '<span class="cue-checkbox">' + ic('check', 'cue-ic--sm') + '</span>' +
           '<img src="assets/people/' + id + '.jpg" alt="">' +
-          '<span class="cue-who-name"><b>' + (P[id].full || P[id].name) + '</b><span>' +
+          '<span class="cue-who-name"><b>' + fullName(id) + '</b><span>' +
             (info[0] ? info[0] + ' price call \u00b7 ' + DAYS[info[1]][0] + ' ' + info[2] : 'No price call this week') + '</span></span></label>' +
         dropdown('due-' + id, '<span>Due</span>', dayLabel(ui.due[id]), items, 'cue-meta-item cue-who-due') +
         '<span class="cue-who-off">Not included</span>' +
@@ -436,7 +440,7 @@
     var more = Object.keys(WHO_EXTRA).filter(function (id) { return ui.whoList.indexOf(id) < 0; });
     return '<div class="cue-whos" data-component="Recipients">' + rows + '</div>' +
       (more.length ? '<div class="cue-who-add">' + dropdown('addwho', ic('plus', 'cue-ic--xs') + 'Add people', '', more.map(function (id) {
-        return { v: id, title: P[id].name, sub: WHO_EXTRA[id], lead: ava(id, 'sm') };
+        return { v: id, title: fullName(id), sub: WHO_EXTRA[id], lead: ava(id, 'sm') };
       })) + '</div>' : '');
   }
 
@@ -472,8 +476,7 @@
         ['Knows.', 'There’s a cheaper quote. A past vendor let them down.'],
         ['Decides with.', 'The COO, who signs off on anything over $50K.'],
         ['Shares only if asked.', 'Two big clients left after late deliveries.'],
-        ['The objection.', '“Your price is 20% higher than the other quote.” ' +
-          '<span class="cue-evidence" contenteditable="false" data-tip="Heard in 9 of the team’s 12 lost calls">' + ic('sparkle', 'cue-ic--xs') + '9 of 12 lost calls</span>'],
+        ['Pushes back with.', '“Your price is 20% higher than the other quote.”'],
         ['Gives in when.', 'You show what late fees really cost.']
       ]) +
     '</section>';
@@ -485,20 +488,20 @@
         ['The situation.', 'Second call. ' + avFirst() + ' has a 20% cheaper quote.'],
         ['Your goal.', 'Show what late fees cost before you talk price.'],
         ['You know.', 'Late fees cost them about $80K a year.'],
-        ['Rules.', 'No discount above 5%. Hints are off.']
+        ['Rules.', 'No discount above 5%.']
       ]) +
     '</section>';
 
     /* The scorecard: one split bar, one block per line, weights you can step */
     var score = '<section class="cue-panel" data-component="Panel/Scorecard">' +
-      '<div class="cue-panel-head"><h2>Scored on</h2><span class="cue-card-note">Weights add up to 100%</span>' +
-        dropdown('pass', '<span>Pass at</span>', String(ui.pass), [60, 65, 70, 75, 80, 85, 90, 95].map(function (v) { return { v: v, title: 'Pass at ' + v, sub: v === 80 ? 'Suggested for this template' : '', on: v === ui.pass }; }), 'cue-meta-item cue-pass-pick') + '</div>' +
-      '<div class="cue-split-bar' + (ui.flash === 'weights' ? ' is-flash' : '') + '" role="img" aria-label="Weights: ' + ui.weights.join(', ') + ' percent">' +
+      '<div class="cue-panel-head"><h2>Scored on</h2><span class="cue-card-note">Points add up to 100</span>' +
+        dropdown('pass', '<span>Pass at</span>', ui.pass + '<span>of 100</span>', [60, 65, 70, 75, 80, 85, 90, 95].map(function (v) { return { v: v, title: 'Pass at ' + v, sub: v === 80 ? 'Suggested for this template' : '', on: v === ui.pass }; }), 'cue-meta-item cue-pass-pick') + '</div>' +
+      '<div class="cue-split-bar' + (ui.flash === 'weights' ? ' is-flash' : '') + '" role="img" aria-label="Points: ' + ui.weights.join(', ') + '">' +
         ui.weights.map(function (w, i) { return '<i data-seg-i="' + i + '" style="width:' + w + '%;background:' + WEIGHT_COLORS[i] + '"></i>'; }).join('') + '</div>' +
       '<ol class="cue-wlist">' + SCORECARD.map(function (r, i) {
         return '<li class="cue-wrow" data-row-i="' + i + '" data-tip="Good: ' + r[1].replace(/"/g, '&quot;') + '"><span class="cue-wdot" style="background:' + WEIGHT_COLORS[i] + '"></span>' +
           '<span class="cue-wname" contenteditable="true" spellcheck="false" data-keep="score' + i + '">' + kept('score' + i, r[0]) + '</span>' +
-          '<span class="cue-weight' + (ui.flash === 'weights' ? ' is-flash' : '') + '"><button data-weight="' + i + '|-5" aria-label="Less weight">−</button><b>' + ui.weights[i] + '%</b><button data-weight="' + i + '|5" aria-label="More weight">+</button></span></li>';
+          '<span class="cue-weight' + (ui.flash === 'weights' ? ' is-flash' : '') + '"><button data-weight="' + i + '|-5" aria-label="Fewer points">−</button><b>' + ui.weights[i] + '<span>pts</span></b><button data-weight="' + i + '|5" aria-label="More points">+</button></span></li>';
       }).join('') + '</ol>' +
     '</section>';
 
@@ -520,7 +523,6 @@
         return { v: t[0], title: t[1], sub: t[2], on: t[0] === ui.template, lead: t[0] === 'scratch' ? '<span class="cue-dd-lead">' + ic('sparkle', 'cue-ic--sm') + '</span>' : ava('ira', 'sm') };
       })) +
       dropdown('length', '', ui.length + ' min', LENGTHS.map(function (l) { return { v: l, title: l + ' minutes', on: l === ui.length }; })) +
-      dropdown('tracks', '<span>Tracks</span>', TRACKS[ui.tracks][0], TRACKS.map(function (t, i) { return { v: i, title: t[0], sub: t[1], on: i === ui.tracks }; })) +
       refCalls() +
     '</div>';
 
@@ -529,7 +531,7 @@
         '<button class="cue-btn" data-go="4" data-hint data-send-label>' + ic('send') + 'Send to ' + n + ' people</button>') +
       '<div class="cue-pagehead cue-rise">' +
         '<div class="cue-titlerow"><h1 class="cue-h1 cue-editable" contenteditable="true" spellcheck="false" data-keep="title">' + kept('title', 'Hold your price') + '</h1>' +
-          '<span class="cue-pill" data-tip="Built from enablement’s Pricing template and 12 of your team’s lost calls">' + ic('sparkle', 'cue-ic--xs') + 'Draft by Cue</span></div>' +
+          '<span class="cue-pill" data-tip="Built from Ira’s Pricing template and 12 of your team’s lost calls">' + ic('sparkle', 'cue-ic--xs') + 'Draft by Cue</span></div>' +
         meta +
       '</div>' +
       '<div class="cue-grid cue-grid--fill cue-rise" style="--i:1">' +
@@ -564,7 +566,7 @@
   function aiChange(kind, text) {
     ui.aiOpen = false;
     if (kind === 'tough') { setMood('tough'); changeDraft('mood'); flashEl(main.querySelector('[data-mood-text]')); toast(avFirst() + ' is tougher now: pushes harder and is ready to walk away.'); }
-    if (kind === 'value') { ui.weights = [15, 40, 30, 15]; changeDraft('weights'); toast('“Puts a number on the value” now counts for 40%.'); }
+    if (kind === 'value') { ui.weights = [15, 40, 30, 15]; changeDraft('weights'); toast('“Puts a number on the value” is now worth 40 points.'); }
     if (kind === 'short') { ui.length = 5; changeDraft('length'); toast('The practice is now 5 minutes.'); }
     if (kind === 'text') { changeDraft('objection'); toast(text ? 'Cue updated the draft: ' + text : 'Type what you want to change.'); }
   }
@@ -626,7 +628,7 @@
           '<div class="sl-sec">' + ic('chevronDown', 'cue-ic--xs') + 'Channels</div>' +
           item(ic('hash', 'cue-ic--sm'), 'sales-team', 'sl-sub sl-bold') + item(ic('hash', 'cue-ic--sm'), 'deal-acme', 'sl-sub') + item(ic('hash', 'cue-ic--sm'), 'general', 'sl-sub') +
           '<div class="sl-sec">' + ic('chevronDown', 'cue-ic--xs') + 'Direct messages</div>' +
-          dm('noa', 'Noa Levin') + dm('dana', 'Dana') + dm('lucia', 'Lucia') +
+          dm('noa', 'Noa Levin') + dm('dana', 'Dana Brooks') + dm('lucia', 'Lucia Moreno') +
           '<div class="sl-sec">' + ic('chevronDown', 'cue-ic--xs') + 'Apps</div>' +
           '<div class="sl-it sl-sub is-on"><span class="sl-app">' + MARK + '</span><span>Cue</span></div>' +
         '</div>' +
@@ -702,7 +704,7 @@
   }
   function beforeCall() {
     var score = '<ol class="cue-score">' + SCORECARD.map(function (r, i) {
-      return '<li data-tip="Good: ' + r[1] + '"><span>' + r[0] + '</span><b class="cue-wt">' + ui.weights[i] + '%</b></li>';
+      return '<li data-tip="Good: ' + r[1] + '"><span>' + r[0] + '</span><b class="cue-wt">' + ui.weights[i] + ' pts</b></li>';
     }).join('') + '</ol>';
     return pagehead('Back', 5, '') +
       '<div class="cue-prep cue-rise">' +
@@ -713,8 +715,12 @@
         '</figure>' +
         '<div class="cue-prep-text">' +
           '<div><h1 class="cue-h1">Hold your price</h1><p class="cue-sub">Before your Acme call · Thu 11:00 · 8 min</p></div>' +
-          '<div class="cue-prep-block"><span class="cue-field-label">You’ll meet</span><p>Busy and doubtful. Has a quote that’s 20% cheaper. Wants to know why you cost more.</p></div>' +
-          '<div class="cue-prep-block"><span class="cue-field-label">Your goal</span><p>Show what late shipments cost before you talk price. End with a clear next step.</p></div>' +
+          /* The rep brief Noa wrote, as one paragraph: the setting, then the mission */
+          '<div class="cue-prep-block cue-prep-brief"><span class="cue-field-label">Your brief</span><p>This is your second call with Mark Ellis, CFO of Acme Logistics. ' +
+            'He’s busy, doubtful, and holding a quote that’s 20% cheaper, so he’ll open by asking why you cost more. ' +
+            'What he won’t say unless you ask: late shipments cost Acme about $80K a year in fees, and two big clients left after late deliveries. ' +
+            'Your mission is to get him talking about that problem, put a number on it, and only then talk price. ' +
+            'Don’t go above a 5% discount, and end with a clear next step.</p></div>' +
           '<div class="cue-prep-block"><span class="cue-field-label">You’re scored on</span>' + score + '</div>' +
           (ui.refs.length ? refMoment(REFS[ui.refs[0]]) : '') +
           '<div class="cue-prep-foot"><button class="cue-btn" data-go="7" data-hint>' + ic('mic') + 'Start call</button><button class="cue-btn cue-btn--secondary" data-toast="Your mic sounds good.">Test mic</button>' +
@@ -744,7 +750,6 @@
       '<p class="cue-call-caption" data-call-caption aria-live="polite"><b>Mark</b> ' + LINES[0][1] + '</p>' +
       '<div class="cue-call-controls">' +
         '<button class="cue-round-btn" data-toast="Muted. Mark waits for you.">' + ic('mic') + '<span>Mute</span></button>' +
-        '<button class="cue-round-btn" data-toast="Hints stay off in a scored round.">' + ic('bulb') + '<span>Hints off</span></button>' +
         '<button class="cue-btn" data-end-call data-hint>End call</button>' +
       '</div>' +
     '</div>';
@@ -845,7 +850,7 @@
       '</div>' +
       roundTimeline() +
       '<div class="cue-grid cue-rise" style="--i:2">' +
-        '<div class="cue-col cue-col--even">' + card('Your scores', rows, '<span class="cue-card-note">Pass at 80</span>') + '</div>' +
+        '<div class="cue-col cue-col--even">' + card('Your scores', rows, '<span class="cue-card-note">Pass at 80 of 100</span>') + '</div>' +
         '<div class="cue-col cue-col--even">' + card('Three moments', moments, '<span class="cue-card-note">Click to replay</span>') + '</div>' +
       '</div>';
   }
@@ -906,7 +911,7 @@
     var done = '<div class="cue-rows">' +
       '<div class="cue-done cue-done--open" data-component="Done row">' +
         '<div class="cue-done-line"><span class="cue-row-name"><b>Hold your price</b><span>Yesterday · shared with Noa</span></span><b class="cue-row-num">84</b></div>' +
-        '<div class="cue-done-note">' + ava('noa', 'xs') + '<span><b>Noa</b> · last night</span><p>Nice round. Watch your 6:12 moment before Thursday.</p>' +
+        '<div class="cue-done-note">' + ava('noa', 'xs') + '<span><b>Noa Levin</b> · last night</span><p>Nice round. Watch your 6:12 moment before Thursday.</p>' +
           '<button class="cue-play" data-play aria-label="Replay your 6:12 moment">' + ic('play', 'cue-ic--sm') + '<span class="cue-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span class="cue-play-len">6:12</span></button></div>' +
       '</div>' +
       DONE.map(function (d) {
@@ -915,10 +920,10 @@
 
     var skills = '<div class="cue-myskills">' + SKILLS.map(function (k, i) {
       var before = k.s.sam, now = SAM_NOW[k.name] || before, ch = now - before;
-      return '<div class="cue-myskill" data-tip="You ' + now + ' · team average ' + k.score + '" data-component="My skill">' +
+      return '<div class="cue-myskill" data-component="My skill">' +
         '<span class="cue-myskill-name">' + k.name + '</span>' +
-        '<div class="cue-myskill-line"><span class="cue-myskill-bar"><i style="--value:' + now + '%;--i:' + i + '"></i><em style="--team:' + k.score + '%"></em></span>' +
-          '<b>' + now + '</b>' + (ch ? delta('up', String(ch)) : '<span class="cue-delta cue-delta--none"></span>') + '</div>' +
+        '<div class="cue-myskill-line"><span class="cue-myskill-bar"><i style="--value:' + now + '%;--i:' + i + '"></i><em style="--team:' + k.score + '%" data-team-tip="Team average ' + k.score + '"></em></span>' +
+          '<b>' + now + '</b>' + delta(ch > 0 ? 'up' : ch < 0 ? 'down' : 'flat', String(Math.abs(ch))) + '</div>' +
       '</div>';
     }).join('') + '</div>';
 
@@ -932,7 +937,7 @@
           '<section class="cue-section cue-rise" style="--i:2"><div class="cue-section-head"><h2>Done lately</h2></div>' + done + '</section>' +
         '</div>' +
         '<aside class="cue-split-side cue-rise" style="--i:3">' +
-          '<div class="cue-section-head"><h2>My skills</h2></div>' +
+          '<div class="cue-section-head"><h2>My skills</h2><span>Points out of 100</span></div>' +
           '<div class="cue-legend cue-legend--plain"><span><i class="is-you"></i>You</span><span><i class="is-team"></i>Team average</span></div>' +
           skills +
         '</aside>' +
@@ -965,13 +970,43 @@
       '<div class="cue-pagehead cue-rise"><h1 class="cue-h1">' + o.title + '</h1><p class="cue-sub">' + o.sub + '</p></div>' +
       '<nav class="cue-tabs cue-rise" aria-label="' + o.title + ' pages" data-component="Page tabs">' + tabs + '</nav>';
   }
+  /* The 3 dots menu: more actions for a page, next to its main button. Opens downward */
+  var MENUS = {
+    practice: [
+      ['pencil', 'Edit practice', 'Opens the practice to edit. Changes reach people on their next round.'],
+      ['replay', 'Send another round', 'Sends a harder round to everyone who passed.'],
+      ['plus', 'Add people', 'Pick more people to send it to.'],
+      ['copy', 'Duplicate', 'Makes a copy you can change for another team.'],
+      ['archive', 'Archive', 'Moves the practice to the archive. Not part of this walkthrough.', true]
+    ],
+    person: [
+      ['replay', 'Send a harder round', 'Sends Daniel a tougher Mark, due before Friday.'],
+      ['share', 'Share the plan with Daniel', 'Daniel gets the 1:1 plan before Thursday.'],
+      ['play', 'See all 3 rounds', 'All of Daniel\u2019s rounds. Not part of this walkthrough.'],
+      ['chat', 'Message Daniel', 'Opens a chat with Daniel. Not part of this walkthrough.']
+    ]
+  };
+  function moreMenu(key) {
+    return '<span class="cue-more" data-component="More menu">' +
+      '<button class="cue-icon-btn" data-more aria-haspopup="menu" aria-expanded="false" aria-label="More actions">' + ic('more') + '</button>' +
+      '<span class="cue-dd-menu" role="menu">' + MENUS[key].map(function (m, i) {
+        return (m[3] ? '<span class="cue-more-sep" role="separator"></span>' : '') +
+          '<button class="cue-dd-item" role="menuitem" data-more-pick="' + key + '|' + i + '">' + ic(m[0], 'cue-ic--sm') + '<span class="cue-dd-text"><b>' + m[1] + '</b></span></button>';
+      }).join('') + '</span>' +
+    '</span>';
+  }
+  function closeMore(box) {
+    box.classList.remove('is-open');
+    box.querySelector('[data-more]').setAttribute('aria-expanded', 'false');
+  }
+
   /* The practice: Overview, Results, Impact */
   function practiceHead(page, actions, hint) {
     return objectHead({
       crumb: 'Practice', crumbNote: 'All your team\u2019s practices. This walkthrough skips the list.',
       title: 'Hold your price', sub: 'Sent Oct 16 to 4 people \u00b7 <b>4 of 4</b> done \u00b7 Average <b>76</b>',
       tabs: [['overview', 'Overview', 12], ['results', 'Results', 10], ['impact', 'Impact', 13]],
-      page: page, actions: actions, hint: hint
+      page: page, actions: (actions || '') + moreMenu('practice'), hint: hint
     });
   }
 
@@ -988,18 +1023,18 @@
     var people = '<div class="cue-rows cue-rows--table">' + head + RESULTS.map(function (r) {
       var lines = SCORECARD.map(function (l, i) { return l[0].replace(/“|”/g, '') + ' ' + r[3][i]; }).join(' · ');
       return '<div class="cue-row cue-result" data-tip="' + lines + '" data-component="Result row">' + ava(r[0], 'md') +
-        '<span class="cue-row-name"><b>' + P[r[0]].name + '</b><span>' + r[2] + ' rounds · best round shared</span></span>' +
+        '<span class="cue-row-name"><b>' + fullName(r[0]) + '</b><span>' + r[2] + ' rounds · best round shared</span></span>' +
         '<span class="cue-ticks" aria-hidden="true">' + r[3].map(function (v) { return '<i style="--value:' + v + '%;--c:var(--viz-' + tone(v) + ')"></i>'; }).join('') + '</span>' +
         '<b class="cue-row-num cue-row-num--lg">' + r[1] + '</b>' +
         '<span class="cue-status-pill cue-status-pill--' + r[5] + '">' + r[4] + '</span>' +
         (r[0] === 'omar' ? '<button class="cue-btn cue-btn--sm" data-go="11" data-hint>' + ic('calendar') + 'Plan 1:1</button>' : '<span class="cue-result-gap"></span>') +
       '</div>';
     }).join('') + '</div>';
-    var team = '<div class="cue-skills">' + SCORECARD.map(function (l, i) {
+    var team = '<div class="cue-skills cue-skills--lines">' + SCORECARD.map(function (l, i) {
       var vals = RESULTS.map(function (r) { return r[3][i]; });
       var avg = Math.round(vals.reduce(function (a, b) { return a + b; }, 0) / vals.length);
       var dots = RESULTS.map(function (r) {
-        return '<img class="cue-skill-person" src="assets/people/' + r[0] + '.jpg" alt="' + P[r[0]].name + ' ' + r[3][i] + '" title="' + P[r[0]].name + ' · ' + r[3][i] + '" style="--value:' + r[3][i] + '%;--c:var(--person-' + r[0] + ')">';
+        return '<img class="cue-skill-person" src="assets/people/' + r[0] + '.jpg" alt="' + fullName(r[0]) + ' ' + r[3][i] + '" title="' + fullName(r[0]) + ' · ' + r[3][i] + '" style="--value:' + r[3][i] + '%;--c:var(--person-' + r[0] + ')">';
       }).join('');
       var dir = avg >= 80 ? 'up' : avg < 70 ? 'down' : 'flat';
       return '<div class="cue-skill" data-component="Skill row"><span class="cue-skill-name">' + l[0] + '</span>' +
@@ -1007,12 +1042,12 @@
         '<span class="cue-skill-score">' + avg + '</span>' +
         '<span class="cue-skill-end">' + (avg < 70 ? '<span class="cue-status-pill cue-status-pill--down">Weakest</span>' : '') + '</span></div>';
     }).join('') + '</div>';
-    return practiceHead('results', '<button class="cue-btn cue-btn--secondary" data-toast="Sends a harder round to everyone who passed.">' + ic('replay') + 'Send another round</button>') +
-      '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>By person</h2><span>Pass at 80 \u00b7 Up 12 from the first rounds</span></div>' + people + '</section>' +
-      '<section class="cue-section cue-rise" style="--i:2"><div class="cue-section-head"><h2>By scorecard line</h2></div>' + team + '</section>';
+    return practiceHead('results', '') +
+      '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>By person</h2><span>Pass at 80 of 100 \u00b7 Up 12 from the first rounds</span></div>' + people + '</section>' +
+      '<section class="cue-section cue-rise" style="--i:2"><div class="cue-section-head"><h2>By scorecard line</h2><span>Points out of 100</span></div>' + team + '</section>';
   }
 
-  /* Screen 12: Omar and the 1:1 plan */
+  /* Screen 12: Daniel and the 1:1 plan */
   function omarTimeline() {
     var bars = '';
     for (var i = 0; i < 120; i++) {
@@ -1035,23 +1070,23 @@
     var scores = '<div class="cue-myskills">' + SCORECARD.map(function (l, i) {
       var v = RESULTS[3][3][i];
       var avg = Math.round(RESULTS.reduce(function (a, r) { return a + r[3][i]; }, 0) / RESULTS.length);
-      return '<div class="cue-myskill" data-tip="Omar ' + v + ' · team average ' + avg + '"><span class="cue-myskill-name">' + l[0] + '</span>' +
-        '<div class="cue-myskill-line"><span class="cue-myskill-bar"><i style="--value:' + v + '%;--i:' + i + ';background:color-mix(in srgb, var(--person-omar) 40%, white)"></i><em style="--team:' + avg + '%"></em></span><b>' + v + '</b></div></div>';
+      return '<div class="cue-myskill"><span class="cue-myskill-name">' + l[0] + '</span>' +
+        '<div class="cue-myskill-line"><span class="cue-myskill-bar"><i style="--value:' + v + '%;--i:' + i + ';background:color-mix(in srgb, var(--person-omar) 40%, white)"></i><em style="--team:' + avg + '%" data-team-tip="Team average ' + avg + '"></em></span><b>' + v + '</b></div></div>';
     }).join('') + '</div>';
     return pagehead('Results', 10,
-        '<button class="cue-btn cue-btn--secondary" data-toast="Sends Omar a tougher Mark, due before Friday.">' + ic('replay') + 'Send a harder round</button>' +
-        confirmBtn('Add to Thursday’s 1:1', 'calendar', 'Added to your 1:1 with Omar, Thu 10:00.', 'In Thursday’s 1:1', 'One week later', 12)) +
+        confirmBtn('Add to Thursday’s 1:1', 'calendar', 'Added to your 1:1 with Daniel, Thu 10:00.', 'In Thursday’s 1:1', 'One week later', 12) +
+        moreMenu('person')) +
       '<div class="cue-split">' +
         '<div class="cue-split-main">' +
-          '<div class="cue-person-head cue-rise">' + '<img class="cue-avatar cue-avatar--xl" src="assets/people/omar.jpg" alt="Omar">' +
-            '<div><h1 class="cue-h1">Omar</h1><p class="cue-sub">Account executive · Best round <b>68</b> · 3 rounds</p></div></div>' +
-          '<p class="cue-summary cue-rise" style="--i:1">Omar asks good questions, but brings up price in the first 3 minutes. No number on the value yet.</p>' +
+          '<div class="cue-person-head cue-rise">' + '<img class="cue-avatar cue-avatar--xl" src="assets/people/omar.jpg" alt="Daniel Shaw">' +
+            '<div><h1 class="cue-h1">Daniel Shaw</h1><p class="cue-sub">Account executive · Best round <b>68</b> · 3 rounds</p></div></div>' +
+          '<p class="cue-summary cue-rise" style="--i:1">Daniel asks good questions, but brings up price in the first 3 minutes. No number on the value yet.</p>' +
           '<section class="cue-card cue-rise" style="--i:2"><div class="cue-card-head"><h2>Two moments to watch</h2></div>' + omarTimeline() + '</section>' +
           '<section class="cue-card cue-rise" style="--i:3"><div class="cue-card-head"><h2>1:1 plan · 15 min</h2><span class="cue-card-note">' + ic('sparkle', 'cue-ic--xs') + ' Drafted by Cue, edit anything</span></div>' + plan + '</section>' +
         '</div>' +
         '<aside class="cue-split-side cue-rise" style="--i:3">' +
-          '<div class="cue-section-head"><h2>Omar’s scores</h2></div>' +
-          '<div class="cue-legend cue-legend--plain"><span><i class="is-you" style="background:var(--person-omar)"></i>Omar</span><span><i class="is-team"></i>Team average</span></div>' +
+          '<div class="cue-section-head"><h2>Daniel’s scores</h2><span>Points out of 100</span></div>' +
+          '<div class="cue-legend cue-legend--plain"><span><i class="is-you" style="background:var(--person-omar)"></i>Daniel</span><span><i class="is-team"></i>Team average</span></div>' +
           scores +
           '<div class="cue-side-deal"><span class="cue-field-label">Next real call</span><b>Pinecrest Supply · Price call</b><span>Fri, Oct 24 · $60K</span></div>' +
         '</aside>' +
@@ -1071,17 +1106,17 @@
         return '<span class="cue-check-chip">' + ic(c[1] ? 'check' : 'close', 'cue-ic--xs cue-check-' + (c[1] ? 'yes' : 'no')) + c[0] + '</span>';
       }).join('') : '<span class="cue-row-quiet">Not yet</span>';
       return '<div class="cue-row cue-real"' + (r[4] ? ' data-tip="From the call recording, ' + r[4] + '"' : '') + ' data-component="Real call row">' + ava(r[0], 'md') +
-        '<span class="cue-row-name"><b>' + P[r[0]].name + ' · ' + r[1] + '</b><span class="cue-checks">' + checks + '</span></span>' +
+        '<span class="cue-row-name"><b>' + fullName(r[0]) + ' · ' + r[1] + '</b><span class="cue-checks">' + checks + '</span></span>' +
         '<span class="cue-real-out">' + r[3] + '</span>' +
         (r[4] ? play('0:30', P[r[0]].name + '’s call') : '<span class="cue-real-gap"></span>') +
       '</div>';
     }).join('') + '</div>';
     return practiceHead('overview', '', 'impact') +
       '<section class="cue-signal cue-rise" data-component="Early signal">' +
-        '<div><span class="cue-field-label">Early signal \u00b7 one week in</span><h2>Lost at the price step</h2><p class="cue-sub">These 4, before and after the practice</p></div>' +
+        '<div><span class="cue-field-label">Early signal \u00b7 one week in</span><h2>Lost when price comes up</h2><p class="cue-sub">These 4, before and after the practice</p></div>' +
         '<div class="cue-signal-bars">' +
           '<div class="cue-compare-row"><span>Before</span><span class="cue-compare-track"><i class="is-down" style="--value:58%;transform:none"></i></span><b>58%</b></div>' +
-          '<div class="cue-compare-row"><span>This week</span><span class="cue-compare-track"><i class="is-up" style="--value:41%;transform:none"></i></span><b>41%</b></div>' +
+          '<div class="cue-compare-row"><span>This week</span><span class="cue-compare-track"><i class="is-up" style="--value:46%;transform:none"></i></span><b>46%</b></div>' +
         '</div>' +
       '</section>' +
       '<section class="cue-section cue-rise" style="--i:1"><div class="cue-section-head"><h2>How the real calls went</h2><span>Checked from call recordings, not from practice</span></div>' + rows + '</section>';
@@ -1090,7 +1125,7 @@
   /* Screen 14: monthly impact */
   function impact() {
     var tiles = [
-      ['Win rate at the price step', '41%', '26%', 41, 26],
+      ['Deals won when price comes up', '41%', '26%', 41, 26],
       ['Average discount', '9%', '17%', 9, 17],
       ['Deals saved', '$310K', '', 0, 0]
     ].map(function (t, i) {
@@ -1104,7 +1139,7 @@
       x: ['Sep 15', '', 'Sep 29', '', 'Oct 13', '', 'Oct 27'],
       tipX: ['Week of Sep 15', 'Week of Sep 22', 'Week of Sep 29', 'Week of Oct 6', 'Week of Oct 13', 'Week of Oct 20', 'Week of Oct 27'],
       marker: { i: 4, text: 'Practice' },
-      label: 'Win rate at the price step by week. People who practiced rose from 27% to 41%. People who have not practiced yet stayed near 26%.',
+      label: 'Deals won when price comes up, by week. People who practiced rose from 27% to 41%. People who have not practiced yet stayed near 26%.',
       series: [
         { name: 'Practiced', kind: 'focus', values: [27, 28, 26, 27, 31, 37, 41] },
         { name: 'Not yet', kind: 'base', values: [28, 27, 28, 26, 27, 26, 26] }
@@ -1115,7 +1150,7 @@
         '<button class="cue-btn" data-go="14" data-hint>See Ira\u2019s view' + ic('arrowRight') + '</button>') +
       filterBar(dropdown('period', '<span>Period</span>', 'October', [{ v: 'oct', title: 'October', sub: 'Since the practice was sent', on: true }, { v: 'quarter', title: 'This quarter' }, { v: 'sep', title: 'September', sub: 'Before the practice' }])) +
       '<div class="cue-stats">' + tiles + '</div>' +
-      '<section class="cue-card cue-rise" style="--i:3"><div class="cue-card-head"><h2>Win rate at the price step, by week</h2></div>' +
+      '<section class="cue-card cue-rise" style="--i:3"><div class="cue-card-head"><h2>Holding price, week by week</h2></div>' +
         '<div class="cue-legend cue-legend--plain"><span><i class="is-up"></i>Practiced \u00b7 4 people</span><span><i class="is-base"></i>Not yet \u00b7 3 people</span></div>' + chart +
         '<div class="cue-skills-hint">' + ic('info', 'cue-ic--sm') + 'Early signal: 4 people, 2 weeks. We check again at quarter end.</div>' +
       '</section>';
@@ -1123,10 +1158,10 @@
 
   /* Screen 15: across teams (Ira) */
   var TEAMS = [['Noa Levin’s team', 15, '27% → 42%', 'noa'], ['Mid-market West', 12, '24% → 36%'], ['Enterprise', 9, '31% → 40%'], ['Mid-market East', 7, '25% → 32%'], ['EMEA', 4, '29% → 33%'], ['Partners', 2, '22% → 24%']];
-  var WORKS = [['A doubtful buyer beats a friendly one', 9, ['Doubtful', 14], ['Friendly', 5]], ['Two rounds beat one', 6, ['Two rounds', 13], ['One round', 7]], ['Practice within 2 days of the real call', 5, ['Within 2 days', 12], ['Earlier', 7]]];
+  var WORKS = [['Doubtful buyers teach more', 9, ['Doubtful', 14], ['Friendly', 5]], ['Two rounds beat one', 6, ['Two rounds', 13], ['One round', 7]], ['Practice close to the real call', 5, ['Within 2 days', 12], ['Earlier', 7]]];
   function acrossTeams() {
     var teams = '<div class="cue-rows">' + TEAMS.map(function (t, i) {
-      return '<div class="cue-row" data-tip="Win rate at the price step ' + t[2] + '" data-component="Team row">' +
+      return '<div class="cue-row" data-tip="Deals won when price comes up: ' + t[2] + '" data-component="Team row">' +
         (t[3] ? ava(t[3], 'sm') : '<span class="cue-team-dot"></span>') +
         '<span class="cue-row-name">' + t[0] + '</span>' +
         '<span class="cue-minibar cue-minibar--lift"><i style="--value:' + (t[1] / 16 * 100) + '%;--c:var(--viz-up);--i:' + i + '"></i></span>' +
@@ -1144,15 +1179,15 @@
       x: ['Aug 25', '', 'Sep 8', '', 'Sep 22', '', 'Oct 6', '', 'Oct 20'],
       tipX: ['Week of Aug 25', 'Week of Sep 1', 'Week of Sep 8', 'Week of Sep 15', 'Week of Sep 22', 'Week of Sep 29', 'Week of Oct 6', 'Week of Oct 13', 'Week of Oct 20'],
       markers: [{ i: 1, text: '2 teams' }, { i: 4, text: '4 teams' }, { i: 7, text: '6 teams' }],
-      label: 'Win rate at the price step by week, all 6 teams. People who practiced rose from 27% to 38% and held there as more teams joined. People who have not practiced yet stayed near 27%.',
+      label: 'Deals won when price comes up, by week, all 6 teams. People who practiced rose from 27% to 38% and held there as more teams joined. People who have not practiced yet stayed near 27%.',
       series: [
         { name: 'Practiced', kind: 'focus', values: [27, 30, 32, 34, 35, 36, 37, 38, 38] },
         { name: 'Not yet', kind: 'base', values: [27, 26, 27, 26, 27, 26, 27, 26, 27] }
       ]
     });
     return objectHead({
-        crumb: 'Library', crumbNote: 'All of enablement\u2019s templates. This walkthrough skips the list.',
-        title: 'Pricing template', sub: 'Used by 6 teams \u00b7 31 people practiced \u00b7 By Ira, enablement',
+        crumb: 'Library', crumbNote: 'All of Ira\u2019s templates. This walkthrough skips the list.',
+        title: 'Pricing template', sub: 'Used by 6 teams \u00b7 31 people practiced \u00b7 By Ira Klein, enablement',
         tabs: [
           ['setup', 'Setup', 'The master buyer, brief, scorecard and reference calls, and what team leads may change. Not part of this walkthrough.'],
           ['teams', 'Teams', 'Which teams use it, who leads each, and how many finished. Not part of this walkthrough.'],
@@ -1163,10 +1198,10 @@
           confirmBtn('Update the template', 'sparkle', 'Template updated: doubtful buyer, two rounds, due 2 days before the call.', 'Template updated', 'Start over', 0)
       }) +
       filterBar(dropdown('tperiod', '<span>Period</span>', 'This quarter', [{ v: 'q', title: 'This quarter', on: true }, { v: 'oct', title: 'October' }, { v: 'all', title: 'Since launch' }])) +
-      '<section class="cue-card cue-rise" data-component="Trend card"><div class="cue-card-head"><h2>Win rate at the price step, by week</h2></div>' +
+      '<section class="cue-card cue-rise" data-component="Trend card"><div class="cue-card-head"><h2>Holding price, week by week</h2></div>' +
         '<div class="cue-legend cue-legend--plain"><span><i class="is-up"></i>Practiced \u00b7 31 people</span><span><i class="is-base"></i>Not yet \u00b7 22 people</span></div>' + trend + '</section>' +
       '<div class="cue-grid cue-grid--match cue-rise" style="--i:1">' +
-        '<div class="cue-col cue-col--even">' + card('Lift per team', teams, '<span class="cue-card-note">Points</span>') + '</div>' +
+        '<div class="cue-col cue-col--even">' + card('How much each team improved', teams, '<span class="cue-card-note">Points</span>') + '</div>' +
         '<div class="cue-col cue-col--even">' + card('What works', works, '<span class="cue-card-note">' + ic('sparkle', 'cue-ic--xs') + ' Cue compares versions on its own</span>') + '</div>' +
       '</div>';
   }
@@ -1174,7 +1209,7 @@
   var STATES = [
     { id: 'home', loop: 0, nav: 'home', url: 'cue.app/home', caption: 'Noa, a sales team lead, opens Cue on Thursday morning.', render: home },
     { id: 'insight', loop: 0, nav: 'home', url: 'cue.app/insights/pricing', caption: 'Noa opens the insight to see why deals are lost.', render: insightPage },
-    { id: 'building', loop: 1, nav: 'practice', url: 'cue.app/practice/new', caption: 'Cue drafts a practice from enablement’s template and the lost calls.', render: building, after: buildingAfter, auto: 3400 },
+    { id: 'building', loop: 1, nav: 'practice', url: 'cue.app/practice/new', caption: 'Cue drafts a practice from Ira’s template and the lost calls.', render: building, after: buildingAfter, auto: 3400 },
     { id: 'draft', loop: 1, nav: 'practice', url: 'cue.app/practice/hold-your-price', caption: 'Noa checks the draft and edits anything.', render: draft },
     { id: 'send', loop: 1, nav: 'practice', url: 'cue.app/practice/hold-your-price', caption: 'One message, in Slack and email, due before each real call.', render: draft, overlay: sendSheet },
     { id: 'channel', loop: 2, frame: function () { return ui.channel; }, url: function () { return ui.channel === 'gmail' ? 'mail.google.com/mail/u/0/#inbox' : 'Slack'; }, caption: 'Sam gets the practice where Sam already works.', render: channelView, extra: channelSwitch },
@@ -1183,7 +1218,7 @@
     { id: 'feedback', loop: 2, nav: 'practice', who: 'sam', url: 'cue.app/practice/hold-your-price/round-2', caption: 'Sam gets a score and three moments to fix, then shares the best round.', render: feedback },
     { id: 'samhome', loop: 2, nav: 'home', who: 'sam', url: 'cue.app/home', caption: 'The next morning: Sam\u2019s week, and Noa\u2019s note on the round.', render: samHome },
     { id: 'results', loop: 3, nav: 'practice', url: 'cue.app/practice/hold-your-price/results', caption: 'Back to Noa. Everyone is done, and Cue shows where each person stands.', render: results },
-    { id: 'omar', loop: 3, nav: 'team', url: 'cue.app/team/omar', caption: 'Noa gets a ready plan for the 1:1 with Omar.', render: omar },
+    { id: 'omar', loop: 3, nav: 'team', url: 'cue.app/team/daniel', caption: 'Noa gets a ready plan for the 1:1 with Daniel.', render: omar },
     { id: 'real', loop: 4, nav: 'practice', url: 'cue.app/practice/hold-your-price', caption: 'A week later, Noa opens the practice from her home to see how the real calls went.', render: realCalls },
     { id: 'impact', loop: 4, nav: 'practice', url: 'cue.app/practice/hold-your-price/impact', caption: 'End of October. The practice\u2019s Impact page shows if the numbers moved, and how sure we are.', render: impact },
     { id: 'teams', loop: 4, nav: 'library', who: 'ira', url: 'cue.app/library/pricing-template', caption: 'Ira, head of enablement, sees what works and updates the template. The loop closes.', render: acrossTeams }
@@ -1247,6 +1282,7 @@
       ui.autoTimer = setTimeout(function () { if (ui.step === here) go(here + 1); }, s.auto);
     }
     root.querySelector('.cue-url-text').textContent = typeof s.url === 'function' ? s.url() : s.url;
+    if (protoPage && history.replaceState) history.replaceState(null, '', '#step-' + (ui.step + 1));
     document.querySelectorAll('[data-proto-caption]').forEach(function (el) { el.textContent = typeof s.caption === 'function' ? s.caption() : s.caption; });
     document.querySelectorAll('[data-proto-step]').forEach(function (el) { el.textContent = 'Step ' + (ui.step + 1) + ' of ' + TOTAL; });
     document.querySelectorAll('.shell-loop [data-act]').forEach(function (b) {
@@ -1257,6 +1293,12 @@
     });
     document.querySelectorAll('[data-proto="prev"]').forEach(function (b) { b.disabled = ui.step === 0; });
     document.querySelectorAll('[data-proto="next"]').forEach(function (b) { b.disabled = ui.step >= STATES.length - 1; });
+    if (protoPage) {
+      /* The progress line, and Next pulses when the screen itself has nothing to click */
+      document.querySelectorAll('.proto-caption').forEach(function (el) { el.style.setProperty('--p', (ui.step + 1) / TOTAL); });
+      var lead = !root.querySelector('[data-hint]') && !s.auto && ui.step < STATES.length - 1;
+      document.querySelectorAll('[data-proto="next"]').forEach(function (b) { b.toggleAttribute('data-hint', lead); });
+    }
     fit();
   }
 
@@ -1276,10 +1318,16 @@
   /* Scale the 1280px window to fit the stage, or the whole screen in full screen */
   var html = document.documentElement;
   var fitBox = document.querySelector('.shell-stage-fit');
+  /* prototype.html: the prototype on its own page (index.html does not set this) */
+  var protoPage = html.hasAttribute('data-proto-page');
   function fit() {
     if (!fitBox) return;
     var s;
-    if (html.classList.contains('is-full')) {
+    if (protoPage) {
+      var box = fitBox.parentElement;
+      s = Math.min(1, (box.clientWidth - 48) / 1280, (box.clientHeight - 48) / win.offsetHeight);
+      fitBox.style.width = Math.floor(1280 * s) + 'px';
+    } else if (html.classList.contains('is-full')) {
       s = Math.min(1, (window.innerWidth - 48) / 1280, (window.innerHeight - 72 - 24) / win.offsetHeight);
       fitBox.style.width = Math.floor(1280 * s) + 'px';
     } else {
@@ -1299,9 +1347,23 @@
   /* One click router for the product */
   root.addEventListener('click', function (e) {
     if (ui.dd && !e.target.closest('.cue-dd')) { ui.dd = null; changeDraft(null); }
-    var t = e.target.closest('[data-dd],[data-dd-pick],[data-end-call],[data-toast],[data-go],[data-play],[data-sent],[data-next-screen],[data-shared],[data-confirm],[data-weight],[data-ai],[data-ai-open],[data-add-part],[data-remove-part],[data-ref-add],[data-ref-remove]');
+    root.querySelectorAll('.cue-more.is-open').forEach(function (m) { if (!m.contains(e.target)) closeMore(m); });
+    var t = e.target.closest('[data-more],[data-more-pick],[data-dd],[data-dd-pick],[data-end-call],[data-toast],[data-go],[data-play],[data-sent],[data-next-screen],[data-shared],[data-confirm],[data-weight],[data-ai],[data-ai-open],[data-add-part],[data-remove-part],[data-ref-add],[data-ref-remove]');
     if (!t) return;
     e.stopPropagation();
+    if (t.hasAttribute('data-more')) {
+      var mbox = t.parentNode;
+      if (mbox.classList.contains('is-open')) { closeMore(mbox); return; }
+      mbox.classList.add('is-open');
+      t.setAttribute('aria-expanded', 'true');
+      return;
+    }
+    if (t.hasAttribute('data-more-pick')) {
+      var mp = t.getAttribute('data-more-pick').split('|');
+      closeMore(t.closest('.cue-more'));
+      toast(MENUS[mp[0]][+mp[1]][2]);
+      return;
+    }
     if (t.hasAttribute('data-go')) { go(+t.getAttribute('data-go')); return; }
     if (t.hasAttribute('data-play')) {
       /* A short fake playback: the wave moves for 3 seconds, one at a time */
@@ -1367,7 +1429,6 @@
       var pk = t.getAttribute('data-dd-pick').split('|');
       ui.dd = null;
       if (pk[0] === 'length') ui.length = +pk[1];
-      if (pk[0] === 'tracks') ui.tracks = +pk[1];
       if (pk[0] === 'pass') ui.pass = +pk[1];
       if (pk[0] === 'voice') ui.voice = +pk[1];
       if (pk[0] === 'period') { changeDraft(null); if (pk[1] !== 'oct') toast('This walkthrough shows October.'); return; }
@@ -1485,9 +1546,12 @@
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && ui.dd) { ui.dd = null; changeDraft(null); return; }
+    var openMore = root.querySelector('.cue-more.is-open');
+    if (e.key === 'Escape' && openMore) { closeMore(openMore); openMore.querySelector('[data-more]').focus(); return; }
     if (e.key === 'Escape' && document.activeElement && document.activeElement.hasAttribute('data-ai-input')) { document.activeElement.blur(); return; }
     if (e.key === 'Escape' && html.classList.contains('is-full')) full(false);
-    if (!html.classList.contains('is-full')) return;
+    if (!html.classList.contains('is-full') && !protoPage) return;
+    if (protoPage && e.target.closest && e.target.closest('input, textarea, [contenteditable="true"]')) return;
     if (e.key === 'ArrowRight') go(ui.step + 1);
     if (e.key === 'ArrowLeft') go(ui.step - 1);
   });
@@ -1503,6 +1567,15 @@
   }
 
   window.cueProto = { go: go, fit: fit, full: full };
+  /* On its own page, a link can open any step: prototype.html#step-8 */
+  function stepFromHash() {
+    var m = /^#step-(\d+)$/.exec(location.hash);
+    return m ? Math.max(0, Math.min(STATES.length - 1, +m[1] - 1)) : -1;
+  }
+  if (protoPage) {
+    if (stepFromHash() >= 0) ui.step = stepFromHash();
+    window.addEventListener('hashchange', function () { var k = stepFromHash(); if (k >= 0) go(k); });
+  }
   render();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 })();

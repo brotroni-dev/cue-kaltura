@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-proto-page>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cue · Prototype</title>
+  <meta name="description" content="The Cue prototype: a clickable walkthrough of the concept, from Noa's homepage to the impact of a practice.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Lato:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..24,400,0,0&display=block">
+  <link rel="stylesheet" href="css/tokens.css?v=8">
+  <link rel="stylesheet" href="css/v2.css?v=97">
+  <link rel="stylesheet" href="css/app.css?v=84">
+</head>
+<body class="proto-page">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="cue-spark-fill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0b0b0b" stop-opacity=".12"/>
+        <stop offset="1" stop-color="#0b0b0b" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- The prototype on its own page. Its bar is the only navigation here -->
+  <header class="proto-top" data-component="Prototype/Bar">
+    <a class="shell-brand" href="v2.html" data-proto-return><img src="favicon.svg" alt="">Cue</a>
+    <span class="shell-label proto-top-tag">Prototype</span>
+    <ol class="shell-loop" data-component="Shell/Loop" aria-label="Jump to a move">
+      <li><button data-act="0"><span class="shell-label">1</span>Spot</button></li>
+      <li><button data-act="1"><span class="shell-label">2</span>Build</button></li>
+      <li><button data-act="2"><span class="shell-label">3</span>Practice</button></li>
+      <li><button data-act="3"><span class="shell-label">4</span>Coach</button></li>
+      <li><button data-act="4"><span class="shell-label">5</span>Prove</button></li>
+    </ol>
+    <a class="proto-return" href="v2.html#solution" data-proto-return>Back to the presentation</a>
+  </header>
+  <!-- Shown on phones only -->
+  <p class="proto-phone-note">Best viewed on a computer.</p>
+
+  <section class="shell-stage proto-stage" aria-label="Prototype" data-component="Shell/Stage">
+    <img class="shell-stage-bg" src="assets/people/sam-full.jpg" alt="">
+    <div class="shell-stage-fit">
+      <div id="cue-proto"></div>
+    </div>
+  </section>
+
+  <footer class="proto-caption" data-component="Prototype/Caption">
+    <p class="shell-caption-text"><b data-proto-step>Step 1 of 15</b><span data-proto-caption></span></p>
+    <span data-proto-extra></span>
+    <div class="shell-controls">
+      <button data-proto="prev">Back</button>
+      <button data-proto="next">Next</button>
+      <button data-proto="restart">Start over</button>
+    </div>
+  </footer>
+
+  <script src="js/icons.js?v=8"></script>
+  <script src="js/charts.js?v=7"></script>
+  <script src="js/app.js?v=98"></script>
+  <script>
+    /* Opened from Present mode: going back returns to the slide, still presenting */
+    (function () {
+      var q = new URLSearchParams(location.search);
+      if (q.get('return') !== 'present') return;
+      var to = 'v2.html?present=' + (q.get('slide') || '3');
+      document.querySelectorAll('[data-proto-return]').forEach(function (a) { a.href = to; });
+    })();
+  </script>
+</body>
+</html>

@@ -168,6 +168,14 @@
   transition: background var(--duration-fast);
 }
 .cue-icon-btn:hover { background: var(--color-paper-3); }
+/* The 3 dots menu: the same menu as the dropdowns, aligned to the button's right edge */
+.cue-more { position: relative; display: inline-flex; }
+.cue-more > .cue-icon-btn svg { stroke-width: 2.6; }
+.cue-more.is-open > .cue-icon-btn { background: var(--color-paper-3); }
+.cue-more .cue-dd-menu { display: none; left: auto; right: 0; min-width: 230px; }
+.cue-more.is-open .cue-dd-menu { display: flex; }
+.cue-more .cue-dd-item > .cue-ic { color: var(--color-ink-2); }
+.cue-more-sep { height: 1px; margin: 4px 6px; background: var(--color-line); }
 .cue-icon-btn .cue-dot { position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--color-ink); box-shadow: 0 0 0 2px var(--color-paper-2); }
 
 /* Hover tooltip (CSS only) */
@@ -239,7 +247,7 @@
 .cue-section-head h2 { margin: 0; font-size: var(--text-lg); font-weight: 600; letter-spacing: var(--tracking-snug); }
 .cue-section-head span { font-size: var(--text-sm); color: var(--color-ink-3); }
 
-/* Insight cards: the number and one line by default, the evidence on hover */
+/* Insight cards: the number and one line by default. On hover the card turns its color and tells the essence */
 .cue-insights { display: flex; gap: var(--space-4); }
 .cue-insight {
   flex: 1;
@@ -250,18 +258,19 @@
   padding: 20px;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-lg);
+  position: relative;
   background: var(--color-paper);
   outline: none;
-  transition: border-color var(--duration-fast), box-shadow var(--duration-base) var(--ease-out);
+  transition: background-color 420ms var(--ease-out), border-color var(--duration-fast), box-shadow var(--duration-base) var(--ease-out);
 }
 .cue-insight:hover, .cue-insight:focus-within {
   border-color: transparent;
-  box-shadow: 0 0 0 1px var(--color-line), 0 18px 40px -18px rgba(0, 0, 0, 0.22);
+  background: var(--tone);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.22);
 }
-.cue-insight-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 24px; transition: opacity var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out); }
+.cue-insight-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 24px; transition: opacity var(--duration-fast), transform var(--duration-base) var(--ease-out); }
 .cue-insight-tag { font-size: var(--text-xs); font-weight: 500; color: var(--color-ink-3); }
-/* Hover: the number stays and moves up into the avatar row, the evidence appears under it */
-.cue-insight-stack { position: relative; height: 100px; flex: none; }
+.cue-insight-stack { position: relative; height: 100px; flex: none; transition: opacity var(--duration-fast), transform var(--duration-base) var(--ease-out); }
 .cue-insight-num {
   position: absolute;
   top: 0;
@@ -284,35 +293,39 @@
   line-height: 1.3;
   letter-spacing: var(--tracking-snug);
   text-wrap: balance;
-  transition: opacity var(--duration-fast), transform var(--duration-base) var(--ease-out);
 }
-.cue-insight-more {
+/* The essence: covers the avatars, number and title, ends above the buttons */
+.cue-insight-face {
   position: absolute;
-  top: 16px;
-  left: 0;
-  right: 0;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  height: 140px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 10px;
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(10px);
   pointer-events: none;
-  transition: opacity var(--duration-base) var(--ease-out) 80ms, transform var(--duration-base) var(--ease-out) 80ms;
+  transition: opacity var(--duration-base) var(--ease-out), transform 480ms var(--ease-out);
 }
-.cue-insight-more-label { font-size: var(--text-sm); color: var(--color-ink-2); }
-.cue-insight:hover .cue-insight-top, .cue-insight:focus-within .cue-insight-top { opacity: 0; transform: translateY(-8px); }
-.cue-insight:hover .cue-insight-num, .cue-insight:focus-within .cue-insight-num { transform: translateY(-40px); }
-.cue-insight:hover h3, .cue-insight:focus-within h3 { opacity: 0; transform: translateY(-6px); }
-.cue-insight:hover .cue-insight-more, .cue-insight:focus-within .cue-insight-more { opacity: 1; transform: none; pointer-events: auto; }
+.cue-insight-essence { margin: 0; font-size: 18px; font-weight: 500; line-height: 1.3; letter-spacing: var(--tracking-snug); color: var(--color-ink); text-wrap: balance; }
+.cue-insight-detail { margin: 0; font-size: var(--text-sm); line-height: 1.5; color: rgba(11, 11, 11, 0.72); text-wrap: pretty; transition: opacity var(--duration-base) var(--ease-out) 120ms; opacity: 0; }
+.cue-insight:hover .cue-insight-top, .cue-insight:focus-within .cue-insight-top,
+.cue-insight:hover .cue-insight-stack, .cue-insight:focus-within .cue-insight-stack { opacity: 0; transform: translateY(-8px); }
+.cue-insight:hover .cue-insight-face, .cue-insight:focus-within .cue-insight-face { opacity: 1; transform: none; transition-delay: 80ms; }
+.cue-insight:hover .cue-insight-detail, .cue-insight:focus-within .cue-insight-detail { opacity: 1; }
+/* The buttons stay, adjusted to sit on the color */
+.cue-insight:hover .cue-link, .cue-insight:focus-within .cue-link { color: var(--color-ink); }
+.cue-insight:hover .cue-btn--secondary, .cue-insight:focus-within .cue-btn--secondary { background: var(--color-paper); }
 .cue-insight-actions { display: flex; align-items: center; gap: var(--space-4); }
 
-/* Compare bars, revealed on hover */
+/* Compare bars */
 .cue-compare { display: flex; flex-direction: column; gap: var(--space-2); }
 .cue-compare-row { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-sm); color: var(--color-ink-2); }
 .cue-compare-row > span:first-child { width: 88px; flex: none; }
 .cue-compare-track { flex: 1; height: 10px; border-radius: 0 5px 5px 0; overflow: hidden; }
 .cue-compare-track i { display: block; height: 100%; width: var(--value); border-radius: 0 5px 5px 0; transform-origin: left; transform: scaleX(0); transition: transform 600ms var(--ease-out); }
-.cue-insight:hover .cue-compare-track i, .cue-insight:focus-within .cue-compare-track i { transform: scaleX(1); }
 .cue-compare-row:nth-child(2) .cue-compare-track i { transition-delay: 80ms; }
 .cue-compare-track i.is-down { background: var(--viz-down); }
 .cue-compare-track i.is-up { background: var(--viz-up); }
@@ -411,9 +424,13 @@
 .cue-skill-score { width: 40px; flex: none; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
 .cue-skill-end { position: relative; width: 120px; flex: none; display: flex; justify-content: flex-end; }
 .cue-skill-end .cue-delta, .cue-skill-end .cue-link { transition: opacity var(--duration-fast); }
+/* In a column of numbers, the arrow goes after the number, so both line up whatever the number of digits */
+.cue-skill-end .cue-delta { flex-direction: row-reverse; }
 .cue-skill-end .cue-link { position: absolute; right: 0; top: 50%; transform: translateY(-50%); opacity: 0; pointer-events: none; color: var(--color-ink); font-weight: 600; }
 .cue-skill:hover .cue-skill-end .cue-delta { opacity: 0; }
 .cue-skill:hover .cue-skill-end .cue-link { opacity: 1; pointer-events: auto; }
+/* Results, by scorecard line: the Weakest tag sits right after its score */
+.cue-skills--lines .cue-skill-end { justify-content: flex-start; }
 
 /* ===== Inner pages (screens 2 to 5) ===== */
 .cue-app { position: relative; }
@@ -487,17 +504,24 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-legend i.is-base { background: var(--viz-base); }
 
 /* Where deals are lost: two bars per step */
-.cue-lost { display: flex; flex-direction: column; gap: 10px; }
-.cue-lost-row { display: flex; align-items: center; gap: var(--space-4); opacity: 0.5; transition: opacity var(--duration-fast); }
-.cue-lost-row.is-focus, .cue-lost-row:hover { opacity: 1; }
-.cue-lost-name { width: 72px; flex: none; font-size: var(--text-sm); color: var(--color-ink-2); }
-.cue-lost-row.is-focus .cue-lost-name { color: var(--color-ink); font-weight: 600; }
-.cue-lost-bars { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-.cue-hbar { display: flex; align-items: center; gap: var(--space-2); }
-.cue-hbar i { display: block; height: 10px; width: var(--value); border-radius: 0 5px 5px 0; transform-origin: left; animation: cue-grow var(--duration-slow) var(--ease-out) both; animation-delay: calc(200ms + var(--i, 0) * 90ms); }
-.cue-hbar i.is-down { background: var(--viz-down); }
-.cue-hbar i.is-base { background: var(--viz-base); }
-.cue-hbar b { font-size: var(--text-xs); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cue-vs { display: flex; flex-direction: column; gap: var(--space-3); }
+.cue-vs-row { display: flex; align-items: center; gap: var(--space-3); }
+.cue-vs-name { width: 96px; flex: none; font-size: var(--text-md); color: var(--color-ink-2); }
+.cue-vs-row.is-focus .cue-vs-name { color: var(--color-ink); font-weight: 500; }
+.cue-vs-bar { flex: 1; display: flex; }
+.cue-vs-bar i { display: block; height: 10px; width: var(--value); border-radius: 5px; background: var(--viz-base); transform-origin: left; animation: cue-grow var(--duration-slow) var(--ease-out) both; animation-delay: calc(200ms + var(--i, 0) * 120ms); }
+.cue-vs-row.is-focus .cue-vs-bar i { background: var(--viz-down); }
+.cue-vs-row b { width: 40px; flex: none; text-align: right; font-size: var(--text-md); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cue-vs-note { margin: var(--space-1) 0 0; font-size: var(--text-sm); color: var(--color-ink-3); }
+
+/* Who: a light table, plain numbers */
+.cue-who-table { display: flex; flex-direction: column; }
+.cue-who-row { display: grid; grid-template-columns: minmax(0, 1fr) 92px 92px; align-items: center; min-height: 40px; font-size: var(--text-md); }
+.cue-who-row + .cue-who-row { border-top: 1px solid var(--color-line); }
+.cue-who-row--head { min-height: 22px; align-items: end; padding-bottom: 6px; font-size: var(--text-xs); color: var(--color-ink-3); }
+.cue-who-row > :nth-child(n+2) { text-align: right; }
+.cue-who-person { display: flex; align-items: center; gap: var(--space-3); }
+.cue-who-row b { font-weight: 600; font-variant-numeric: tabular-nums; }
 
 /* Rows: people, deals, recipients */
 .cue-rows { display: flex; flex-direction: column; }
@@ -515,6 +539,9 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-row-name { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: var(--text-md); line-height: 1.3; }
 .cue-row-name b { font-weight: 500; }
 .cue-row-name > span { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); color: var(--color-ink-3); }
+/* Deals at risk: a little more air between the rows, and between a deal and its line */
+.cue-rows--deals { gap: 6px; }
+.cue-rows--deals .cue-row-name { gap: 3px; }
 .cue-row-num { font-weight: 600; font-variant-numeric: tabular-nums; }
 .cue-minibar { width: 96px; height: 6px; border-radius: 3px; background: var(--color-paper-2); overflow: hidden; }
 .cue-minibar i { display: block; height: 100%; width: var(--value); border-radius: 3px; background: color-mix(in srgb, var(--c) 45%, white); transform-origin: left; animation: cue-grow var(--duration-slow) var(--ease-out) both; animation-delay: calc(250ms + var(--i, 0) * 90ms); }
@@ -527,6 +554,12 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-moment-text b { font-size: var(--text-md); font-weight: 500; line-height: 1.35; }
 .cue-moment--good { margin-top: var(--space-1); padding-top: var(--space-2); border-top: 1px solid var(--color-line); }
 .cue-moment--good .cue-avatar { box-shadow: 0 0 0 2px var(--color-paper), 0 0 0 3.5px var(--person-dana); }
+/* Insight: Dana's moment is the answer, so it gets a soft green panel, like "Ready" */
+.cue-moment--works { margin-top: var(--space-2); padding: 10px 10px 10px 12px; border-radius: 12px; background: var(--color-up-soft); }
+.cue-moment--works .cue-moment-text span { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--color-up); }
+.cue-moment--works .cue-moment-text b { color: var(--color-ink); }
+.cue-moment--works .cue-avatar { box-shadow: 0 0 0 2px var(--color-up-soft); }
+.cue-moment--works .cue-play { background: var(--color-paper); }
 .cue-play {
   display: inline-flex;
   align-items: center;
@@ -556,6 +589,11 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-play.is-playing .cue-wave { display: inline-flex; }
 @keyframes cue-talk { from { transform: scaleY(0.25); } to { transform: scaleY(1); } }
 
+/* Screen 2: the summary at the top. Three short parts, the key numbers in black */
+/* In short: the insight as a few plain sentences */
+.cue-brief { margin: 0; font-size: var(--text-lg); line-height: 1.55; color: var(--color-ink-2); text-wrap: pretty; }
+.cue-brief b { font-weight: 600; color: var(--color-ink); }
+
 /* Screen 3: building */
 .cue-building { margin: auto; width: 420px; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
 .cue-building-mark { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; background: var(--color-paper-2); }
@@ -580,7 +618,7 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-score li .cue-editable { flex: 0 1 auto; }
 
 /* ----- The draft: calm panels, values you can touch ----- */
-.is-still .cue-rise, .is-still .cue-skill-fill, .is-still .cue-hbar i, .is-still .cue-minibar i, .is-still .cue-pair i, .is-still .cue-chart .area, .is-still .cue-chart .dot { animation: none !important; }
+.is-still .cue-rise, .is-still .cue-skill-fill, .is-still .cue-vs-bar i, .is-still .cue-minibar i, .is-still .cue-pair i, .is-still .cue-chart .area, .is-still .cue-chart .dot { animation: none !important; }
 .is-still .cue-chart .draw { animation: none !important; stroke-dashoffset: 0; }
 [data-flash], .is-flash { animation: cue-flash 1.6s var(--ease-out) both; border-radius: var(--radius-sm); }
 @keyframes cue-flash { 0%, 30% { background: var(--viz-calm-soft); box-shadow: 0 0 0 6px var(--viz-calm-soft); } 100% { background: transparent; box-shadow: 0 0 0 6px transparent; } }
@@ -648,7 +686,6 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-persona-photo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; }
 .cue-dd-face { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex: none; }
 .cue-persona-set { display: flex; align-items: center; gap: 2px; margin: -8px 0 0 -8px; }
-.cue-evidence { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: var(--radius-pill); background: var(--viz-calm-soft); font-size: var(--text-xs); color: #3c4f9a; white-space: nowrap; }
 /* Parts: the buyer and the rep brief are lists of small editable blocks */
 .cue-parts { display: flex; flex-direction: column; gap: 2px; margin: 0 -10px; }
 .cue-part { position: relative; padding: 5px 52px 5px 10px; border-radius: 10px; transition: background var(--duration-fast), box-shadow var(--duration-fast), opacity 200ms, transform 200ms; }
@@ -657,7 +694,6 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-part.is-leaving { opacity: 0; transform: translateX(-6px); }
 .cue-part-text { margin: 0; outline: none; font-size: var(--text-md); line-height: 1.5; color: var(--color-ink-2); cursor: text; }
 .cue-part-text b { font-weight: 600; color: var(--color-ink); }
-.cue-part-text .cue-evidence { margin-left: 2px; vertical-align: 1px; line-height: 1.4; cursor: default; }
 .cue-part-tools { position: absolute; top: 4px; right: 6px; display: flex; align-items: center; gap: 4px; color: var(--color-ink-3); opacity: 0; transition: opacity var(--duration-fast); }
 .cue-part:hover .cue-part-tools, .cue-part:focus-within .cue-part-tools { opacity: 1; }
 .cue-part-del { display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: var(--color-ink-3); cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast); }
@@ -719,7 +755,8 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-wdot { width: 8px; height: 8px; flex: none; border-radius: 50%; }
 .cue-wname { flex: 1; min-width: 0; font-size: var(--text-md); outline: none; cursor: text; }
 .cue-weight { display: inline-flex; align-items: center; gap: 2px; }
-.cue-weight b { min-width: 40px; text-align: center; font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cue-weight b { min-width: 58px; text-align: center; font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+.cue-weight b span { margin-left: 3px; font-weight: 400; color: var(--color-ink-3); }
 .cue-weight button { width: 24px; height: 24px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; background: var(--color-paper-2); box-shadow: inset 0 0 0 1px var(--color-paper-2); font: inherit; font-size: 15px; line-height: 1; color: var(--color-ink-2); cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast); }
 .cue-weight button:hover { background: var(--color-paper-3); color: var(--color-ink); }
 .cue-pass { display: flex; align-items: center; gap: var(--space-3); min-height: 36px; padding: 0; font-size: var(--text-sm); color: var(--color-ink-3); }
@@ -978,6 +1015,7 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
 .cue-prep-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-5); padding-top: var(--space-2); }
 .cue-prep-block { display: flex; flex-direction: column; gap: var(--space-2); }
 .cue-prep-block p { margin: 0; font-size: var(--text-lg); line-height: 1.45; max-width: 44ch; }
+.cue-prep-brief p { max-width: 62ch; line-height: 1.55; text-wrap: pretty; }
 .cue-prep-block .cue-score li { min-height: 34px; }
 .cue-prep-foot { display: flex; align-items: center; gap: var(--space-3); margin-top: auto; }
 .cue-private { display: inline-flex; align-items: center; gap: 6px; margin-left: var(--space-2); font-size: var(--text-sm); color: var(--color-ink-3); }
@@ -1118,14 +1156,18 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
 .cue-legend i.is-team { width: 2px; height: 12px; border-radius: 1px; background: var(--color-ink-3); }
 .cue-myskills { display: flex; flex-direction: column; gap: var(--space-4); margin-top: var(--space-2); }
 .cue-myskill { display: flex; flex-direction: column; gap: 6px; }
-.cue-myskill[data-tip]::after { left: auto; right: 0; }
 .cue-myskill-name { font-size: var(--text-sm); color: var(--color-ink-2); }
 .cue-myskill-line { display: flex; align-items: center; gap: var(--space-3); }
 .cue-myskill-line b { width: 24px; text-align: right; font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
-.cue-myskill-line .cue-delta { width: 34px; justify-content: flex-end; font-size: var(--text-xs); }
+.cue-myskill-line .cue-delta { width: 34px; flex-direction: row-reverse; justify-content: flex-start; font-size: var(--text-xs); }
 .cue-myskill-bar { position: relative; flex: 1; height: 8px; border-radius: 4px; background: var(--color-paper-2); }
 .cue-myskill-bar i { position: absolute; inset: 0 auto 0 0; width: var(--value); border-radius: 4px; background: color-mix(in srgb, var(--person-sam) 45%, white); transform-origin: left; animation: cue-grow var(--duration-slow) var(--ease-out) both; animation-delay: calc(300ms + var(--i, 0) * 80ms); }
 .cue-myskill-bar em { position: absolute; top: -3px; bottom: -3px; left: var(--team); width: 2px; margin-left: -1px; border-radius: 1px; background: var(--color-ink-3); }
+/* The team average tooltip hangs from the team mark, so it points at what it describes */
+.cue-myskill-bar em::before, .cue-myskill-bar em::after { position: absolute; left: 50%; opacity: 0; pointer-events: none; transform: translate(-50%, -4px); transition: opacity var(--duration-fast), transform var(--duration-fast); z-index: 4; }
+.cue-myskill-bar em::before { content: ''; top: calc(100% + 3px); border: 5px solid transparent; border-top: 0; border-bottom-color: var(--color-ink); }
+.cue-myskill-bar em::after { content: attr(data-team-tip); top: calc(100% + 8px); padding: 6px 10px; border-radius: var(--radius-sm); background: var(--color-ink); color: var(--color-paper); font-size: var(--text-xs); font-style: normal; font-weight: 500; line-height: 1.4; white-space: nowrap; }
+.cue-myskill:hover .cue-myskill-bar em::before, .cue-myskill:hover .cue-myskill-bar em::after { opacity: 1; transform: translate(-50%, 0); }
 
 /* ===== Coach and Prove (screens 11 to 15) ===== */
 .cue-status-pill { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: var(--radius-pill); font-size: var(--text-xs); font-weight: 600; white-space: nowrap; }
@@ -1205,7 +1247,7 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
 .cue-chart .marker { stroke: var(--color-ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
 .cue-chart .marker-text { font-size: 11px; fill: var(--color-ink-2); }
 .cue-chart .cross { stroke: var(--color-ink); stroke-width: 1; opacity: 0; transition: opacity var(--duration-fast); pointer-events: none; }
-.cue-chart .hit { fill: transparent; cursor: crosshair; }
+.cue-chart .hit { fill: transparent; }
 .cue-chart .hit:hover + .cross { opacity: 0.2; }
 .cue-tip { position: absolute; top: 0; left: 0; pointer-events: none; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); background: var(--color-ink); color: var(--color-paper); font-size: var(--text-xs); line-height: 1.5; white-space: nowrap; opacity: 0; transform: translate(-50%, calc(-100% - 10px)); transition: opacity var(--duration-fast); z-index: 4; }
 .cue-tip.is-on { opacity: 1; }
@@ -1233,7 +1275,7 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
 /* Feedback: shared state */
 .cue-pill--lg { height: 36px; padding: 0 14px; font-size: var(--text-sm); }
 
-/* A quiet pulse that shows the next click */
+/* A grey ripple that shows the next click */
 [data-hint] { position: relative; }
 [data-hint]::before {
   content: "";
@@ -1243,7 +1285,7 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
   pointer-events: none;
   animation: cue-hint 1.8s var(--ease-out) infinite;
 }
-@keyframes cue-hint { 0% { box-shadow: 0 0 0 0 rgba(11, 11, 11, 0.28); } 75%, 100% { box-shadow: 0 0 0 10px rgba(11, 11, 11, 0); } }
+@keyframes cue-hint { 0% { box-shadow: 0 0 0 0 rgba(11, 11, 11, 0.5); } 75%, 100% { box-shadow: 0 0 0 12px rgba(11, 11, 11, 0); } }
 
 /* Toast */
 .cue-toast {

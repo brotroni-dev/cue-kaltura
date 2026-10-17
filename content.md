@@ -16,13 +16,17 @@ matter. Sales is the first story.
 | Who | Role | Notes |
 |---|---|---|
 | Noa Levin | Sales team lead (the manager) | Main persona |
-| Sam | Account executive | Rep persona, pricing group |
-| Lucia | Account executive | Pricing group |
-| Omar | Account executive | Pricing group, needs a 1:1 |
-| Theo | Account executive | Pricing group |
-| Dana | Account executive | Top performer, the example to learn from |
-| Kofi, Hana | Account executives, new | First-call insight |
-| Ira | Head of enablement | Third persona, sees all teams |
+| Sam Rivera | Account executive | Rep persona, pricing group |
+| Lucia Moreno | Account executive | Pricing group |
+| Daniel Shaw | Account executive | Pricing group, needs a 1:1 |
+| Theo Walsh | Account executive | Pricing group |
+| Dana Brooks | Account executive | Top performer, the example to learn from |
+| Kofi Mensah, Hana Weiss | Account executives, new | First-call insight |
+| Ira Klein | Head of enablement | Third persona, sees all teams |
+
+Full names wherever a name labels a person: rows, lists, tables, headers, Slack DMs, the
+slide personas. Sentences, captions and possessives use first names ("Noa edits it",
+"Dana's call").
 | Mark Ellis | CFO at Acme Logistics | The AI avatar Sam practices with (photo to pick) |
 
 **Deals at the price step** (they set the practice deadlines):
@@ -31,7 +35,7 @@ matter. Sales is the first story.
 |---|---|---|---|
 | Acme Logistics | Sam | $120K | Thu, Oct 23, 11:00 |
 | Northline Foods | Lucia | $90K | Mon, Oct 20 |
-| Pinecrest Supply | Omar | $60K | Fri, Oct 24 |
+| Pinecrest Supply | Daniel | $60K | Fri, Oct 24 |
 | Brightline Retail | Theo | $70K | Tue, Oct 21 |
 
 **The practice:** "Hold your price", 8 minutes, built from enablement's Pricing
@@ -147,30 +151,37 @@ Act: Spot · Who: Noa · Where: cue.app/insights/pricing
 Caption: Noa opens the insight to see why deals are lost.
 Back: Home
 Title: 4 people lose deals when price comes up
-Number: $420K at risk · 9 open deals at the price step
 
-**Where deals are lost** (bars per step, these 4 vs the rest of the team):
-First call · Demo · Price · Signed
-Lost at the price step: 58% vs 27%
+**Summary** (right under the title, so a manager can scan the page; a thin line above each part,
+the key number in black; it replaces the old "$420K at risk" line)
+- Where: They lose 58% of deals once price comes up. The rest of your team loses 27%.
+- Why: They name the price before the buyer sees the value. It happened in 9 of 12 lost calls.
+- At stake: 9 open deals, worth $420K, get to the price talk in the next two weeks.
+The next step is the black "Build practice" button at the top.
 
-**Why**
-In 9 of 12 lost calls, price came up before the buyer saw the value.
+**Lost once price comes up** (two bars, each labeled, no key and no ticks)
+These 4 · 58% (the only bar in color)
+Rest of team · 27%
+Under it: At the first call and the demo, they lose about as many as everyone else.
+
+**Why** (the summary already says the main line, so the card goes straight to the calls)
 Three call moments (hover to read, click to play):
-- Sam · Acme Logistics · 4:12 · "We can do 15% off if you sign this month."
-- Lucia · Northline Foods · 2:40 · Offered a discount before the buyer asked.
-- Theo · Brightline Retail · 1:55 · Gave the price in the first two minutes.
+- Sam Rivera · Acme Logistics · 4:12 · "We can do 15% off if you sign this month."
+- Lucia Moreno · Northline Foods · 2:40 · Offered a discount before the buyer asked.
+- Theo Walsh · Brightline Retail · 1:55 · Gave the price in the first two minutes.
 
 **What Dana does**
 Dana shows what doing nothing costs before saying a price.
 Clip: Dana · 40 sec · Play
 
-**Who** (hover a person for their numbers)
-Sam 62% · Lucia 55% · Omar 57% · Theo 60% (lost at the price step)
+**Who** (a light table, plain numbers, no bars)
+Columns: Lost at price · Avg discount
+Sam Rivera 5 of 8 · 21% · Lucia Moreno 6 of 11 · 18% · Daniel Shaw 4 of 7 · 19% · Theo Walsh 3 of 5 · 22%
 
 **Deals at risk**
-Acme Logistics · $120K · Sam · price call Thu
-Northline Foods · $90K · Lucia · price call Mon
-Brightline Retail · $70K · Theo · price call Tue
+Acme Logistics · $120K · Sam Rivera · price call Thu
+Northline Foods · $90K · Lucia Moreno · price call Mon
+Brightline Retail · $70K · Theo Walsh · price call Tue
 + 6 more
 
 Buttons: **Build practice** · Plan 1:1s
@@ -193,19 +204,19 @@ Rule: soft panels, no lines. Every value shows a pencil on hover; choices open a
 Title: Hold your price · pill "Draft by Cue" (hover: built from enablement's Pricing
 template and 12 of the team's lost calls)
 Meta line:
-- Template (dropdown, shows the draft comes from existing training): Pricing · By Ira,
+- Template (dropdown, shows the draft comes from existing training): Pricing · By Ira Klein,
   enablement · used by 5 teams. Also: Discovery questions, First calls that land,
   Start from scratch (Cue drafts from your team's lost calls only).
 - Length (dropdown): 5 / 8 / 10 / 15 minutes
-- Tracks (dropdown, the business number that proves it worked): Win rate at the price
+- Measured by (dropdown, the business number that proves it worked; was "Tracks"): Win rate at the price
   step (suggested by the insight) · Average discount · Deal size · Time to close
 - Reference calls (dropdown panel; real call snippets reps watch before the practice):
   shows the kept calls' faces and "Dana's call" (or "2 calls"). Inside:
-  In this practice (Reps watch these before the call): Dana · Kestrel Shipping · 0:40 ·
+  In this practice (Reps watch these before the call): Dana Brooks · Kestrel Shipping · 0:40 ·
   Shows what doing nothing costs before the price · remove.
   Search: Find a call, like "late fees".
-  Suggested (Won calls on price, across teams): Dana · Northwind Freight · 1:10 · Gets the
-  COO into the next call · Model call · Pricing template · 2:30 · By Ira, enablement. From
+  Suggested (Won calls on price, across teams): Dana Brooks · Northwind Freight · 1:10 · Gets the
+  COO into the next call · Model call · Pricing template · 2:30 · By Ira Klein, enablement. From
   value to price to next step · Ben Ortiz · East team · 0:55 · Turns "too expensive" into a
   cost per year. Each with Add. Hover a face to play the snippet.
 
@@ -241,12 +252,13 @@ same parts as the buyer, Add a part at the end:
 The situation. Second call. Mark has a 20% cheaper quote.
 Your goal. Show what late fees cost before you talk price.
 You know. Late fees cost them about $80K a year.
-Rules. No discount above 5%. Hints are off.
+Rules. No discount above 5%.
 
-**Scored on** (right card; weights add up to 100%; one split bar; − and + always visible;
-hovering a line highlights its part of the bar; Pass at is a dropdown in the header, 80)
-Asks about the problem first 20% · Puts a number on the value 30% ·
-Handles "too expensive" without a discount 30% · Agrees on a next step 20%
+**Scored on** (right card; note: Points add up to 100; one split bar; − and + always visible;
+hovering a line highlights its part of the bar; Pass at 80 of 100 is a dropdown in the header)
+Asks about the problem first 20 pts · Puts a number on the value 30 pts ·
+Handles "too expensive" without a discount 30 pts · Agrees on a next step 20 pts
+Points, not percents, so it reads like a test: each line is worth some of the 100 points.
 
 Who and when moved to the Send sheet (screen 5): who gets it and by when is a sending decision.
 
@@ -265,17 +277,17 @@ Message (drafted by Cue, editable):
 "Hi {first name}, your {deal} price call is on {day}. Here's an 8 minute
 practice with a tough CFO. Rounds are private, share your best one. Noa"
 Who and when (note: Due before each person's price call. Change any date.)
-One row per person: checkbox, face, name, their price call, and a Due dropdown.
+One row per person: checkbox, face, full name, their price call, and a Due dropdown.
 - Sam Rivera · Acme price call · Thu 11:00 · Due Thu, Oct 23
-- Lucia · Northline price call · Mon 10:00 · Due Mon, Oct 20
-- Omar · Pinecrest price call · Fri 09:30 · Due Fri, Oct 24
-- Theo · Brightline price call · Tue 14:00 · Due Tue, Oct 21
+- Lucia Moreno · Northline price call · Mon 10:00 · Due Mon, Oct 20
+- Daniel Shaw · Pinecrest price call · Fri 09:30 · Due Fri, Oct 24
+- Theo Walsh · Brightline price call · Tue 14:00 · Due Tue, Oct 21
 Due dropdown: the days from tomorrow up to the call; the call day says "Before the Acme
 call · Suggested". People with no price call get "End of the week · Suggested".
 Unchecked: the row fades and shows "Not included"; the title and the Send button count
 update ("Send to 3 people"). Send turns off when no one is checked.
-Add people (dropdown): Kofi (New on the team · price call Wed) · Hana (New on the team) ·
-Dana (Top of the team on price). Added people get a row with their own due date.
+Add people (dropdown): Kofi Mensah (New on the team · price call Wed) · Hana Weiss (New on
+the team) · Dana Brooks (Top of the team on price). Added people get a row with their own due date.
 Button: **Send**
 Toast after: Sent. Results show up as people finish.
 
@@ -315,10 +327,10 @@ Busy and doubtful. Has a quote that's 20% cheaper. Wants to know why you cost mo
 Show what late shipments cost before you talk price. End with a clear next step.
 
 **You're scored on**
-The 4 scorecard lines. Hover a line to hear what good sounds like.
+The 4 scorecard lines, each with its points (20 pts, 30 pts). Hover a line to hear what good sounds like.
 
 **What good sounds like** (the first reference call Noa kept; hidden if she removed them all)
-Reference call · Dana · 0:40 · Play
+Reference call · Dana Brooks · 0:40 · Play
 
 Note: Rounds are private. You choose which one Noa sees.
 Buttons: **Start call** · Test mic
@@ -330,7 +342,7 @@ Top: Mark Ellis · CFO, Acme Logistics · 03:12 / 08:00 · Round 2 · Private
 Center: Mark's photo, a sound wave when Mark talks, a smaller wave when Sam talks.
 Caption line: Mark: "Your price is 20% higher than the other quote. Why should I
 pay more?"
-Controls: Mute · Hints off · **End call**
+Controls: Mute · **End call**
 
 **Scoring (after End call, same step, about 5 seconds, then the feedback opens)**
 A calm dark moment that continues the call. Mark's picture melts into a soft blur behind.
@@ -352,7 +364,7 @@ Rounds: Round 1: 71 · Round 2: 84
 **Your round** (timeline of the 8 minutes, the three moments pinned on it,
 hover a pin to read it, click to replay)
 
-Scores (hover a line for what good looks like):
+Scores (note: Pass at 80 of 100; hover a line for what good looks like):
 - Asks about the problem first · 90
 - Puts a number on the value · 78
 - Handles "too expensive" without a discount · 82
@@ -383,13 +395,18 @@ Greeting: Hi Sam
 
 **Done lately**
 - Hold your price · Yesterday · shared with Noa · 84
-  Noa · last night: "Nice round. Watch your 6:12 moment before Thursday." (replay 6:12)
+  Noa Levin · last night: "Nice round. Watch your 6:12 moment before Thursday." (replay 6:12)
 - First calls that land · Sep 29 · 79
 - Discovery questions · Sep 12 · 81
 
-**My skills** (side column; You, and a quiet team average tick; hover for numbers)
-Asking good questions 74 (+2) · Talking value before price 62 (+28) ·
-Handling "too expensive" 58 (+28) · Setting a clear next step 78 · Bringing more people in 44
+**My skills** (side column; You, and a quiet team average tick; the tooltip says only "Team
+average 74", since the score is already on the row. It hangs under the grey team mark
+with a small pointer, and shows when you hover the row)
+Asking good questions 74 (▲ 2) · Talking value before price 62 (▲ 28) ·
+Handling "too expensive" 58 (▲ 28) · Setting a clear next step 78 (no change, 0) ·
+Bringing more people in 44 (no change, 0)
+The same three marks as Noa's team skills: green up, red down, a grey flat line with 0 for
+no change.
 
 Note: the share confirmation lives on screen 9. "Share this round with Noa" turns into
 "Shared with Noa" and "Go to my home".
@@ -404,33 +421,33 @@ Under the title: Sent Oct 16 to 4 people · 4 of 4 done · Average 76
 Page switch: Overview · **Results** · Impact (this screen is Results; Overview is screen 13,
 Impact is screen 14)
 Action: Send another round
-By person (note: Pass at 80 · Up 12 from the first rounds)
+By person (note: Pass at 80 of 100 · Up 12 from the first rounds)
 By person: a light table. Header: Person · Scorecard · Score · Status. Scorecard = 4 small bars, one per scorecard line,
 in the same order as the draft; height is the score, green 80+, blue 70 to 79, red below 70. One row per person with
 light gray lines between them (4 small bars for the 4 lines, best score, status: Ready /
-Close / Needs a 1:1, and "Plan 1:1" on Omar). No hover hints in the copy; details still
+Close / Needs a 1:1, and "Plan 1:1" on Daniel). No hover hints in the copy; details still
 show on hover.
 
 Groups:
-- **Ready:** Sam 84, Lucia 81
-- **Close:** Theo 74
-- **Needs a 1:1:** Omar 68
+- **Ready:** Sam Rivera 84, Lucia Moreno 81
+- **Close:** Theo Walsh 74
+- **Needs a 1:1:** Daniel Shaw 68
 
 By scorecard line:
 Asks about the problem first 82 · Puts a number on the value 66 ·
 Handles "too expensive" 75 · Agrees on a next step 83
 
-Button: **Plan 1:1 with Omar**
+Button: **Plan 1:1 with Daniel**
 
-### 12. Omar
-Act: Coach · Who: Noa · Where: cue.app/team/omar
-Caption: Noa gets a ready plan for the 1:1 with Omar.
-Header: Omar · Best round 68 · 3 rounds
-Summary: Omar asks good questions, but brings up price in the first 3 minutes.
+### 12. Daniel
+Act: Coach · Who: Noa · Where: cue.app/team/daniel
+Caption: Noa gets a ready plan for the 1:1 with Daniel.
+Header: Daniel Shaw · Best round 68 · 3 rounds
+Summary: Daniel asks good questions, but brings up price in the first 3 minutes.
 No number on the value yet.
 Moments (pinned on the round timeline): 1:48 Price came up before the problem ·
 5:20 Agreed to "think about it"
-Side: Omar's scores vs team average, and the next real call (Pinecrest · Fri, Oct 24 · $60K)
+Side: Daniel's scores vs team average (tooltip on each line: "Team average 82", only the team number, pinned under the team mark), and the next real call (Pinecrest · Fri, Oct 24 · $60K)
 
 **1:1 plan** (15 min)
 1. Watch Dana's clip together (40 sec)
@@ -450,12 +467,12 @@ Early signal · one week in: Lost at the price step. These 4, before and after t
 practice. Before 58% · This week 41%
 How the real calls went (Checked from call recordings, not from practice), light lines
 between people:
-- **Sam · Acme Logistics.** Value before price ✓ · No discount ✓ · Next step set ✓
+- **Sam Rivera · Acme Logistics.** Value before price ✓ · No discount ✓ · Next step set ✓
   · Moved to contract · 0:30
-- **Lucia · Northline Foods.** Value before price ✓ · 5% discount (team: 18%) ✓ · Next step
+- **Lucia Moreno · Northline Foods.** Value before price ✓ · 5% discount (team: 18%) ✓ · Next step
   set ✓ · In negotiation · 0:30
-- **Theo · Brightline Retail.** Price came up early ✕ · Next step set ✓ · Follow-up Tue · 0:30
-- **Omar · Pinecrest Supply.** Not yet · Price call Fri, after the 1:1
+- **Theo Walsh · Brightline Retail.** Price came up early ✕ · Next step set ✓ · Follow-up Tue · 0:30
+- **Daniel Shaw · Pinecrest Supply.** Not yet · Price call Fri, after the 1:1
 
 ### 14. Impact
 Act: Prove · Who: Noa · Where: cue.app/practice/hold-your-price/impact
@@ -485,7 +502,7 @@ Caption: Ira, head of enablement, sees what works and updates the template. The 
 The same object header as a practice:
 Breadcrumb: Library (all of enablement's templates, which the walkthrough skips)
 Title: Pricing template
-Under the title: Used by 6 teams · 31 people practiced · By Ira, enablement
+Under the title: Used by 6 teams · 31 people practiced · By Ira Klein, enablement
 Page switch: Setup · Teams · **Impact**
 - Setup (not built): the master buyer, brief, scorecard and reference calls, and what team
   leads may change or not (locked parts)

@@ -36,7 +36,9 @@
     chat: 'M4 5h16v11H9l-5 4Z',
     headphones: 'M4 15v-3a8 8 0 0 1 16 0v3M4 15h3v5H4ZM17 15h3v5h-3Z',
     bookmark: 'M6.5 4h11v16.5L12 17l-5.5 3.5Z',
-    replay: 'M4 4v5h5M4.6 13a7.5 7.5 0 1 0 1.8-6.5L4 9'
+    replay: 'M4 4v5h5M4.6 13a7.5 7.5 0 1 0 1.8-6.5L4 9',
+    copy: 'M9 9h11v11H9ZM15 9V4H4v11h5',
+    archive: 'M3.5 4.5h17v4h-17ZM5 8.5V20h14V8.5M10 12.5h4'
   };
   /* Filled marks for change chips, like the reference "Results" card */
   var F = {

@@ -1,0 +1,583 @@
+/* The presentation shell, version 2 (v2.html and prototype.html).
+   A copy of shell.css, plus: four framed slides, Present mode, and the prototype on its own page.
+   One left axis, five type styles, almost no lines. The product lives in app.css under .cue. */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--shell-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* One container, one left edge */
+.shell-wrap {
+  width: 100%;
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: 0 var(--grid-margin);
+}
+
+/* The five type styles: display, title, lead, body, label */
+.shell-display {
+  margin: 0;
+  font-size: var(--shell-display);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+.shell-title {
+  margin: 0;
+  font-size: var(--shell-title);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.shell-lead {
+  margin: 0;
+  max-width: 30em;
+  font-size: var(--shell-lead);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--color-ink-2);
+  text-wrap: pretty;
+}
+.shell-label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: var(--color-ink-3);
+}
+
+/* Nav: brand left, sections right */
+.shell-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--color-paper) 86%, transparent);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+}
+.shell-nav .shell-wrap { height: 64px; display: flex; align-items: center; gap: var(--space-6); }
+.shell-brand { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.shell-brand img { width: 22px; height: 22px; }
+.shell-links { margin-left: auto; display: flex; gap: var(--space-6); }
+.shell-links a { font-size: 14px; color: var(--color-ink-3); transition: color var(--duration-fast); }
+.shell-links a:hover, .shell-links a[aria-current="true"] { color: var(--color-ink); }
+/* The prototype, one click from anywhere: a small black pill at the end of the header */
+.shell-nav-cta { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px 0 14px; border-radius: var(--radius-pill); background: var(--color-ink); font-size: 13px; font-weight: 500; white-space: nowrap; color: var(--color-paper); transition: background var(--duration-fast); }
+.shell-nav-cta:hover { background: #2b2b29; }
+.shell-nav-cta svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Cover, with a background drawn only from graphs and people (js/hero.js) */
+.shell-cover { position: relative; overflow: hidden; padding: var(--space-10) 0 0; }
+.shell-cover .shell-wrap { position: relative; z-index: 1; }
+/* The chart sits right under the text and tucks 96px behind it (the line is low on the left) */
+.shell-hero-bg { position: relative; z-index: 0; margin-top: calc(var(--space-10) * -1); pointer-events: none; }
+.hero { display: block; width: 100%; height: auto; aspect-ratio: 1440 / 440; }
+
+/* line: the chart draws in, dots and people pop, people float */
+.hero-stroke { stroke-dasharray: 1; stroke-dashoffset: 1; animation: hero-draw 2.2s var(--ease-out) 0.2s forwards; }
+.hero-area { opacity: 0; animation: hero-fade 1.6s var(--ease-out) 0.9s forwards; }
+.hero-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: hero-pop 420ms var(--ease-out) forwards; animation-delay: calc(0.35s + var(--i) * 0.11s); }
+.hero-person { opacity: 0; animation: hero-person 700ms var(--ease-out) forwards, hero-float 5s ease-in-out infinite; animation-delay: calc(1.2s + var(--i) * 0.25s), calc(2s + var(--i) * 0.6s); }
+
+
+@keyframes hero-draw { to { stroke-dashoffset: 0; } }
+@keyframes hero-fade { to { opacity: 1; } }
+@keyframes hero-pop { 0% { transform: scale(0); } 70% { transform: scale(1.3); } 100% { transform: scale(1); } }
+@keyframes hero-person { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes hero-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+/* Phones: the chart shrinks with the screen, so the faces grow a little, up from the line */
+@media (max-width: 600px) {
+  .hero-person { transform-box: fill-box; transform-origin: 50% 100%; scale: 1.6; }
+}
+.shell-cover .shell-label { margin-bottom: var(--space-6); }
+.shell-cover .shell-lead { margin-top: var(--space-6); }
+
+/* Section */
+.shell-section { padding: var(--space-10) 0 var(--space-6); }
+.shell-section .shell-label { margin-bottom: var(--space-4); }
+.shell-section .shell-lead { margin-top: var(--space-4); }
+
+/* Blocks inside a section: a label, then one list or one paragraph */
+.shell-block { margin-top: var(--space-8); }
+.shell-block > .shell-label { margin-bottom: var(--space-4); }
+.shell-text { margin: 0; max-width: 36em; font-size: 15px; line-height: 1.5; color: var(--color-ink-2); text-wrap: pretty; }
+.shell-list { margin: var(--space-8) 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-3); max-width: 38em; }
+.shell-block .shell-list { margin-top: 0; }
+.shell-list li { font-size: 15px; line-height: 1.5; color: var(--color-ink-2); text-wrap: pretty; }
+.shell-list b { font-weight: 500; color: var(--color-ink); }
+.shell-list--time li { padding-left: 22px; text-indent: -22px; }
+.shell-list--time i { display: inline-block; width: 10px; height: 10px; margin-right: 12px; border-radius: 50%; background: var(--c); }
+
+/* Three people: photo, name, the job in their words */
+.shell-people { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-5); }
+.shell-people li { display: flex; align-items: center; gap: var(--space-4); }
+.shell-people img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; }
+.shell-people div { display: flex; flex-direction: column; gap: 2px; }
+.shell-person { font-size: 14px; color: var(--color-ink-3); }
+.shell-people q { font-size: var(--shell-lead); line-height: 1.35; letter-spacing: -0.01em; color: var(--color-ink); quotes: "\201C" "\201D"; text-indent: -0.42em; }
+
+/* The loop: five moves in one row, the current one in ink */
+.shell-loop {
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+}
+.shell-loop button {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--color-ink-3);
+  cursor: pointer;
+  transition: color var(--duration-base);
+}
+.shell-loop button .shell-label { color: inherit; }
+.shell-loop button:hover { color: var(--color-ink-2); }
+.shell-loop button.is-current { color: var(--color-ink); }
+.shell-loop button:disabled { cursor: default; color: var(--color-line); }
+.shell-loop button:disabled:hover { color: var(--color-line); }
+
+/* Prototype controls: quiet text buttons */
+.shell-controls { display: flex; gap: var(--space-5); }
+.shell-controls button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-ink-2);
+  cursor: pointer;
+  transition: color var(--duration-fast);
+}
+.shell-controls button:hover { color: var(--color-ink); }
+.shell-controls button:disabled { color: var(--color-line); cursor: default; }
+.shell-caption-text { margin: 0; }
+/* A small switch next to the caption, e.g. Slack or Gmail */
+.shell-switch { display: inline-flex; padding: 2px; gap: 2px; border-radius: var(--radius-pill); background: var(--color-paper-2); }
+.shell-switch button { height: 26px; padding: 0 12px; border: 0; border-radius: var(--radius-pill); background: transparent; font: inherit; font-size: 13px; color: var(--color-ink-2); cursor: pointer; }
+.shell-switch button[aria-pressed="true"] { background: var(--color-paper); color: var(--color-ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); }
+[data-proto-extra]:empty { display: none; }
+
+/* Stage: the product sits on a blurred photo, so it reads as software, not as the page */
+.shell-stage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: var(--space-9) var(--grid-margin);
+  background: #8fcfd6;
+}
+.shell-stage-bg {
+  position: absolute;
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  object-fit: cover;
+  filter: blur(70px) saturate(1.1);
+  transform: scale(1.15);
+  z-index: -1;
+}
+.shell-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.16));
+}
+.shell-stage-fit { margin: 0 auto; max-width: 1280px; }
+.shell-stage-note { display: none; }
+
+/* Caption: one quiet line under the stage, controls on the right */
+.shell-caption { padding: var(--space-4) 0 0; font-size: 14px; color: var(--color-ink-3); }
+.shell-caption .shell-wrap { display: flex; align-items: baseline; gap: var(--space-5); }
+.shell-caption .shell-controls { margin-left: auto; }
+.shell-caption-text b { font-weight: 500; color: var(--color-ink); margin-right: var(--space-2); }
+
+/* Full screen: the stage takes the whole window, with one bar on top */
+.shell-stage-bar { display: none; }
+:root.is-full { overflow: hidden; }
+:root.is-full .shell-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  padding: 72px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+:root.is-full .shell-stage-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 0 24px;
+  background: color-mix(in srgb, var(--color-paper) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 14px;
+  color: var(--color-ink-3);
+}
+:root.is-full .shell-stage-bar .shell-controls { margin-left: auto; }
+:root.is-full .shell-stage-fit { margin: 0; }
+
+/* Footer: one quiet line */
+.shell-foot { position: relative; padding: var(--space-6) 0 var(--space-8); font-size: 13px; color: var(--color-ink-3); }
+.shell-foot .shell-wrap { position: relative; z-index: 1; }
+/* The end glow: five soft color clouds from the deck's palette, blurred and drifting slowly.
+   It starts behind the closing and fades out toward the top, so it never touches the slides */
+.end-glow { position: absolute; z-index: 0; left: 0; right: 0; bottom: 0; top: -170px; overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.75) 60%, #000); mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.75) 60%, #000); }
+.end-glow i { position: absolute; bottom: -230px; width: 36vw; max-width: 500px; aspect-ratio: 1; border-radius: 50%; background: var(--c); opacity: 0.45; filter: blur(80px); animation: end-drift var(--t) ease-in-out infinite alternate; animation-delay: var(--dl); }
+.end-glow i:nth-child(1) { --c: #f2a6a0; --t: 6s; --dl: -2s; left: -6%; }
+.end-glow i:nth-child(2) { --c: #cdb3e6; --t: 7.5s; --dl: -5s; left: 16%; bottom: -260px; }
+.end-glow i:nth-child(3) { --c: #b8b3f0; --t: 6.5s; --dl: -3s; left: 38%; }
+.end-glow i:nth-child(4) { --c: #8fd3d8; --t: 8s; --dl: -6s; left: 58%; bottom: -260px; }
+.end-glow i:nth-child(5) { --c: #8fd3a2; --t: 7s; --dl: -4s; left: 78%; }
+@keyframes end-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(18vw, -60px) scale(1.25); }
+  66% { transform: translate(-8vw, -20px) scale(1.05); }
+  100% { transform: translate(-18vw, 30px) scale(0.85); }
+}
+
+@media (max-width: 900px) {
+  .shell-links { display: none; }
+  .shell-cover { padding: var(--space-9) 0 0; }
+  .shell-hero-bg { margin-top: calc(var(--space-5) * -1); }
+  .shell-section { padding: var(--space-8) 0 var(--space-5); }
+  .shell-lead { font-size: 18px; }
+  .shell-loop { margin-top: var(--space-6); }
+  .shell-stage { padding: var(--space-5) var(--grid-margin); }
+  .shell-caption .shell-wrap { flex-direction: column; gap: var(--space-2); }
+  .shell-caption .shell-controls { margin-left: 0; }
+  .shell-list li, .shell-text { font-size: 15px; }
+  .shell-people q { font-size: 18px; }
+}
+
+
+@media (max-width: 600px) {
+  .shell-stage-note { display: block; margin: var(--space-4) 0 0; color: #fff; text-align: center; }
+  .shell-full-btn { display: none; }
+}
+
+/* ===== Version 2: the four slides ===== */
+
+/* Nav: a quiet Present button after the slide links */
+.shell-present { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px 0 11px; border: 1px solid var(--color-line); border-radius: var(--radius-pill); background: var(--color-paper); font: inherit; font-size: 14px; font-weight: 500; color: var(--color-ink); cursor: pointer; transition: background var(--duration-fast), border-color var(--duration-fast); }
+.shell-present:hover { background: var(--color-paper-2); border-color: var(--color-paper-2); }
+.shell-present svg { width: 12px; height: 12px; fill: currentColor; }
+.shell-present[hidden] { display: none; }
+
+/* A slide: one white frame with a hairline, like the product's cards, at least 16:9 */
+.slide { padding: var(--space-5) 0; }
+.slide:first-of-type { padding-top: var(--space-9); }
+.slide-frame {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 16 / 9;
+  padding: var(--space-7) var(--space-9) var(--space-8);
+  border: 1px solid var(--color-line);
+  border-radius: 24px;
+  background: var(--color-paper);
+}
+.slide-head { display: flex; justify-content: space-between; gap: var(--space-5); margin-bottom: var(--space-8); }
+.slide-head .shell-label { margin: 0; }
+.slide-frame > .shell-lead { margin-top: var(--space-4); }
+.slide-frame { --shell-lead: 18px; }
+.slide-cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-9); margin-top: var(--space-8); align-items: start; }
+.slide-cols > div > .shell-label { margin-bottom: var(--space-4); }
+/* Title on top, details at the bottom of the frame: the space between is on purpose */
+.slide-frame > .slide-cols:last-child:not(.slide-cols--flow) { margin-top: auto; padding-top: var(--space-8); }
+.slide-cols .shell-list { margin-top: 0; }
+
+/* Slide 1: the words on the left, today's library on the right as a bento.
+   Both columns run the full height. On the left, the points sit in the middle so the space around them is even */
+.lxp-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-9); }
+.lxp-text { display: flex; flex-direction: column; }
+.lxp-text .shell-lead { margin-top: var(--space-4); }
+.lxp-points { display: flex; flex-direction: column; }
+.lxp-points > :first-child { margin: var(--space-7) 0; }
+.lxp-points .shell-label { margin-bottom: var(--space-3); }
+.lxp-points .shell-list { margin-top: 0; }
+/* The opportunity: the slide's answer, on a soft color */
+.opp-panel { align-self: flex-start; padding: 16px 22px 18px; border-radius: 16px; background: var(--viz-calm-soft); }
+.opp-panel .shell-label { color: #5a68ad; }
+
+/* The library: four courses the same size, and the report card that comes in from the right, over them */
+/* The library sits as tall as the words beside it, and no wider than 500px, so the slide has air */
+.bento { position: relative; justify-self: end; width: 100%; max-width: 500px; min-height: 360px; margin: 0; }
+.bento-courses { position: absolute; top: 0; bottom: 0; left: 0; right: 64px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.bento-cell { position: relative; overflow: hidden; min-width: 0; min-height: 0; border-radius: 18px; background: var(--color-paper-2); }
+.bento-cell img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bento-cell::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.58)); }
+.lxp-done { position: absolute; z-index: 1; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px; border-radius: 10px; background: rgba(255, 255, 255, 0.94); font-size: 10.5px; font-weight: 500; color: var(--color-ink); }
+.lxp-done svg { width: 10px; height: 10px; fill: none; stroke: var(--color-up); stroke-width: 3; }
+.bento-cap { position: absolute; z-index: 1; left: 12px; right: 12px; bottom: 10px; display: flex; flex-direction: column; gap: 1px; color: #fff; }
+.bento-cap b { font-size: 13px; line-height: 1.25; font-weight: 500; text-wrap: balance; }
+.bento-cap span { font-size: 11px; color: rgba(255, 255, 255, 0.8); }
+/* The report: a white card on the right, in the middle, over the courses */
+.bento-report { position: absolute; right: 0; top: 50%; translate: 0 -50%; width: 232px; padding: 12px 16px 14px; border-radius: 16px; background: var(--color-paper); box-shadow: 0 0 0 1px var(--color-line), 0 24px 50px -20px rgba(0, 0, 0, 0.25); }
+.bento-report-title { display: block; margin-bottom: 2px; font-size: 12px; color: var(--color-ink-3); }
+.bento-stat { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--color-line); font-size: 13px; white-space: nowrap; color: var(--color-ink-2); }
+.bento-report-title + .bento-stat { border-top: 0; }
+.bento-stat b { font-size: 18px; font-weight: 400; letter-spacing: -0.01em; color: var(--color-ink); font-variant-numeric: tabular-nums; }
+.bento-stat.is-missing b { font-size: 13px; letter-spacing: 0; color: var(--color-down); }
+
+/* Appearing: the courses one by one from the top, then the report slides in from the right.
+   Only when the script is on, so without it everything simply shows */
+.can-animate [data-appear] .bento-cell { opacity: 0; transform: translateY(18px); }
+.can-animate [data-appear] .bento-report { opacity: 0; transform: translateX(40px); }
+.can-animate [data-appear].is-in .bento-cell { animation: appear-up 640ms var(--ease-out) forwards; animation-delay: calc(var(--d) * 160ms); }
+.can-animate [data-appear].is-in .bento-report { animation: appear-left 720ms var(--ease-out) 620ms forwards; }
+@keyframes appear-up { to { opacity: 1; transform: none; } }
+@keyframes appear-left { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .can-animate [data-appear] .bento-cell, .can-animate [data-appear] .bento-report { opacity: 1; transform: none; }
+}
+/* Slide 2: the words and the people on the left, one recorded call on the right */
+/* The call sits level with the words beside it, so the smaller text and the card stay balanced */
+.focus-layout { display: grid; grid-template-columns: minmax(0, 1fr) 470px; gap: 96px; align-items: center; }
+.focus-text { display: flex; flex-direction: column; }
+.focus-text .shell-lead { margin-top: var(--space-4); max-width: 34em; }
+/* Who we design for sits right under the lead */
+.who { margin-top: var(--space-8); }
+.who .shell-label { margin-bottom: var(--space-5); }
+.who-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-5); }
+.who-list li { display: flex; align-items: flex-start; gap: var(--space-4); }
+.who-list img { width: 48px; height: 48px; flex: none; border-radius: 50%; object-fit: cover; }
+.who-list div { display: flex; flex-direction: column; gap: 3px; padding-top: 2px; }
+.who-list q { font-size: 15px; line-height: 1.45; color: var(--color-ink-2); quotes: "\201C" "\201D"; }
+
+/* The call: a dark player. One line of time, the moment the price came up, and what the client said */
+.call { --x: 30%; --on-dark: rgba(255, 255, 255, 0.55); --hot: #ff6b5e; align-self: center; margin: 0; padding: 26px 28px 28px; border-radius: 20px; background: #121211; box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.45); }
+.call-head { display: flex; align-items: center; justify-content: space-between; font-size: 14px; color: var(--on-dark); }
+.call-wave { position: relative; height: 56px; margin: 56px 0 0; display: flex; align-items: center; justify-content: space-between; }
+.call-wave i { width: 4px; height: var(--h); flex: none; border-radius: 2px; background: rgba(255, 255, 255, 0.24); }
+.call-wave i.is-moment { background: var(--hot); }
+/* The marker runs from the tag, through the wave, down the side of the quote */
+.call-mark { position: absolute; top: -40px; bottom: -82px; left: var(--x); width: 2px; margin-left: -1px; border-radius: 1px; background: var(--hot); }
+.call-mark::before { content: ""; position: absolute; top: 0; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--hot); }
+.call-tag { position: absolute; top: -6px; left: 12px; padding: 3px 10px; border-radius: 12px; background: rgba(255, 107, 94, 0.16); font-size: 12.5px; font-weight: 500; white-space: nowrap; color: #ff8f84; }
+.call-quote { margin: 18px 0 0 calc(var(--x) + 14px); }
+.call-quote span { display: block; margin-bottom: 4px; font-size: 13px; color: var(--on-dark); }
+.call-quote p { margin: 0; font-size: 15px; line-height: 1.35; letter-spacing: -0.01em; color: #fff; }
+/* The part of the call already played is a little brighter */
+.call-wave i.is-played { background: rgba(255, 255, 255, 0.55); }
+
+/* Playing: the line runs from the start to 4:12 and stops. The moment turns red,
+   the tag pops in, the line reaches down, and what the client said appears */
+.can-animate .call[data-appear] .call-mark { left: 0; top: -8px; bottom: -8px; }
+.can-animate .call[data-appear] .call-wave i.is-played, .can-animate .call[data-appear] .call-wave i.is-moment { background: rgba(255, 255, 255, 0.24); }
+.can-animate .call[data-appear] .call-tag { opacity: 0; }
+.can-animate .call[data-appear] .call-quote { opacity: 0; transform: translateY(8px); }
+.can-animate .call[data-appear].is-in .call-mark { animation: call-run 1600ms cubic-bezier(0.45, 0, 0.25, 1) 300ms both, call-open 520ms var(--ease-out) 2000ms both; }
+.can-animate .call[data-appear].is-in .call-wave i.is-played { animation: call-played 220ms linear both; animation-delay: calc(300ms + var(--p) * 1600ms); }
+.can-animate .call[data-appear].is-in .call-wave i.is-moment { animation: call-hot 360ms var(--ease-out) 1850ms both; }
+.can-animate .call[data-appear].is-in .call-tag { animation: call-pop 380ms var(--ease-out) 2050ms both; }
+.can-animate .call[data-appear].is-in .call-quote { animation: appear-up 560ms var(--ease-out) 2350ms both; }
+@keyframes call-run { from { left: 0; } to { left: var(--x); } }
+@keyframes call-open { from { top: -8px; bottom: -8px; } to { top: -40px; bottom: -82px; } }
+@keyframes call-played { to { background: rgba(255, 255, 255, 0.55); } }
+@keyframes call-hot { to { background: var(--hot); } }
+@keyframes call-pop { from { opacity: 0; transform: translateY(4px) scale(0.96); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .can-animate .call[data-appear] .call-mark { left: var(--x); top: -40px; bottom: -82px; }
+  .can-animate .call[data-appear] .call-wave i.is-played { background: rgba(255, 255, 255, 0.55); }
+  .can-animate .call[data-appear] .call-wave i.is-moment { background: var(--hot); }
+  .can-animate .call[data-appear] .call-tag, .can-animate .call[data-appear] .call-quote { opacity: 1; transform: none; }
+}
+/* The opportunity is the slide's answer: bigger, and in black */
+.slide-answer { margin: 0; max-width: 26em; font-size: 18px; line-height: 1.4; letter-spacing: -0.015em; color: var(--color-ink); text-wrap: pretty; }
+:root:not(.is-presenting) .lxp-points .slide-answer { font-size: clamp(16px, 1.3vw, 18px); }
+
+
+/* Slide 3: the loop as a vertical flow. Each move is one row and opens the prototype there */
+/* Slide 3: the headline, then the five steps right under it, all on the left */
+.slide-cols--flow { grid-template-columns: minmax(0, 680px); margin-top: 0; align-items: stretch; flex: 1; }
+.slide-cols--flow .flow-steps { margin-top: var(--space-8); }
+/* The list is as wide as its longest line, so the faces and arrows sit just after the text, still in one column */
+.slide-cols--flow .flow-steps { width: fit-content; max-width: 100%; }
+.slide-cols--flow .flow-step-text span { white-space: nowrap; }
+.slide-cols--flow .flow-step-text { margin-right: var(--space-2); }
+.slide-cols--flow .flow-step-go { margin-left: -6px; }
+.slide-cols--flow > div { align-self: start; }
+.slide-cols--flow > .flow-steps { align-self: end; }
+.slide-cols--flow .shell-lead { margin-top: var(--space-4); }
+.flow-steps { position: relative; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-3); }
+.flow-steps::before { content: ""; position: absolute; z-index: 1; top: 24px; bottom: 24px; left: 13px; width: 2px; border-radius: 1px; background: linear-gradient(180deg, #f2a6a0, #b8b3f0 50%, #8fd3d8 75%, #8fd3a2); }
+/* Each row is one link. On hover the whole row gets a soft grey background, the line and dots stay on top */
+.flow-steps a { position: relative; display: flex; align-items: center; gap: var(--space-4); min-height: 48px; margin: 0 -12px; padding: var(--space-1) 12px; border-radius: 12px; color: inherit; transition: background var(--duration-fast); }
+.flow-steps a:hover { background: var(--color-paper-2); }
+.flow-steps a:hover .flow-step-n { border-color: var(--color-paper-2); }
+.flow-steps a:hover .flow-step-who img { box-shadow: 0 0 0 2px var(--color-paper-2); }
+.flow-step-n { position: relative; z-index: 2; width: 28px; height: 28px; flex: none; display: grid; place-items: center; border: 3px solid var(--color-paper); border-radius: 50%; background: var(--c); font-family: var(--font-sans); font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--color-ink); }
+.flow-step-text { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: var(--space-4); }
+.flow-step-text b { width: 76px; flex: none; font-size: 15px; font-weight: 500; }
+.flow-step-text span { font-size: 15px; line-height: 1.4; color: var(--color-ink-2); }
+.flow-step-who { display: flex; flex: none; }
+.flow-step-who img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--color-paper); }
+.flow-step-who img + img { margin-left: -8px; }
+.flow-step-go { width: 18px; height: 18px; flex: none; fill: none; stroke: var(--color-ink-3); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke var(--duration-fast); }
+.flow-steps a:hover .flow-step-go { stroke: var(--color-ink); }
+
+/* Slide 4: three steps from first use to deals, then what has to be true */
+.ladder { margin: var(--space-8) 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+.ladder li { display: flex; flex-direction: column; gap: 6px; padding-top: var(--space-4); border-top: 2px solid var(--c); }
+.ladder b { font-size: 17px; font-weight: 500; letter-spacing: -0.01em; }
+.ladder p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--color-ink-2); text-wrap: pretty; }
+/* One concrete measure per step. The title, text and measure rows line up across the columns */
+.ladder li:has(.ladder-measure) { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 6px; align-content: start; }
+.ladder-measure { align-self: stretch; margin-top: 10px; padding: 9px 12px 10px; display: flex; flex-direction: column; gap: 2px; border-radius: 10px; background: color-mix(in srgb, var(--c) 22%, white); font-size: 13px; line-height: 1.45; color: var(--color-ink); text-wrap: pretty; }
+/* A soft box in the column's color, with a small label so it reads as the metric */
+.ladder-measure-label { font-size: 12px; font-weight: 500; color: rgba(11, 11, 11, 0.55); }
+.ladder + .slide-cols { margin-top: var(--space-8); }
+/* Slide 4: the three steps sit in the middle of the free space, like the pictures on slides 1 and 2.
+   At least 32px above and below, and always the same on both sides */
+.slide-frame--steps > .shell-lead { max-width: 44em; }
+.slide-frame--steps > .ladder { margin: auto 0; padding-top: var(--space-6); }
+.slide-frame--steps > .slide-cols:last-child:not(.slide-cols--flow) { margin-top: 0; padding-top: var(--space-6); }
+.shell-list--plain li { padding-left: 18px; text-indent: -18px; }
+.shell-list--plain li::before { content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 12px 2px 0; border-radius: 50%; background: var(--color-ink-3); vertical-align: middle; }
+
+/* After the slides: one quiet invitation to the prototype */
+.shell-close { position: relative; z-index: 1; padding: var(--space-10) 0 var(--space-9); }
+.shell-close .shell-label { margin-bottom: var(--space-4); }
+.shell-close .shell-lead { margin: var(--space-4) 0 var(--space-6); }
+.shell-close .shell-title + .shell-btn { margin-top: var(--space-6); }
+.shell-btn { display: inline-flex; align-items: center; gap: var(--space-2); height: 44px; padding: 0 20px; border-radius: var(--radius-pill); background: var(--color-ink); font-size: 15px; font-weight: 500; color: var(--color-paper); transition: background var(--duration-fast); }
+.shell-btn:hover { background: #2a2a2a; }
+.shell-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ===== Present mode: one slide at a time, scaled to the screen ===== */
+.present-bar { display: none; }
+:root.is-presenting, :root.is-presenting body { overflow: hidden; }
+:root.is-presenting body { background: var(--color-paper-2); }
+:root.is-presenting .shell-nav, :root.is-presenting .shell-cover, :root.is-presenting .shell-foot, :root.is-presenting .shell-close { display: none; }
+:root.is-presenting .slide { position: fixed; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 0; opacity: 0; visibility: hidden; transition: opacity 360ms var(--ease-out), visibility 0s linear 360ms; }
+:root.is-presenting .slide.is-shown { opacity: 1; visibility: visible; transition: opacity 360ms var(--ease-out), visibility 0s; }
+:root.is-presenting .slide > .shell-wrap { width: auto; max-width: none; padding: 0; }
+:root.is-presenting .slide-frame { width: 1440px; height: 810px; aspect-ratio: auto; transform: scale(var(--present-scale, 1)); transform-origin: center; box-shadow: 0 40px 100px -40px rgba(0, 0, 0, 0.22); border-color: transparent; }
+:root.is-presenting .present-bar { position: fixed; right: 24px; bottom: 20px; z-index: 5; display: flex; align-items: center; gap: var(--space-2); }
+.present-count { min-width: 44px; margin-right: var(--space-2); font-family: var(--font-sans); font-size: 14px; color: var(--color-ink-2); text-align: right; font-variant-numeric: tabular-nums; }
+.present-arrow { width: 34px; height: 34px; display: grid; place-items: center; padding: 0; border: 1px solid var(--color-line); border-radius: 50%; background: var(--color-paper); color: var(--color-ink); cursor: pointer; }
+.present-arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.present-arrow:disabled { color: var(--color-line); cursor: default; }
+.present-proto { height: 34px; margin-left: var(--space-3); padding: 0 16px; font-size: 14px; }
+.present-proto[hidden] { display: none; }
+.present-exit { height: 34px; margin-left: var(--space-2); padding: 0 14px; border: 1px solid var(--color-line); border-radius: var(--radius-pill); background: var(--color-paper); font: inherit; font-size: 14px; color: var(--color-ink-2); cursor: pointer; }
+.present-exit:hover, .present-arrow:hover:not(:disabled) { background: var(--color-paper); color: var(--color-ink); border-color: var(--color-ink-3); }
+
+/* ===== prototype.html: the prototype on its own page ===== */
+.proto-page { height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+.proto-top { flex: none; height: 60px; display: flex; align-items: center; gap: var(--space-6); padding: 0 var(--space-5); }
+.proto-top-tag { padding: 3px 8px; border: 1px solid var(--color-line); border-radius: 6px; color: var(--color-ink-2); }
+.proto-top .shell-loop { margin: 0 auto; column-gap: var(--space-5); }
+.proto-top .shell-loop button { font-size: 15px; }
+.proto-return { font-size: 14px; color: var(--color-ink-2); transition: color var(--duration-fast); }
+.proto-return:hover { color: var(--color-ink); }
+.proto-page .proto-stage { flex: 1; min-height: 0; padding: var(--space-5); display: flex; align-items: center; justify-content: center; }
+/* Phones: one quiet line that the prototype is made for a computer */
+.proto-phone-note { display: none; }
+@media (max-width: 767px) {
+  .proto-phone-note { display: block; margin: 0; padding: 10px var(--space-4); background: var(--viz-calm-soft); font-size: 13px; line-height: 1.4; text-align: center; color: var(--color-ink); }
+}
+
+/* The prototype's background: a light grey with soft washes of the app's own chart colors
+   (calm blue, up green, a touch of down coral). Still, no motion */
+.proto-page .proto-stage {
+  background:
+    radial-gradient(42% 70% at 0% 18%, rgba(169, 185, 242, 0.55), rgba(169, 185, 242, 0) 100%),
+    radial-gradient(42% 70% at 100% 82%, rgba(143, 211, 162, 0.5), rgba(143, 211, 162, 0) 100%),
+    radial-gradient(30% 50% at 100% 8%, rgba(242, 166, 160, 0.32), rgba(242, 166, 160, 0) 100%),
+    linear-gradient(180deg, #f4f4f2 0%, #e9e9e6 100%);
+}
+.proto-page .shell-stage-bg { display: none; }
+.proto-page .proto-stage::after { display: none; }
+.proto-page .shell-stage-fit { margin: 0; }
+.proto-caption { position: relative; flex: none; min-height: 64px; display: flex; align-items: center; gap: var(--space-6); padding: 0 var(--space-5); font-size: 15px; color: var(--color-ink-2); }
+.proto-caption .shell-caption-text { flex: 1; min-width: 0; }
+.proto-caption .shell-caption-text b { font-weight: 500; color: var(--color-ink); margin-right: var(--space-2); }
+/* A thin line on top shows how far into the story you are, in the five move colors */
+.proto-caption::before, .proto-caption::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.proto-caption::before { background: var(--color-paper-3); }
+.proto-caption::after { background: linear-gradient(90deg, #f2a6a0, #cdb3e6, #b8b3f0, #8fd3d8, #8fd3a2); clip-path: inset(0 calc((1 - var(--p, 0)) * 100%) 0 0); transition: clip-path 500ms var(--ease-out); }
+/* Start over stays quiet, Back is a text link, Next is the one clear button */
+.proto-caption .shell-controls { align-items: center; gap: var(--space-4); }
+.proto-caption [data-proto="restart"] { order: -1; margin-right: var(--space-2); font-size: 13px; color: var(--color-ink-3); }
+.proto-caption [data-proto="next"] { height: 36px; padding: 0 16px; border-radius: var(--radius-pill); background: var(--color-ink); color: var(--color-paper); font-weight: 500; transition: background var(--duration-fast); }
+.proto-caption [data-proto="next"]::after { content: " \2192"; }
+.proto-caption [data-proto="next"]:hover { background: #2a2a28; color: var(--color-paper); }
+.proto-caption [data-proto="next"]:disabled { background: var(--color-paper-3); color: var(--color-ink-3); }
+
+/* Narrow screens reflow the slides, but never in Present mode: there the frame is always 1440 wide */
+@media (max-width: 1100px) {
+  :root:not(.is-presenting) .slide-frame { aspect-ratio: auto; padding: var(--space-6); }
+  :root:not(.is-presenting) .slide-cols, :root:not(.is-presenting) .slide-cols--flow { grid-template-columns: 1fr; gap: var(--space-6); }
+  :root:not(.is-presenting) .ladder { grid-template-columns: 1fr; gap: var(--space-5); }
+  :root:not(.is-presenting) .focus-layout { grid-template-columns: 1fr; gap: var(--space-7); }
+  :root:not(.is-presenting) .call { align-self: start; max-width: 520px; }
+  :root:not(.is-presenting) .lxp-layout { grid-template-columns: 1fr; gap: var(--space-7); }
+  :root:not(.is-presenting) .bento { min-height: 0; aspect-ratio: 1 / 1; width: 100%; max-width: 560px; }
+  /* The step lines may wrap here, so slide 3 never runs past the screen */
+  :root:not(.is-presenting) .slide-cols--flow .flow-steps { width: auto; }
+  :root:not(.is-presenting) .slide-cols--flow .flow-step-text span { white-space: normal; }
+}
+@media (max-width: 900px) { .shell-present, .shell-nav-cta { margin-left: auto; } }
+@media (max-width: 700px) {
+  :root:not(.is-presenting) .bento { min-height: 0; aspect-ratio: auto; }
+  :root:not(.is-presenting) .bento-courses { position: relative; right: auto; height: 360px; }
+  :root:not(.is-presenting) .bento-report { position: relative; top: auto; right: auto; translate: none; width: auto; margin: -40px 12px 0; }
+  :root:not(.is-presenting) .opp-panel { padding: 18px 20px 20px; }
+  :root:not(.is-presenting) .slide-answer { font-size: 17px; }
+  :root:not(.is-presenting) .call { padding: 20px; }
+  :root:not(.is-presenting) .call-wave i:nth-child(2n) { display: none; }
+  :root:not(.is-presenting) .call-mark { bottom: -6px; }
+  :root.can-animate:not(.is-presenting) .call[data-appear].is-in .call-mark { animation: call-run 1600ms cubic-bezier(0.45, 0, 0.25, 1) 300ms both; top: -40px; bottom: -6px; }
+  :root:not(.is-presenting) .call-quote { margin-left: 0; }
+}
+@media (max-width: 600px) {
+  .flow-step-text { flex-direction: column; gap: 2px; }
+  .flow-step-who { display: none; }
+  .proto-top .shell-loop, .proto-top-tag { display: none; }
+}
+/* Present mode keeps the full-size type, whatever the window */
+:root.is-presenting .slide-frame { --shell-title: 44px; --shell-lead: 18px; }
+:root.is-presenting .slide-frame .shell-lead { font-size: 18px; }
+:root.is-presenting .slide-frame .shell-list li, :root.is-presenting .slide-frame .shell-text { font-size: 15px; }
+:root.is-presenting .slide-frame .shell-people q { font-size: 20px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  /* things that start hidden and animate in must simply be shown */
+  .hero-stroke { stroke-dashoffset: 0; }
+  .hero-area, .hero-person { opacity: 1; }
+  .hero-dot, .cue-calm-bar b, .cue-pin { transform: none; opacity: 1; }
+}
