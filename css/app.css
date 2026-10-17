@@ -136,8 +136,8 @@
 
 /* Top bar: greeting, ask, bell */
 .cue-topbar { display: flex; align-items: center; gap: var(--space-3); }
-.cue-title { margin: 0; font-size: var(--text-2xl); font-weight: 600; letter-spacing: var(--tracking-tight); line-height: 1.1; }
-.cue-date { color: var(--color-ink-3); font-size: var(--text-md); }
+.cue-title { margin: 0; font-size: var(--text-2xl); font-weight: 600; letter-spacing: var(--tracking-tight); line-height: 1.1; align-self: baseline; }
+.cue-date { align-self: baseline; color: var(--color-ink-3); font-size: var(--text-md); }
 .cue-search {
   margin-left: auto;
   width: 280px;
