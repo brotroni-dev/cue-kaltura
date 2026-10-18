@@ -172,6 +172,20 @@
       '</section>';
   }
 
+  /* The first time Noa's home opens, the first insight card shows its essence once, like onboarding,
+     so it's clear the cards open up. Not again after Back or Start over */
+  function homeAfter() {
+    if (ui.peeked) return;
+    clearTimeout(ui.peekTimer);
+    ui.peekTimer = setTimeout(function () {
+      var card = main.querySelector('.cue-insight');
+      if (ui.step !== 0 || !card || card.matches(':hover')) return;
+      ui.peeked = true;
+      card.classList.add('is-peek');
+      ui.peekTimer = setTimeout(function () { card.classList.remove('is-peek'); }, 1600);
+    }, 1400);
+  }
+
   /* Shared bits for inner pages */
   function pagehead(back, backGo, actions) {
     return '<header class="cue-pagebar" data-component="Page bar">' +
@@ -1209,7 +1223,7 @@
   }
 
   var STATES = [
-    { id: 'home', loop: 0, nav: 'home', url: 'cue.app/home', caption: 'Noa, a sales team lead, opens Cue on Thursday morning.', render: home },
+    { id: 'home', loop: 0, nav: 'home', url: 'cue.app/home', caption: 'Noa, a sales team lead, opens Cue on Thursday morning.', render: home, after: homeAfter },
     { id: 'insight', loop: 0, nav: 'home', url: 'cue.app/insights/pricing', caption: 'Noa opens the insight to see why deals are lost.', render: insightPage },
     { id: 'building', loop: 1, nav: 'practice', url: 'cue.app/practice/new', caption: 'Cue drafts a practice from Ira’s template and the lost calls.', render: building, after: buildingAfter, auto: 3400 },
     { id: 'draft', loop: 1, nav: 'practice', url: 'cue.app/practice/hold-your-price', caption: 'Noa checks the draft and edits anything.', render: draft },
