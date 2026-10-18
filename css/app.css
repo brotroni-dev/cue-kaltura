@@ -596,6 +596,8 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-moment-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .cue-moment-text span { font-size: var(--text-xs); color: var(--color-ink-3); }
 .cue-moment-text b { font-size: var(--text-md); font-weight: 500; line-height: 1.35; }
+.cue-moment-go { flex: none; color: var(--color-ink-3); }
+.cue-moment-go:hover { color: var(--color-ink); }
 .cue-moment--good { margin-top: var(--space-1); padding-top: var(--space-2); border-top: 1px solid var(--color-line); }
 .cue-moment--good .cue-avatar { box-shadow: 0 0 0 2px var(--color-paper), 0 0 0 3.5px var(--person-dana); }
 /* Insight: Dana's moment is the answer, so it gets a soft green panel, like "Ready" */
@@ -1124,6 +1126,12 @@ input:checked + .cue-checkbox, input:checked ~ .cue-checkbox { background: var(-
 .cue-pill--pass { gap: 4px; background: var(--color-up-soft); color: var(--color-up); }
 .cue-col--even { flex: 1; }
 .cue-grid--fill { align-items: stretch; }
+/* Insight page: both columns end on the same line. The last card on the left (Why) grows down to the
+   bottom of the right column, and its quotes spread evenly over that height, so there's no empty block */
+.cue-grid--tall { align-items: stretch; }
+.cue-grid--tall > .cue-col:not(.cue-col--side) > .cue-card:last-child { flex: 1; }
+.cue-grid--tall > .cue-col:not(.cue-col--side) > .cue-card:last-child > .cue-rows { flex: 1; justify-content: space-between; }
+.cue-grid--tall .cue-who-row { min-height: 36px; }
 .cue-grid--fill .cue-persona { flex: 1; }
 .cue-row--score { min-height: 48px; }
 .cue-minibar--wide { width: 140px; }

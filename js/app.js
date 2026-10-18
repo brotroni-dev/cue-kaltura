@@ -211,10 +211,12 @@
     ['omar', '4 of 7', '19%'],
     ['theo', '3 of 5', '22%']
   ];
+  /* Why: what each of the 4 actually said, word for word, at the moment price came up */
   var MOMENTS = [
     ['sam', 'Acme Logistics', '4:12', '“We can do 15% off if you sign this month.”', '0:18'],
-    ['lucia', 'Northline Foods', '2:40', 'Offered a discount before the buyer asked.', '0:26'],
-    ['theo', 'Brightline Retail', '1:55', 'Gave the price in the first two minutes.', '0:14']
+    ['lucia', 'Northline Foods', '2:40', '“I’m sure we can find some room on the price.”', '0:26'],
+    ['omar', 'Pinecrest Supply', '2:15', '“Before we get into it, the price is $60K a year.”', '0:21'],
+    ['theo', 'Brightline Retail', '1:55', '“It’s $70K, but there’s room to move on that.”', '0:14']
   ];
   var DEALS = [
     ['Acme Logistics', 'sam', '$120K', 'Thu, Oct 23'],
@@ -223,18 +225,11 @@
   ];
 
   function insightPage() {
-    /* Who loses deals at price: two bars, each with the faces of who it is, nothing to decode */
-    var price = STEPS_LOST[2];
-    var chart = '<div class="cue-vs" data-component="Compare bars">' +
-        '<div class="cue-vs-row is-focus"><span class="cue-vs-faces">' + avas(['sam', 'lucia', 'omar', 'theo']) + '</span><span class="cue-vs-name">4 people</span><span class="cue-vs-bar"><i style="--value:' + price[1] + '%;--i:0"></i></span><b>' + price[1] + '%</b></div>' +
-        '<div class="cue-vs-row"><span class="cue-vs-faces">' + avas(['dana', 'kofi', 'hana']) + '</span><span class="cue-vs-name">3 people</span><span class="cue-vs-bar"><i style="--value:' + price[2] + '%;--i:1"></i></span><b>' + price[2] + '%</b></div>' +
-      '</div>' +
-      '<p class="cue-vs-note">The gap only opens at price. Earlier in the deal, all 7 lose about the same.</p>';
-
     /* The whole insight in a few plain sentences, for a manager who only scans */
     var brief = '<p class="cue-brief">These 4 people lose <b>58%</b> of their deals once price comes up. The rest of your team loses 27%. ' +
       'The reason: they name the price before the buyer sees the value. It happened in <b>9 of 12</b> lost calls. ' +
-      '9 open deals worth <b>$420K</b> get to the price talk in the next two weeks.</p>';
+      '9 open deals worth <b>$420K</b> get to the price talk in the next two weeks. ' +
+      'If nothing changes, about half of them will be lost the same way. A short practice before those calls can change that.</p>';
 
     var who = '<div class="cue-who-table" data-component="Who table">' +
       '<div class="cue-who-row cue-who-row--head"><span></span><span>Lost at price</span><span>Avg discount</span></div>' +
@@ -246,12 +241,10 @@
     var why = '<div class="cue-rows">' + MOMENTS.map(function (m) {
         return '<div class="cue-moment" data-component="Call moment">' + ava(m[0], 'sm') +
           '<div class="cue-moment-text"><span>' + fullName(m[0]) + ' · ' + m[1] + ' · ' + m[2] + '</span><b>' + m[3] + '</b></div>' +
-          play(m[4], P[m[0]].name + '’s call') + '</div>';
+          play(m[4], P[m[0]].name + '’s call') +
+          /* Opens the whole recorded call, at this moment, where the call lives */
+          '<button class="cue-icon-btn cue-icon-btn--plain cue-moment-go" aria-label="Open ' + P[m[0]].name + '’s full call at ' + m[2] + '" data-toast="Opens the full call recording at ' + m[2] + '. Not part of this walkthrough.">' + ic('arrowUpRight', 'cue-ic--sm') + '</button></div>';
       }).join('') +
-      /* The positive turn: what the best person on the team does differently */
-      '<div class="cue-moment cue-moment--works" data-component="Call moment/What works">' + ava('dana', 'sm') +
-        '<div class="cue-moment-text"><span>' + ic('up', 'cue-ic--xs') + 'What Dana does differently</span><b>Shows what doing nothing costs before saying a price.</b></div>' +
-        play('0:40', 'Dana’s call') + '</div>' +
       '</div>';
 
     var deals = '<div class="cue-rows cue-rows--deals">' + DEALS.map(function (d) {
@@ -267,8 +260,8 @@
         '<div class="cue-insight-top">' + avas(['sam', 'lucia', 'omar', 'theo']) + '<span class="cue-insight-tag">Pricing · 4 people</span></div>' +
         '<h1 class="cue-h1">4 people lose deals when price comes up</h1>' +
       '</div>' +
-      '<div class="cue-grid cue-rise" style="--i:1">' +
-        '<div class="cue-col">' + card('In short', brief) + card('Who loses deals at price', chart) + card('Why', why) + '</div>' +
+      '<div class="cue-grid cue-grid--tall cue-rise" style="--i:1">' +
+        '<div class="cue-col">' + card('In short', brief) + card('Why', why, '<span class="cue-card-note">From their recorded calls</span>') + '</div>' +
         '<div class="cue-col cue-col--side">' + card('Who', who) + card('Deals at risk', deals) + '</div>' +
       '</div>';
   }
@@ -1210,8 +1203,7 @@
           ['impact', 'Impact', 14]
         ],
         page: 'impact',
-        actions: '<button class="cue-btn cue-btn--secondary" data-toast="Rolled out to 3 more teams. Their leads get a draft to approve.">' + ic('team') + 'Roll out to 3 more teams</button>' +
-          confirmBtn('Update the template', 'sparkle', 'Template updated: doubtful buyer, two rounds, due 2 days before the call.', 'Template updated', 'Start over', 0)
+        actions: confirmBtn('Update the template', 'sparkle', 'Template updated: doubtful buyer, two rounds, due 2 days before the call.', 'Template updated', 'Start over', 0)
       }) +
       filterBar(dropdown('tperiod', '<span>Period</span>', 'This quarter', [{ v: 'q', title: 'This quarter', on: true }, { v: 'oct', title: 'October' }, { v: 'all', title: 'Since launch' }])) +
       '<section class="cue-card cue-rise" data-component="Trend card"><div class="cue-card-head"><h2>Holding price, week by week</h2></div>' +
