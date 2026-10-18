@@ -168,6 +168,11 @@
   transition: background var(--duration-fast);
 }
 .cue-icon-btn:hover { background: var(--color-paper-3); }
+.cue-icon-btn--primary { background: var(--color-ink); color: var(--color-paper); }
+.cue-icon-btn--primary:hover { background: #2a2a28; }
+/* In the top bar, the label opens below the button, centered */
+.cue-topbar .cue-icon-btn[data-tip]::after { left: 50%; bottom: auto; top: calc(100% + 8px); transform: translate(-50%, -4px); }
+.cue-topbar .cue-icon-btn[data-tip]:hover::after { transform: translate(-50%, 0); }
 /* The 3 dots menu: the same menu as the dropdowns, aligned to the button's right edge */
 .cue-more { position: relative; display: inline-flex; }
 .cue-more > .cue-icon-btn svg { stroke-width: 2.6; }

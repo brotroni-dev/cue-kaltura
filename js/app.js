@@ -157,6 +157,8 @@
         '<h1 class="cue-title">Good morning, ' + P.noa.first + '</h1>' +
         '<span class="cue-date">Thu, Oct 16</span>' +
         '<div class="cue-search" data-toast="Ask Cue answers questions about your team. Not part of this walkthrough." data-component="Search">' + ic('sparkle', 'cue-ic--sm') + '<span>Ask Cue</span><kbd>⌘K</kbd></div>' +
+        /* The page's main action: build a new practice */
+        '<button class="cue-icon-btn cue-icon-btn--primary" aria-label="Build new practice" data-tip="Build new practice" data-toast="Starts a practice from a template or from scratch. This walkthrough begins from the pricing insight." data-component="Icon button/Primary">' + ic('plus') + '</button>' +
         '<button class="cue-icon-btn" aria-label="Notifications" data-toast="Notifications are not part of this walkthrough.">' + ic('bell') + '<span class="cue-dot"></span></button>' +
       '</header>' +
       '<div class="cue-stats" data-component="Stats">' + STATS.map(stat).join('') + '</div>' +
