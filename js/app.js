@@ -223,13 +223,13 @@
   ];
 
   function insightPage() {
-    /* Deals lost when price comes up: two bars, each with the faces of who it is, nothing to decode */
+    /* Who loses deals at price: two bars, each with the faces of who it is, nothing to decode */
     var price = STEPS_LOST[2];
     var chart = '<div class="cue-vs" data-component="Compare bars">' +
         '<div class="cue-vs-row is-focus"><span class="cue-vs-faces">' + avas(['sam', 'lucia', 'omar', 'theo']) + '</span><span class="cue-vs-name">4 people</span><span class="cue-vs-bar"><i style="--value:' + price[1] + '%;--i:0"></i></span><b>' + price[1] + '%</b></div>' +
         '<div class="cue-vs-row"><span class="cue-vs-faces">' + avas(['dana', 'kofi', 'hana']) + '</span><span class="cue-vs-name">3 people</span><span class="cue-vs-bar"><i style="--value:' + price[2] + '%;--i:1"></i></span><b>' + price[2] + '%</b></div>' +
       '</div>' +
-      '<p class="cue-vs-note">Twice as many. Before price comes up, all 7 lose about the same.</p>';
+      '<p class="cue-vs-note">The gap only opens at price. Earlier in the deal, all 7 lose about the same.</p>';
 
     /* The whole insight in a few plain sentences, for a manager who only scans */
     var brief = '<p class="cue-brief">These 4 people lose <b>58%</b> of their deals once price comes up. The rest of your team loses 27%. ' +
@@ -268,7 +268,7 @@
         '<h1 class="cue-h1">4 people lose deals when price comes up</h1>' +
       '</div>' +
       '<div class="cue-grid cue-rise" style="--i:1">' +
-        '<div class="cue-col">' + card('In short', brief) + card('Deals lost when price comes up', chart) + card('Why', why) + '</div>' +
+        '<div class="cue-col">' + card('In short', brief) + card('Who loses deals at price', chart) + card('Why', why) + '</div>' +
         '<div class="cue-col cue-col--side">' + card('Who', who) + card('Deals at risk', deals) + '</div>' +
       '</div>';
   }
