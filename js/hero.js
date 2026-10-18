@@ -21,7 +21,7 @@
   function defs() {
     return '<defs>' +
       '<linearGradient id="hz" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="' + W + '" y2="0">' + STOPS + '</linearGradient>' +
-      '<linearGradient id="fadeV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
+      '<linearGradient id="fadeV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".15"/></linearGradient>' +
       '<mask id="areaMask"><rect width="' + W + '" height="' + H + '" fill="url(#fadeV)"/></mask>' +
     '</defs>';
   }

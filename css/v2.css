@@ -86,6 +86,22 @@ a { color: inherit; text-decoration: none; }
 /* The chart sits right under the text and tucks 96px behind it (the line is low on the left) */
 .shell-hero-bg { position: relative; z-index: 0; margin-top: calc(var(--space-10) * -1); pointer-events: none; }
 .hero { display: block; width: 100%; height: auto; aspect-ratio: 1440 / 440; }
+/* The chart's soft fill keeps going down behind the first slide, then fades to white, so the card stands out.
+   It fades in together with the chart's fill */
+:root:not(.is-presenting) .shell-cover + .slide { position: relative; }
+:root:not(.is-presenting) .shell-cover + .slide > .shell-wrap { position: relative; z-index: 1; }
+:root:not(.is-presenting) .shell-cover + .slide::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 480px;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0), var(--color-paper)),
+    linear-gradient(90deg, rgba(242, 166, 160, 0.15), rgba(169, 185, 242, 0.15) 50%, rgba(143, 211, 162, 0.15));
+  opacity: 0;
+  animation: hero-fade 1.6s var(--ease-out) 0.9s forwards;
+}
 
 /* line: the chart draws in, dots and people pop, people float */
 .hero-stroke { stroke-dasharray: 1; stroke-dashoffset: 1; animation: hero-draw 2.2s var(--ease-out) 0.2s forwards; }
@@ -449,6 +465,20 @@ a { color: inherit; text-decoration: none; }
 .flow-step-who img + img { margin-left: -8px; }
 .flow-step-go { width: 18px; height: 18px; flex: none; fill: none; stroke: var(--color-ink-3); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke var(--duration-fast); }
 .flow-steps a:hover .flow-step-go { stroke: var(--color-ink); }
+/* Arriving at slide 3: the hover state runs down the five steps once, quickly, to show they can be clicked */
+.flow-steps li:nth-child(1) { --d: 300ms; }
+.flow-steps li:nth-child(2) { --d: 460ms; }
+.flow-steps li:nth-child(3) { --d: 620ms; }
+.flow-steps li:nth-child(4) { --d: 780ms; }
+.flow-steps li:nth-child(5) { --d: 940ms; }
+.can-animate .flow-steps[data-appear].is-in a { animation: flow-peek 560ms ease-in-out var(--d) backwards; }
+.can-animate .flow-steps[data-appear].is-in .flow-step-n { animation: flow-peek-n 560ms ease-in-out var(--d) backwards; }
+.can-animate .flow-steps[data-appear].is-in .flow-step-who img { animation: flow-peek-who 560ms ease-in-out var(--d) backwards; }
+.can-animate .flow-steps[data-appear].is-in .flow-step-go { animation: flow-peek-go 560ms ease-in-out var(--d) backwards; }
+@keyframes flow-peek { 0%, 100% { background-color: rgba(246, 246, 244, 0); } 35%, 60% { background-color: var(--color-paper-2); } }
+@keyframes flow-peek-n { 0%, 100% { border-color: var(--color-paper); } 35%, 60% { border-color: var(--color-paper-2); } }
+@keyframes flow-peek-who { 0%, 100% { box-shadow: 0 0 0 2px var(--color-paper); } 35%, 60% { box-shadow: 0 0 0 2px var(--color-paper-2); } }
+@keyframes flow-peek-go { 0%, 100% { stroke: var(--color-ink-3); } 35%, 60% { stroke: var(--color-ink); } }
 
 /* Slide 4: three steps from first use to deals, then what has to be true */
 .ladder { margin: var(--space-8) 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
@@ -587,6 +617,6 @@ a { color: inherit; text-decoration: none; }
   html { scroll-behavior: auto; }
   /* things that start hidden and animate in must simply be shown */
   .hero-stroke { stroke-dashoffset: 0; }
-  .hero-area, .hero-person { opacity: 1; }
+  .hero-area, .hero-person, .shell-cover + .slide::before { opacity: 1; }
   .hero-dot, .cue-calm-bar b, .cue-pin { transform: none; opacity: 1; }
 }
