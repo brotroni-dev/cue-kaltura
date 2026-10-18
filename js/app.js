@@ -1529,6 +1529,16 @@
     var lab = root.querySelector('[data-pass-label]');
     if (lab) lab.textContent = ui.pass;
   });
+  /* Tooltips open below. When there's no room left in the window under the item, that one opens above instead */
+  root.addEventListener('mouseover', function (e) {
+    var t = e.target.closest && e.target.closest('[data-tip]');
+    if (!t) return;
+    var box = t.closest('.cue-main') || t.closest('.cue-app') || document.documentElement;
+    var tr = t.getBoundingClientRect(), br = box.getBoundingClientRect();
+    var scale = t.offsetHeight ? tr.height / t.offsetHeight : 1;
+    var need = ((parseFloat(getComputedStyle(t, '::after').height) || 30) + 14) * scale;
+    t.classList.toggle('tip-up', Math.min(br.bottom, window.innerHeight) - tr.bottom < need);
+  });
   root.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && e.target.hasAttribute && e.target.hasAttribute('data-ai-input')) {
       e.preventDefault();
