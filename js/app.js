@@ -212,9 +212,9 @@
     ['theo', '3 of 5', '22%']
   ];
   var MOMENTS = [
-    ['sam', 'Acme Logistics', '4:12', '“We can do 15% off if you sign this month.”'],
-    ['lucia', 'Northline Foods', '2:40', 'Offered a discount before the buyer asked.'],
-    ['theo', 'Brightline Retail', '1:55', 'Gave the price in the first two minutes.']
+    ['sam', 'Acme Logistics', '4:12', '“We can do 15% off if you sign this month.”', '0:18'],
+    ['lucia', 'Northline Foods', '2:40', 'Offered a discount before the buyer asked.', '0:26'],
+    ['theo', 'Brightline Retail', '1:55', 'Gave the price in the first two minutes.', '0:14']
   ];
   var DEALS = [
     ['Acme Logistics', 'sam', '$120K', 'Thu, Oct 23'],
@@ -223,13 +223,13 @@
   ];
 
   function insightPage() {
-    /* Lost once price comes up: two bars, each labeled, nothing to decode */
+    /* Deals lost when price comes up: two bars, each with the faces of who it is, nothing to decode */
     var price = STEPS_LOST[2];
     var chart = '<div class="cue-vs" data-component="Compare bars">' +
-        '<div class="cue-vs-row is-focus"><span class="cue-vs-name">These 4</span><span class="cue-vs-bar"><i style="--value:' + price[1] + '%;--i:0"></i></span><b>' + price[1] + '%</b></div>' +
-        '<div class="cue-vs-row"><span class="cue-vs-name">Rest of team</span><span class="cue-vs-bar"><i style="--value:' + price[2] + '%;--i:1"></i></span><b>' + price[2] + '%</b></div>' +
+        '<div class="cue-vs-row is-focus"><span class="cue-vs-faces">' + avas(['sam', 'lucia', 'omar', 'theo']) + '</span><span class="cue-vs-name">4 people</span><span class="cue-vs-bar"><i style="--value:' + price[1] + '%;--i:0"></i></span><b>' + price[1] + '%</b></div>' +
+        '<div class="cue-vs-row"><span class="cue-vs-faces">' + avas(['dana', 'kofi', 'hana']) + '</span><span class="cue-vs-name">3 people</span><span class="cue-vs-bar"><i style="--value:' + price[2] + '%;--i:1"></i></span><b>' + price[2] + '%</b></div>' +
       '</div>' +
-      '<p class="cue-vs-note">At the first call and the demo, they lose about as many as everyone else.</p>';
+      '<p class="cue-vs-note">Twice as many. Before price comes up, all 7 lose about the same.</p>';
 
     /* The whole insight in a few plain sentences, for a manager who only scans */
     var brief = '<p class="cue-brief">These 4 people lose <b>58%</b> of their deals once price comes up. The rest of your team loses 27%. ' +
@@ -246,7 +246,7 @@
     var why = '<div class="cue-rows">' + MOMENTS.map(function (m) {
         return '<div class="cue-moment" data-component="Call moment">' + ava(m[0], 'sm') +
           '<div class="cue-moment-text"><span>' + fullName(m[0]) + ' · ' + m[1] + ' · ' + m[2] + '</span><b>' + m[3] + '</b></div>' +
-          play('0:20', P[m[0]].name + '’s call') + '</div>';
+          play(m[4], P[m[0]].name + '’s call') + '</div>';
       }).join('') +
       /* The positive turn: what the best person on the team does differently */
       '<div class="cue-moment cue-moment--works" data-component="Call moment/What works">' + ava('dana', 'sm') +
@@ -268,7 +268,7 @@
         '<h1 class="cue-h1">4 people lose deals when price comes up</h1>' +
       '</div>' +
       '<div class="cue-grid cue-rise" style="--i:1">' +
-        '<div class="cue-col">' + card('In short', brief) + card('Lost once price comes up', chart) + card('Why', why) + '</div>' +
+        '<div class="cue-col">' + card('In short', brief) + card('Deals lost when price comes up', chart) + card('Why', why) + '</div>' +
         '<div class="cue-col cue-col--side">' + card('Who', who) + card('Deals at risk', deals) + '</div>' +
       '</div>';
   }

@@ -512,6 +512,9 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-vs { display: flex; flex-direction: column; gap: var(--space-3); }
 .cue-vs-row { display: flex; align-items: center; gap: var(--space-3); }
 .cue-vs-name { width: 96px; flex: none; font-size: var(--text-md); color: var(--color-ink-2); }
+/* The faces of who each bar is about, in a column of their own so the names line up */
+.cue-vs-faces { width: 76px; flex: none; display: flex; }
+.cue-vs-faces + .cue-vs-name { width: 72px; }
 .cue-vs-row.is-focus .cue-vs-name { color: var(--color-ink); font-weight: 500; }
 .cue-vs-bar { flex: 1; display: flex; }
 .cue-vs-bar i { display: block; height: 10px; width: var(--value); border-radius: 5px; background: var(--viz-base); transform-origin: left; animation: cue-grow var(--duration-slow) var(--ease-out) both; animation-delay: calc(200ms + var(--i, 0) * 120ms); }
