@@ -720,7 +720,7 @@
   }
   function beforeCall() {
     var score = '<ol class="cue-score">' + SCORECARD.map(function (r, i) {
-      return '<li data-tip="Good: ' + r[1] + '"><span>' + r[0] + '</span><b class="cue-wt">' + ui.weights[i] + ' pts</b></li>';
+      return '<li data-tip="Good: ' + r[1] + '"><span class="cue-score-n">' + (i + 1) + '</span><span>' + r[0] + '</span><b class="cue-wt">' + ui.weights[i] + ' pts</b></li>';
     }).join('') + '</ol>';
     return pagehead('Back', 5, '') +
       '<div class="cue-prep cue-rise">' +

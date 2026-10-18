@@ -213,7 +213,9 @@
   font-size: var(--text-xs);
   font-weight: 500;
   line-height: 1.4;
-  white-space: nowrap;
+  width: max-content;
+  max-width: 320px;
+  white-space: normal;
   pointer-events: none;
   opacity: 0;
   transform: translateY(-4px);
@@ -640,9 +642,10 @@ button.cue-crumb:hover { color: var(--color-ink); }
 .cue-editable { border-radius: var(--radius-xs); outline: none; transition: background var(--duration-fast), box-shadow var(--duration-fast); cursor: text; }
 .cue-editable:hover { background: var(--color-paper-2); box-shadow: 0 0 0 4px var(--color-paper-2); }
 .cue-editable:focus { background: var(--color-paper); box-shadow: 0 0 0 1px var(--color-ink-3), 0 0 0 4px var(--color-paper-2); }
-.cue-score { margin: 0; padding: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; }
-.cue-score li { counter-increment: s; display: flex; align-items: center; gap: var(--space-3); min-height: 40px; }
-.cue-score li::before { content: counter(s); width: 20px; flex: none; font-size: var(--text-xs); color: var(--color-ink-3); font-variant-numeric: tabular-nums; }
+.cue-score { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+.cue-score li { display: flex; align-items: center; gap: var(--space-3); min-height: 40px; }
+/* The line number is a real element, so the tooltip's arrow can use the line's ::before */
+.cue-score-n { width: 20px; flex: none; font-size: var(--text-xs); color: var(--color-ink-3); font-variant-numeric: tabular-nums; }
 .cue-score li .cue-editable { flex: 0 1 auto; }
 
 /* ----- The draft: calm panels, values you can touch ----- */
